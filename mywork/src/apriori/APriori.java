@@ -14,10 +14,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.StringTokenizer;
 
+import util.Printer;
+
 public class APriori implements AprioriInterface {
 
 	// private List<int[]> itemsets;
-	private String fileName;
+	private String fileName, outputFile;
 	private int N, T;
 
 	private int max;
@@ -26,11 +28,15 @@ public class APriori implements AprioriInterface {
 	private HashMap<ItemSet, Integer> itemsCountMap;
 
 	private List<Transaction> transactions;
+ 
+	private Printer printer;
 
 	private long start = System.currentTimeMillis();
 
-	public APriori(String fileName, double minimumSupport, double minimumConfidence) throws Exception {
+	public APriori(String fileName, double minimumSupport, double minimumConfidence,String outputFile) throws Exception {
 		this.fileName = fileName;
+		this.outputFile=outputFile;
+		
 
 		if (minimumConfidence > 1 || minimumConfidence < 0)
 			throw new IllegalArgumentException("confidence must be expressed between 0 and 1 (included)");
@@ -42,11 +48,37 @@ public class APriori implements AprioriInterface {
 					"support must be expressed with a double value between 0 and 1 (included)");
 		else
 			this.minimumSupport = minimumSupport;
+		
+		printer=new Printer(this, outputFile);
 
 		readTransactions();
 
-		printInputSettings();
+		printer.printInputSettings();
 
+	}
+
+	public double getMinimumSupport() {
+		return minimumSupport;
+	}
+
+	public double getMinimumConfidence() {
+		return minimumConfidence;
+	}
+
+	public List<Transaction> getTransactions() {
+		return transactions;
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public int getN() {
+		return N;
+	}
+
+	public int getT() {
+		return T;
 	}
 
 	private void readTransactions() throws Exception {
@@ -73,26 +105,15 @@ public class APriori implements AprioriInterface {
 				} else {
 					int old = itemsCountMap.get(unary);
 					itemsCountMap.put(unary, ++old);
-					// System.out.println("OKKKKKKKKKKKKKKK");
 
 				}
-
 			}
 			transactions.add(t);
 		}
 		br.close();
 	}
 
-	private void printInputSettings() {
-		System.out.println("Transactions:\n"+ transactions);
-
-		System.out.println("Input configuration: \n" + N + " items, " + T + " transactions, ");
-		System.out.println("Max =" + max);
-		System.out.println("Min Sup = " + minimumSupport + "%");
-		System.out.println("Min Conf = " + minimumConfidence + "%");
-		System.out.println("itemsCount" + itemsCountMap);
-
-	}
+	
 
 	@Override
 	public void compute() {
@@ -145,9 +166,9 @@ public class APriori implements AprioriInterface {
 	}
 
 	public static void main(String[] args) throws Exception {
-		APriori ap = new APriori("chess.dat", 0.5, 0.8);
+		APriori ap = new APriori("chess.dat", 0.5, 0.8,"result.txt");
+		
 		ap.compute();
-
 
 	}
 
