@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -15,16 +16,16 @@ import java.util.StringTokenizer;
 
 public class APriori implements AprioriInterface {
 
-	private List<int[]> itemsets;
+	// private List<int[]> itemsets;
 	private String fileName;
 	private int N, T;
 
 	private int max;
 
 	private double minimumSupport, minimumConfidence;
-	private HashMap<Integer, Integer> itemsCountMap;
+	private HashMap<ItemSet, Integer> itemsCountMap;
 
-	private List<String> tuples;
+	private List<Transaction> transactions;
 
 	private long start = System.currentTimeMillis();
 
@@ -42,39 +43,48 @@ public class APriori implements AprioriInterface {
 		else
 			this.minimumSupport = minimumSupport;
 
-		readLines();
+		readTransactions();
+
 		printInputSettings();
 
 	}
 
-	private void readLines() throws Exception {
-
+	private void readTransactions() throws Exception {
 		N = 0;
 		T = 0;
 		itemsCountMap = new HashMap<>();
 		BufferedReader br = new BufferedReader(new FileReader(new File(fileName)));
+		transactions = new ArrayList<>();
 		while (br.ready()) {
 			String s = br.readLine();
 			T++;
+			Transaction t = new Transaction(s);
 			StringTokenizer st = new StringTokenizer(s, " ");
 			while (st.hasMoreTokens()) {
 				int x = Integer.parseInt(st.nextToken());
+				ItemSet unary = new ItemSet(1);
+				unary.add(x);
+				t.addItem(x);
 				if (x > max)
 					max = x;
-				if (!itemsCountMap.containsKey(x)) {
-					itemsCountMap.put(x, 1);
+				if (!itemsCountMap.containsKey(unary)) {
+					itemsCountMap.put(unary, 1);
 					N++;
 				} else {
-					int old = itemsCountMap.get(x);
+					int old = itemsCountMap.get(unary);
+					itemsCountMap.put(unary, ++old);
+					// System.out.println("OKKKKKKKKKKKKKKK");
 
-					itemsCountMap.put(x, ++old);
 				}
 
 			}
+			transactions.add(t);
 		}
+		br.close();
 	}
 
 	private void printInputSettings() {
+		System.out.println("Transactions:\n"+ transactions);
 
 		System.out.println("Input configuration: \n" + N + " items, " + T + " transactions, ");
 		System.out.println("Max =" + max);
@@ -91,6 +101,7 @@ public class APriori implements AprioriInterface {
 		System.out.println("Found " + itemsCountMap.size() + " frequent itemsets of size 1" + " (with support "
 				+ (minimumSupport * 100) + "%)");
 		;
+
 		int currentItemset = 1;
 		int nbFrequentSets = 0;
 
@@ -105,18 +116,16 @@ public class APriori implements AprioriInterface {
 	}
 
 	private void sizeOne() {
-		Iterator<Entry<Integer, Integer>> it = itemsCountMap.entrySet().iterator();
-		LinkedList<Integer> toDelete = new LinkedList<>();
+		Iterator<Entry<ItemSet, Integer>> it = itemsCountMap.entrySet().iterator();
+		LinkedList<ItemSet> toDelete = new LinkedList<>();
 		while (it.hasNext()) {
-			Map.Entry<Integer, Integer> pair = (Map.Entry) it.next();
-
+			Map.Entry<ItemSet, Integer> pair = (Map.Entry) it.next();
 			double sup = computeSup(pair.getValue());
 			System.out.println("sup of " + pair.getKey() + " = " + sup);
 			if (sup < minimumSupport)
 				toDelete.add(pair.getKey());
-
 		}
-		for (int x : toDelete) {
+		for (ItemSet x : toDelete) {
 			itemsCountMap.remove(x);
 		}
 
@@ -135,58 +144,16 @@ public class APriori implements AprioriInterface {
 
 	}
 
-	private String showItemsets() {
-		StringBuilder sb = new StringBuilder("{");
-
-		for (int[] i : itemsets) {
-			sb.append(Arrays.toString(i) + ", ");
-
-		}
-		sb.append("}");
-		return sb.toString();
-	}
-
 	public static void main(String[] args) throws Exception {
 		APriori ap = new APriori("chess.dat", 0.5, 0.8);
 		ap.compute();
 
-		Object[] o = ap.getItemsCountMap().keySet().toArray();
-		int [] a=new int[o.length];
-		for(int i=0;i<o.length;i++) {
-			a[i]=(int)o[i];			
-		}
-		permute(a, 2);
-		
-		
 
 	}
 
-	public HashMap<Integer, Integer> getItemsCountMap() {
+	public HashMap<ItemSet, Integer> getItemsCountMap() {
 		return itemsCountMap;
 
-	}
-
-	static void permute(int[]a, int k) {
-		
-		
-		if (k == a.length) {
-			for (int i = 0; i < a.length; i++) {
-				System.out.print(" [" + a[i] + "] ");
-			}
-			System.out.println();
-		} else {
-			for (int i = k; i < a.length; i++) {
-				int temp = a[k];
-				a[k] = a[i];
-				a[i] = temp;
-
-				permute(a, k + 1);
-
-				temp = a[k];
-				a[k] = a[i];
-				a[i] = temp;
-			}
-		}
 	}
 
 }
