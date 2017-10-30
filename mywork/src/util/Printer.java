@@ -11,11 +11,11 @@ public class Printer {
 	String fileName;
 	PrintWriter pw;
 
-	public Printer(APriori ap, String s) throws Exception {
+	public Printer(APriori ap) throws Exception {
 		this.ap = ap;
-		this.fileName = s;
+		
 
-		pw = new PrintWriter(new File(fileName));
+		pw = ap.getPrintWriter();
 	}
 
 	public void printInputSettings() {
@@ -27,8 +27,9 @@ public class Printer {
 		sb.append(", Min Conf = " + ap.getMinimumConfidence() + "%\n");
 		//sb.append("itemsCount" + ap.getItemsCountMap() + "\n");
 
-		pw.write(sb.toString());
-		pw.close();
+		pw.write(sb.toString()+"\n");
+		
+		
 		
 		System.out.println(sb.toString());
 //		System.out.println("Input configuration: \n" + ap.getN() + " items, " + ap.getT() + " transactions, ");
