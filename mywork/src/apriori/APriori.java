@@ -26,7 +26,7 @@ public class APriori implements AprioriInterface, Cloneable {
 
 	private double minimumSupport, minimumConfidence;
 	private HashMap<ItemSet, Integer> frequentItemsTable;
-	private HashSet<Integer> currentItems;
+	private HashMap<Integer, Boolean> currentItems;
 
 	private List<Transaction> transactions;
 
@@ -82,15 +82,13 @@ public class APriori implements AprioriInterface, Cloneable {
 		return T;
 	}
 
-	
-	
 	private void readTransactions() throws Exception {
 		N = 0;
 		T = 0;
 		frequentItemsTable = new HashMap<>();
 		BufferedReader br = new BufferedReader(new FileReader(new File(fileName)));
 		transactions = new ArrayList<>();
-		currentItems=new HashSet<>();
+		currentItems = new HashMap();
 		while (br.ready()) {
 			String s = br.readLine();
 			T++;
@@ -101,7 +99,7 @@ public class APriori implements AprioriInterface, Cloneable {
 				ItemSet unary = new ItemSet();
 				unary.add(x);
 				t.addItem(x);
-				currentItems.add(x);
+				currentItems.put(x, false);
 				if (x > max)
 					max = x;
 				if (!frequentItemsTable.containsKey(unary)) {
@@ -128,30 +126,29 @@ public class APriori implements AprioriInterface, Cloneable {
 		// iterazione sui Ck Lk
 		int currentItemset = 1;
 		int nbFrequentSets = 0;
-		
-		
-		generateCk();
-		
-		
-		
-		System.out.println(frequentItemsTable);
+
+		// generateCk();
+
+		// System.out.println(frequentItemsTable);
 		System.out.println(frequentItemsTable.size());
 
-//		for (int k = 2; frequentItemsTable.size() != 0; k++) {
-//			generateCk();
-//			Iterator<ItemSet> it = frequentItemsTable.keySet().iterator();
-//			while (it.hasNext()) {
-//				ItemSet is = it.next();
-//				int value = frequentItemsTable.get(is);
-//				for (Transaction t : transactions)
-//					if (t.containsItemset(is))
-//						value++;
-//				frequentItemsTable.put(is, value);
-//			}
-//
-//			// prune();
-//
-//		}
+		for (int k = 2; frequentItemsTable.size() != 0; k++) {
+			System.out.println("generating all the tuples of size " + k);
+			generateCk();
+			Iterator<ItemSet> it = frequentItemsTable.keySet().iterator();
+			System.out.println(frequentItemsTable.size()+ " of size " + k +" have been generated");
+			while (it.hasNext()) {
+				ItemSet is = it.next();
+				countOccurrences(is);
+			}
+
+			 System.out.println(frequentItemsTable);
+
+			prune(k);
+
+			System.out.println("currentItems size(" + k + ") = " + currentItems.size());
+
+		}
 
 		long elapsedTime = System.currentTimeMillis() - start;
 
@@ -159,12 +156,78 @@ public class APriori implements AprioriInterface, Cloneable {
 
 	}
 
+	// reset all the items at false
+	private void resetCurrentItems() {
+		HashMap<Integer, Boolean> newCurrentItems = new HashMap<>();
+		for (Integer i : currentItems.keySet())
+			newCurrentItems.put(i, false);
+		currentItems = newCurrentItems;
+
+	}
+
+	// after the counting of the candidate tuples Ck,
+	// it prunes all the unfrequent tuples
+	private void prune(int k) {
+
+		Iterator<Entry<ItemSet, Integer>> it = frequentItemsTable.entrySet().iterator();
+		LinkedList<ItemSet> toDelete = new LinkedList<>();
+
+		//System.out.println(currentItems);
+
+		// compute the support for all the itemsets in Ck
+		while (it.hasNext()) {
+			Map.Entry<ItemSet, Integer> pair = (Map.Entry) it.next();
+			double sup = computeSup(pair.getValue());
+			// System.out.println("sup of " + pair.getKey() + " = " + sup);
+			if (sup < minimumSupport)
+				toDelete.add(pair.getKey());
+			else // if an itemset is frequent then all the items in it are frequent
+				for (Integer i : pair.getKey()) {
+					// System.out.println(i +" is frequen");
+					currentItems.put(i, true);
+				}
+		}
+		int numRemoved = toDelete.size();
+		int c = 0;
+		for (ItemSet x : toDelete) {
+			frequentItemsTable.remove(x);
+
+			// remove from current items
+			Iterator<Map.Entry<Integer, Boolean>> itCurr = currentItems.entrySet().iterator();
+			while (itCurr.hasNext()) {
+				Map.Entry<Integer, Boolean> curr = itCurr.next();
+				if (!curr.getValue()) {
+					c++;
+					itCurr.remove();
+					System.out.println(curr.getKey() + " removed");
+				}
+			}
+		}
+
+		resetCurrentItems();
+
+		System.out.println("pruned " + numRemoved + " itemsets from itemsets of size " + k + " and " + c + " elements");
+
+	}
+
+	// count the occurrences of an itemsets in all the transactions and eventually
+	// insert the value in the map
+	private void countOccurrences(ItemSet is) {
+		int value = frequentItemsTable.get(is);
+		for (Transaction t : transactions)
+			if (t.containsItemset(is))
+				value++;
+		frequentItemsTable.put(is, value);
+
+	}
+
+	// generate the candidate tuples
 	private void generateCk() {
-		HashMap<ItemSet, Integer> newMap=new HashMap<>();
+		HashMap<ItemSet, Integer> newMap = new HashMap<>();
 		Iterator<ItemSet> it = frequentItemsTable.keySet().iterator();
 		while (it.hasNext()) {
 			ItemSet temp = it.next();
-			Iterator<Integer> it1 = currentItems.iterator();
+			Iterator<Integer> it1 = currentItems.keySet().iterator();
 			while (it1.hasNext()) {
 				int x = it1.next();
 				if (!temp.contains(x)) {
@@ -176,7 +239,7 @@ public class APriori implements AprioriInterface, Cloneable {
 			}
 			it.remove();
 		}
-		frequentItemsTable=newMap;
+		frequentItemsTable = newMap;
 	}
 
 	private void sizeOne() {
@@ -192,7 +255,13 @@ public class APriori implements AprioriInterface, Cloneable {
 		int numRemoved = toDelete.size();
 		for (ItemSet x : toDelete) {
 			frequentItemsTable.remove(x);
+			for (Integer i : x.getElements()) {
+				currentItems.remove(i);
+				System.out.println(i + " removed");
+
+			}
 		}
+		resetCurrentItems();
 		System.out.println("pruned " + numRemoved + " elements from itemsets of size 1");
 
 	}
@@ -211,16 +280,11 @@ public class APriori implements AprioriInterface, Cloneable {
 	}
 
 	public static void main(String[] args) throws Exception {
-		APriori ap = new APriori("chess.dat", 0.5, 0.8, "result.txt");
+		APriori ap = new APriori("toy.txt",(double)2/9, 0.8, "result.txt");
 
 		ap.compute();
+
 		
-		HashSet<Integer> prova=new HashSet<>();
-		prova.add(1);
-		prova.add(1);
-		prova.add(1);
-		prova.remove(1);
-		System.out.println(prova);
 
 	}
 
