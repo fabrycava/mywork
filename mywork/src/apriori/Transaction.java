@@ -25,5 +25,10 @@ public class Transaction{
 	public List<Integer> getItems(){
 		return items;
 	}
+	
+	
+	public boolean containsItemset(ItemSet is){
+		return items.containsAll(is.getElements());
+	}
 
 }

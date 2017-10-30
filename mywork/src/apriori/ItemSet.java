@@ -3,12 +3,12 @@ package apriori;
 import java.util.HashSet;
 import java.util.Iterator;
 
-public class ItemSet implements Iterable<Integer> {
-	private int arity;
+public class ItemSet implements Iterable<Integer>, Cloneable {
+	
 	private HashSet<Integer> elements;
 
-	public ItemSet(int arity) {
-		this.arity = arity;
+	public ItemSet() {
+		
 		elements = new HashSet<>();
 	}
 
@@ -36,8 +36,8 @@ public class ItemSet implements Iterable<Integer> {
 
 	}
 
-	public int getArity() {
-		return arity;
+	public int cardinality() {
+		return elements.size();
 	}
 
 	public HashSet<Integer> getElements() {
@@ -68,4 +68,17 @@ public class ItemSet implements Iterable<Integer> {
 		}
 		return x * 157;
 	}
+	
+	
+	public ItemSet clone(){
+		ItemSet is=new ItemSet();		
+		for(Integer i:this.elements)
+			is.elements.add(i);
+		return is;		
+	}
+	
+	public boolean contains(Integer x){
+		return elements.contains(x);
+	}
+	
 }
