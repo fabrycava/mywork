@@ -1,16 +1,17 @@
 package apriori;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 public class Transaction{
 
-	private List<Integer> items;
+	private HashSet<Integer> items;
 	
 	
 	public Transaction(String s) {
-		items=new LinkedList<>();
+		items=new HashSet<>();
 	}
 	
 	@Override
@@ -22,7 +23,7 @@ public class Transaction{
 		items.add(x);
 	}
 	
-	public List<Integer> getItems(){
+	public HashSet<Integer> getItems(){
 		return items;
 	}
 	

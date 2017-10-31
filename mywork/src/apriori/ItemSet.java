@@ -4,11 +4,13 @@ import java.util.HashSet;
 import java.util.Iterator;
 
 public class ItemSet implements Iterable<Integer>, Cloneable {
-	
+
 	private HashSet<Integer> elements;
 
+	private int max = 0;
+
 	public ItemSet() {
-		
+
 		elements = new HashSet<>();
 	}
 
@@ -18,6 +20,10 @@ public class ItemSet implements Iterable<Integer>, Cloneable {
 	}
 
 	public void add(int x) {
+		if (elements.isEmpty())
+			max = x;
+		else if (x > max)
+			max = x;
 		elements.add(x);
 	}
 
@@ -34,6 +40,10 @@ public class ItemSet implements Iterable<Integer>, Cloneable {
 		}
 		return false;
 
+	}
+	
+	public int getMax() {
+		return max;
 	}
 
 	public int cardinality() {
@@ -61,24 +71,23 @@ public class ItemSet implements Iterable<Integer>, Cloneable {
 
 	@Override
 	public int hashCode() {
-		//System.out.println("invoking hashcode ");
+		// System.out.println("invoking hashcode ");
 		int x = 1;
 		for (Integer integer : elements) {
 			x *= integer;
 		}
 		return x * 157;
 	}
-	
-	
-	public ItemSet clone(){
-		ItemSet is=new ItemSet();		
-		for(Integer i:this.elements)
+
+	public ItemSet clone() {
+		ItemSet is = new ItemSet();
+		for (Integer i : this.elements)
 			is.elements.add(i);
-		return is;		
+		return is;
 	}
-	
-	public boolean contains(Integer x){
+
+	public boolean contains(Integer x) {
 		return elements.contains(x);
 	}
-	
+
 }

@@ -1,0 +1,119 @@
+Input configuration: 
+75 items, 1591 transactions, Min Sup = 0.5, Min Conf = 0.8%
+
+1 removed
+4 removed
+6 removed
+8 removed
+10 removed
+12 removed
+14 removed
+16 removed
+18 removed
+19 removed
+22 removed
+23 removed
+26 removed
+28 removed
+30 removed
+32 removed
+33 removed
+35 removed
+37 removed
+39 removed
+41 removed
+43 removed
+45 removed
+47 removed
+49 removed
+51 removed
+53 removed
+55 removed
+57 removed
+59 removed
+61 removed
+63 removed
+65 removed
+67 removed
+69 removed
+70 removed
+73 removed
+75 removed
+pruned 38 itemsets from itemsets of size 1 and 38 elements
+Found 37 frequent itemsets of size 1 (with support 50.0%)
+generating all the tuples of size 2
+666 of size 2 have been generated
+pruned 239 itemsets from itemsets of size 2 and 0 elements
+currentItems size(2) = 37
+generating all the tuples of size 3
+4889 of size 3 have been generated
+pruned 2450 itemsets from itemsets of size 3 and 0 elements
+currentItems size(3) = 37
+generating all the tuples of size 4
+20877 of size 4 have been generated
+pruned 12735 itemsets from itemsets of size 4 and 0 elements
+currentItems size(4) = 37
+generating all the tuples of size 5
+56674 of size 5 have been generated
+pruned 39152 itemsets from itemsets of size 5 and 0 elements
+currentItems size(5) = 37
+generating all the tuples of size 6
+105845 of size 6 have been generated
+71 removed
+20 removed
+pruned 80407 itemsets from itemsets of size 6 and 2 elements
+currentItems size(6) = 35
+generating all the tuples of size 7
+117675 of size 7 have been generated
+2 removed
+pruned 92298 itemsets from itemsets of size 7 and 1 elements
+currentItems size(7) = 34
+generating all the tuples of size 8
+109436 of size 8 have been generated
+68 removed
+11 removed
+13 removed
+pruned 91900 itemsets from itemsets of size 8 and 3 elements
+currentItems size(8) = 31
+generating all the tuples of size 9
+55869 of size 9 have been generated
+15 removed
+24 removed
+38 removed
+50 removed
+pruned 47431 itemsets from itemsets of size 9 and 4 elements
+currentItems size(9) = 27
+generating all the tuples of size 10
+25407 of size 10 have been generated
+17 removed
+21 removed
+pruned 22591 itemsets from itemsets of size 10 and 2 elements
+currentItems size(10) = 25
+generating all the tuples of size 11
+8013 of size 11 have been generated
+64 removed
+72 removed
+31 removed
+54 removed
+pruned 7388 itemsets from itemsets of size 11 and 4 elements
+currentItems size(11) = 21
+generating all the tuples of size 12
+840 of size 12 have been generated
+74 removed
+42 removed
+44 removed
+46 removed
+27 removed
+pruned 756 itemsets from itemsets of size 12 and 5 elements
+currentItems size(12) = 16
+generating all the tuples of size 13
+17 of size 13 have been generated
+3 removed
+9 removed
+pruned 12 itemsets from itemsets of size 13 and 2 elements
+currentItems size(13) = 14
+generating all the tuples of size 14
+0 of size 14 have been generated
+pruned 0 itemsets from itemsets of size 14 and 0 elements
+currentItems size(14) = 14
+Elapsed time = 80387

@@ -1,0 +1,148 @@
+Input configuration: 
+62 items, 500 transactions, Min Sup = 0.8, Min Conf = 0.8%
+
+31 removed
+18 removed
+71 removed
+49 removed
+27 removed
+14 removed
+23 removed
+54 removed
+32 removed
+10 removed
+63 removed
+19 removed
+50 removed
+28 removed
+6 removed
+37 removed
+15 removed
+46 removed
+24 removed
+55 removed
+33 removed
+11 removed
+20 removed
+73 removed
+51 removed
+38 removed
+16 removed
+69 removed
+47 removed
+12 removed
+65 removed
+43 removed
+8 removed
+39 removed
+70 removed
+4 removed
+13 removed
+pruned 37 elements from itemsets of size 1Found 25 frequent itemsets of size 1 (with support 80.0%)
+FIT size = 25
+generating all the tuples of size 2
+300 of size 2 have been generated
+pruned 8 itemsets from itemsets of size 2 and 0 elements
+currentItems size(2) = 25
+generating all the tuples of size 3
+2295 of size 3 have been generated
+pruned 186 itemsets from itemsets of size 3 and 0 elements
+currentItems size(3) = 25
+generating all the tuples of size 4
+12513 of size 4 have been generated
+pruned 1959 itemsets from itemsets of size 4 and 0 elements
+currentItems size(4) = 25
+generating all the tuples of size 5
+51517 of size 5 have been generated
+pruned 12594 itemsets from itemsets of size 5 and 0 elements
+currentItems size(5) = 25
+generating all the tuples of size 6
+165738 of size 6 have been generated
+pruned 55832 itemsets from itemsets of size 6 and 0 elements
+currentItems size(6) = 25
+generating all the tuples of size 7
+425875 of size 7 have been generated
+pruned 182209 itemsets from itemsets of size 7 and 0 elements
+currentItems size(7) = 25
+generating all the tuples of size 8
+886811 of size 8 have been generated
+pruned 455380 itemsets from itemsets of size 8 and 0 elements
+currentItems size(8) = 25
+generating all the tuples of size 9
+1510912 of size 9 have been generated
+pruned 893893 itemsets from itemsets of size 9 and 0 elements
+currentItems size(9) = 25
+generating all the tuples of size 10
+2118948 of size 10 have been generated
+pruned 1401088 itemsets from itemsets of size 10 and 0 elements
+currentItems size(10) = 25
+generating all the tuples of size 11
+2453815 of size 11 have been generated
+pruned 1771913 itemsets from itemsets of size 11 and 0 elements
+currentItems size(11) = 25
+generating all the tuples of size 12
+2347865 of size 12 have been generated
+pruned 1818674 itemsets from itemsets of size 12 and 0 elements
+currentItems size(12) = 25
+generating all the tuples of size 13
+1852722 of size 13 have been generated
+pruned 1517997 itemsets from itemsets of size 13 and 0 elements
+currentItems size(13) = 25
+generating all the tuples of size 14
+1200250 of size 14 have been generated
+pruned 1028664 itemsets from itemsets of size 14 and 0 elements
+currentItems size(14) = 25
+generating all the tuples of size 15
+633309 of size 15 have been generated
+pruned 562739 itemsets from itemsets of size 15 and 0 elements
+currentItems size(15) = 25
+generating all the tuples of size 16
+268756 of size 16 have been generated
+pruned 245860 itemsets from itemsets of size 16 and 0 elements
+currentItems size(16) = 25
+generating all the tuples of size 17
+89915 of size 17 have been generated
+pruned 84223 itemsets from itemsets of size 17 and 0 elements
+currentItems size(17) = 25
+generating all the tuples of size 18
+22956 of size 18 have been generated
+72 removed
+pruned 21928 itemsets from itemsets of size 18 and 1 elements
+currentItems size(18) = 24
+generating all the tuples of size 19
+3198 of size 19 have been generated
+64 removed
+pruned 3077 itemsets from itemsets of size 19 and 1 elements
+currentItems size(19) = 23
+generating all the tuples of size 20
+260 of size 20 have been generated
+3 removed
+17 removed
+pruned 253 itemsets from itemsets of size 20 and 2 elements
+currentItems size(20) = 21
+generating all the tuples of size 21
+1 of size 21 have been generated
+1 removed
+66 removed
+34 removed
+68 removed
+36 removed
+5 removed
+7 removed
+40 removed
+9 removed
+74 removed
+42 removed
+44 removed
+48 removed
+52 removed
+21 removed
+56 removed
+25 removed
+58 removed
+60 removed
+29 removed
+62 removed
+pruned 1 itemsets from itemsets of size 21 and 21 elements
+currentItems size(21) = 0
+Elapsed time = 3688745

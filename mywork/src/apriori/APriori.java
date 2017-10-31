@@ -25,22 +25,22 @@ public class APriori implements AprioriInterface, Cloneable {
 
 	private int max;
 
-	private double minimumSupport, minimumConfidence;
-	private HashMap<ItemSet, Integer> frequentItemsTable;
-	private HashMap<Integer, Boolean> currentItems;
+	protected double minimumSupport;
+	private double minimumConfidence;
+	protected HashMap<ItemSet, Integer> frequentItemsTable;
+	protected HashMap<Integer, Boolean> currentItems;
 
 	private List<Transaction> transactions;
 
-	private PrintWriter pw;
+	protected PrintWriter pw;
 
 	StringBuilder sb = new StringBuilder();
 
 	private Printer printer;
 
-	private long start = System.currentTimeMillis();
+	protected long start = System.currentTimeMillis();
 
-	public APriori(String fileName, double minimumSupport, double minimumConfidence)
-			throws Exception {
+	public APriori(String fileName, double minimumSupport, double minimumConfidence) throws Exception {
 		this.fileName = fileName;
 		this.outputFile = outputFile;
 
@@ -54,8 +54,8 @@ public class APriori implements AprioriInterface, Cloneable {
 					"support must be expressed with a double value between 0 and 1 (included)");
 		else
 			this.minimumSupport = minimumSupport;
-		
-		pw=new PrintWriter(new File(fileName+".result"));
+
+		pw = new PrintWriter(new File(fileName + ".result"));
 
 		printer = new Printer(this);
 
@@ -64,7 +64,7 @@ public class APriori implements AprioriInterface, Cloneable {
 		printer.printInputSettings();
 
 	}
-	
+
 	public PrintWriter getPrintWriter() {
 		return pw;
 	}
@@ -90,9 +90,13 @@ public class APriori implements AprioriInterface, Cloneable {
 	}
 
 	public int getT() {
+
 		return T;
 	}
+	public HashMap<ItemSet, Integer> getItemsCountMap() {
+		return frequentItemsTable;
 
+	}
 	private void readTransactions() throws Exception {
 		N = 0;
 		T = 0;
@@ -129,22 +133,25 @@ public class APriori implements AprioriInterface, Cloneable {
 	@Override
 	public void compute() {
 
-		sizeOne();
+				
 
+//		System.out.println(frequentItemsTable);
+//		sb.append("FIT size = " + frequentItemsTable.size() + "\n");
+//		System.out.println("FIT size = " + frequentItemsTable.size());
+
+		prune(1);
+		
 		sb.append("Found " + frequentItemsTable.size() + " frequent itemsets of size 1" + " (with support "
 				+ (minimumSupport * 100) + "%)\n");
-		System.out.println("Found " + frequentItemsTable.size() + " frequent itemsets of size 1" + " (with support "
-				+ (minimumSupport * 100) + "%)");
-
-		// System.out.println(frequentItemsTable);
-		sb.append("FIT size = " + frequentItemsTable.size() + "\n");
-		System.out.println("FIT size = " + frequentItemsTable.size());
-
+		System.out.println("Found " + frequentItemsTable.size() + " frequent itemsets of size 1"
+				+ " (with support " + (minimumSupport * 100) + "%)");
+		System.out.println(frequentItemsTable);
 		for (int k = 2; frequentItemsTable.size() != 0; k++) {
 			sb.append("generating all the tuples of size " + k + "\n");
 			System.out.println("generating all the tuples of size " + k);
 			generateCk();
 			Iterator<ItemSet> it = frequentItemsTable.keySet().iterator();
+			//System.out.println(frequentItemsTable);
 			sb.append(frequentItemsTable.size() + " of size " + k + " have been generated\n");
 			System.out.println(frequentItemsTable.size() + " of size " + k + " have been generated");
 			while (it.hasNext()) {
@@ -165,14 +172,16 @@ public class APriori implements AprioriInterface, Cloneable {
 
 		sb.append("Elapsed time = " + elapsedTime + "\n");
 		System.out.println("Elapsed time = " + elapsedTime);
-
+		
 		pw.print(sb.toString());
 		pw.close();
 
 	}
 
+	
+
 	// reset all the items at false
-	private void resetCurrentItems() {
+	protected void resetCurrentItems() {
 		HashMap<Integer, Boolean> newCurrentItems = new HashMap<>();
 		for (Integer i : currentItems.keySet())
 			newCurrentItems.put(i, false);
@@ -182,7 +191,7 @@ public class APriori implements AprioriInterface, Cloneable {
 
 	// after the counting of the candidate tuples Ck,
 	// it prunes all the unfrequent tuples
-	private void prune(int k) {
+	protected void prune(int k) {
 
 		Iterator<Entry<ItemSet, Integer>> it = frequentItemsTable.entrySet().iterator();
 		LinkedList<ItemSet> toDelete = new LinkedList<>();
@@ -230,7 +239,7 @@ public class APriori implements AprioriInterface, Cloneable {
 
 	// count the occurrences of an itemsets in all the transactions and eventually
 	// insert the value in the map
-	private void countOccurrences(ItemSet is) {
+	protected void countOccurrences(ItemSet is) {
 		int value = frequentItemsTable.get(is);
 		for (Transaction t : transactions)
 			if (t.containsItemset(is))
@@ -240,7 +249,7 @@ public class APriori implements AprioriInterface, Cloneable {
 	}
 
 	// generate the candidate tuples
-	private void generateCk() {
+	protected void generateCk() {
 		HashMap<ItemSet, Integer> newMap = new HashMap<>();
 		Iterator<ItemSet> it = frequentItemsTable.keySet().iterator();
 		while (it.hasNext()) {
@@ -248,7 +257,7 @@ public class APriori implements AprioriInterface, Cloneable {
 			Iterator<Integer> it1 = currentItems.keySet().iterator();
 			while (it1.hasNext()) {
 				int x = it1.next();
-				if (!temp.contains(x)) {
+				if (x > temp.getMax()) {// ensure the monotonicity
 					ItemSet previous = temp.clone();
 					previous.add(x);
 					if (!newMap.containsKey(previous))
@@ -260,31 +269,7 @@ public class APriori implements AprioriInterface, Cloneable {
 		frequentItemsTable = newMap;
 	}
 
-	private void sizeOne() {
-		Iterator<Entry<ItemSet, Integer>> it = frequentItemsTable.entrySet().iterator();
-		LinkedList<ItemSet> toDelete = new LinkedList<>();
-		while (it.hasNext()) {
-			Map.Entry<ItemSet, Integer> pair = (Map.Entry) it.next();
-			double sup = computeSup(pair.getValue());
-			// System.out.println("sup of " + pair.getKey() + " = " + sup);
-			if (sup < minimumSupport)
-				toDelete.add(pair.getKey());
-		}
-		int numRemoved = toDelete.size();
-		for (ItemSet x : toDelete) {
-			frequentItemsTable.remove(x);
-			for (Integer i : x.getElements()) {
-				currentItems.remove(i);
-				sb.append(i + " removed\n");
-				System.out.println(i + " removed");
-
-			}
-		}
-		resetCurrentItems();
-		sb.append("pruned " + numRemoved + " elements from itemsets of size 1");
-		System.out.println("pruned " + numRemoved + " elements from itemsets of size 1");
-
-	}
+	
 
 	private double computeSup(int value) {
 
@@ -300,15 +285,13 @@ public class APriori implements AprioriInterface, Cloneable {
 	}
 
 	public static void main(String[] args) throws Exception {
-		APriori ap = new APriori("chess4.dat", 0.9, 0.8);
+		APriori ap = new APriori("kosarak.dat.txt", 0.01, 0.8);
 
-		ap.compute();
+		 ap.compute();
 
-	}
-
-	public HashMap<ItemSet, Integer> getItemsCountMap() {
-		return frequentItemsTable;
 
 	}
+
+	
 
 }
