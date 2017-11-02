@@ -1,23 +1,35 @@
 Input configuration: 
-5 items, 9 transactions, Min Sup = 0.2222222222222222, Min Conf = 0.8%
+5 items, 9 transactions, Min Sup = 0.2222222222222222, Min Conf = 0.4%
 
-pruned 0 elements from itemsets of size 1Found 5 frequent itemsets of size 1 (with support 22.22222222222222%)
-FIT size = 5
+pruned 0 itemsets from itemsets of size 1 and 0 elements
+Found 5 frequent itemsets of size 1 (with support 22.22222222222222%)
 generating all the tuples of size 2
 10 of size 2 have been generated
 pruned 4 itemsets from itemsets of size 2 and 0 elements
 currentItems size(2) = 5
 generating all the tuples of size 3
 8 of size 3 have been generated
-4 removed
 pruned 6 itemsets from itemsets of size 3 and 1 elements
 currentItems size(3) = 4
 generating all the tuples of size 4
 1 of size 4 have been generated
-1 removed
-2 removed
-3 removed
-5 removed
 pruned 1 itemsets from itemsets of size 4 and 4 elements
 currentItems size(4) = 0
-Elapsed time = 9
+Found 16 Association rules (with confidence 40.0%)
+[(4)	==>	(2)	:	1.0
+, (1)	==>	(3)	:	0.6666666666666666
+, (3)	==>	(1)	:	0.6666666666666666
+, (2)	==>	(3)	:	0.5714285714285714
+, (3)	==>	(2)	:	0.6666666666666666
+, (1, 2)	==>	(3)	:	0.5
+, (1, 3)	==>	(2)	:	0.5
+, (2, 3)	==>	(1)	:	0.5
+, (1)	==>	(2)	:	0.6666666666666666
+, (2)	==>	(1)	:	0.5714285714285714
+, (5)	==>	(1)	:	1.0
+, (5)	==>	(2)	:	1.0
+, (1, 2)	==>	(5)	:	0.5
+, (5)	==>	(1, 2)	:	1.0
+, (1, 5)	==>	(2)	:	1.0
+, (2, 5)	==>	(1)	:	1.0
+]Elapsed time = 14

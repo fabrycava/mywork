@@ -5,17 +5,19 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 import util.Printer;
+import util.Subset;
 
 public class APriori implements AprioriInterface, Cloneable {
 
@@ -30,6 +32,9 @@ public class APriori implements AprioriInterface, Cloneable {
 	protected HashMap<ItemSet, Integer> frequentItemsTable;
 	protected HashMap<Integer, Boolean> currentItems;
 
+	protected HashMap<ItemSet, Double> frequent;
+	protected HashSet<AssociationRule> assoc;
+
 	private List<Transaction> transactions;
 
 	protected PrintWriter pw;
@@ -43,6 +48,7 @@ public class APriori implements AprioriInterface, Cloneable {
 	public APriori(String fileName, double minimumSupport, double minimumConfidence) throws Exception {
 		this.fileName = fileName;
 		this.outputFile = outputFile;
+		frequent = new HashMap<>();
 
 		if (minimumConfidence > 1 || minimumConfidence < 0)
 			throw new IllegalArgumentException("confidence must be expressed between 0 and 1 (included)");
@@ -93,10 +99,12 @@ public class APriori implements AprioriInterface, Cloneable {
 
 		return T;
 	}
+
 	public HashMap<ItemSet, Integer> getItemsCountMap() {
 		return frequentItemsTable;
 
 	}
+
 	private void readTransactions() throws Exception {
 		N = 0;
 		T = 0;
@@ -133,25 +141,24 @@ public class APriori implements AprioriInterface, Cloneable {
 	@Override
 	public void compute() {
 
-				
+		// System.out.println(frequentItemsTable);
+		// sb.append("FIT size = " + frequentItemsTable.size() + "\n");
+		// System.out.println("FIT size = " + frequentItemsTable.size());
 
-//		System.out.println(frequentItemsTable);
-//		sb.append("FIT size = " + frequentItemsTable.size() + "\n");
-//		System.out.println("FIT size = " + frequentItemsTable.size());
-
+		System.out.println(frequentItemsTable);
 		prune(1);
-		
+
 		sb.append("Found " + frequentItemsTable.size() + " frequent itemsets of size 1" + " (with support "
 				+ (minimumSupport * 100) + "%)\n");
-		System.out.println("Found " + frequentItemsTable.size() + " frequent itemsets of size 1"
-				+ " (with support " + (minimumSupport * 100) + "%)");
+		System.out.println("Found " + frequentItemsTable.size() + " frequent itemsets of size 1" + " (with support "
+				+ (minimumSupport * 100) + "%)");
 		System.out.println(frequentItemsTable);
 		for (int k = 2; frequentItemsTable.size() != 0; k++) {
 			sb.append("generating all the tuples of size " + k + "\n");
 			System.out.println("generating all the tuples of size " + k);
 			generateCk();
 			Iterator<ItemSet> it = frequentItemsTable.keySet().iterator();
-			//System.out.println(frequentItemsTable);
+			// System.out.println(frequentItemsTable);
 			sb.append(frequentItemsTable.size() + " of size " + k + " have been generated\n");
 			System.out.println(frequentItemsTable.size() + " of size " + k + " have been generated");
 			while (it.hasNext()) {
@@ -168,17 +175,89 @@ public class APriori implements AprioriInterface, Cloneable {
 
 		}
 
+		assocRules();
+
 		long elapsedTime = System.currentTimeMillis() - start;
 
 		sb.append("Elapsed time = " + elapsedTime + "\n");
 		System.out.println("Elapsed time = " + elapsedTime);
-		
+
 		pw.print(sb.toString());
 		pw.close();
 
 	}
 
-	
+	private void assocRules() {
+		generateAssocRules();
+		//System.out.println(assoc);
+		computeAssocRules();
+		printAssocRules();
+
+	}
+
+	private void printAssocRules() {
+		sb.append("Found " + assoc.size() + " Association rules" + " (with confidence " + (minimumConfidence * 100)
+				+ "%)\n");
+		System.out.println("Found " + assoc.size() + " Association rules" + " (with confidence "
+				+ (minimumConfidence * 100) + "%)\n");
+		sb.append(assoc);
+		System.out.println(assoc);
+
+	}
+
+	private void computeAssocRules() {
+		Iterator<AssociationRule> it = assoc.iterator();
+		while (it.hasNext()) {
+			AssociationRule ar = it.next();
+			double conf = computeConfidence(ar);
+			if (conf < minimumConfidence)
+				it.remove();
+			else
+				ar.setConfidence(conf);
+
+		}
+
+	}
+
+	private double computeConfidence(AssociationRule ar) {
+		ItemSet XY = new ItemSet(ar);
+		// System.out.println("union =" + union);
+		// System.out.println("s = " + ar.getS());
+
+		double suppXY = frequent.get(XY);
+		double suppX = frequent.get(ar.getI());
+		return (double) suppXY / suppX;
+	}
+
+	private void generateAssocRules() {
+		assoc = new HashSet();
+		Iterator<ItemSet> it = frequent.keySet().iterator();
+		while (it.hasNext()) {
+			ItemSet curr = it.next();
+			ItemSet[] subsets = generateSubsets(curr);
+			for (int i = 0; i < subsets.length; i++) {
+				for (int j = 0; j < subsets.length; j++) {
+					if (i != j && subsets[i].cardinality() != 0 && subsets[j].cardinality() != 0
+							&& subsets[i].nullIntersection(subsets[j])) {
+						AssociationRule ar = new AssociationRule(subsets[i], subsets[j]);
+						assoc.add(ar);
+					}
+				}
+			}
+		}
+	}
+
+	private static ItemSet[] generateSubsets(ItemSet curr) {
+		Set<Set<Integer>> subsets = Subset.powerSet(curr.getElements());
+		System.out.println(subsets);
+		ItemSet[] subsetsArray = new ItemSet[subsets.size()];
+		Iterator<Set<Integer>> it = subsets.iterator();
+		int i = 0;
+		while (it.hasNext())
+			subsetsArray[i++] = new ItemSet(it.next());
+		return subsetsArray;
+
+	}
 
 	// reset all the items at false
 	protected void resetCurrentItems() {
@@ -192,7 +271,6 @@ public class APriori implements AprioriInterface, Cloneable {
 	// after the counting of the candidate tuples Ck,
 	// it prunes all the unfrequent tuples
 	protected void prune(int k) {
-
 		Iterator<Entry<ItemSet, Integer>> it = frequentItemsTable.entrySet().iterator();
 		LinkedList<ItemSet> toDelete = new LinkedList<>();
 
@@ -205,11 +283,14 @@ public class APriori implements AprioriInterface, Cloneable {
 			// System.out.println("sup of " + pair.getKey() + " = " + sup);
 			if (sup < minimumSupport)
 				toDelete.add(pair.getKey());
-			else // if an itemset is frequent then all the items in it are frequent
-				for (Integer i : pair.getKey()) {
-					// System.out.println(i +" is frequen");
+			else {// itemset is frequen
+				for (Integer i : pair.getKey()) {// if an itemset is frequent then all the items in it are frequent
 					currentItems.put(i, true);
 				}
+				// add the frequent itemset to the frequent so i can count the confidence later.
+				if (pair.getKey().cardinality() > 0)
+					frequent.put(pair.getKey(), sup);
+			}
 		}
 		int numRemoved = toDelete.size();
 		int c = 0;
@@ -223,8 +304,8 @@ public class APriori implements AprioriInterface, Cloneable {
 				if (!curr.getValue()) {
 					c++;
 					itCurr.remove();
-					sb.append(curr.getKey() + " removed\n");
-					System.out.println(curr.getKey() + " removed");
+					// sb.append(curr.getKey() + " removed\n");
+					// System.out.println(curr.getKey() + " removed");
 				}
 			}
 		}
@@ -269,8 +350,6 @@ public class APriori implements AprioriInterface, Cloneable {
 		frequentItemsTable = newMap;
 	}
 
-	
-
 	private double computeSup(int value) {
 
 		double sup = ((double) value / T);
@@ -285,13 +364,33 @@ public class APriori implements AprioriInterface, Cloneable {
 	}
 
 	public static void main(String[] args) throws Exception {
-		APriori ap = new APriori("kosarak.dat.txt", 0.01, 0.8);
+		APriori ap = new APriori("toy.txt", (double) 2 / 9, 0.4);
 
-		 ap.compute();
+		ap.compute();
 
+		// ItemSet i = new ItemSet();
+		// i.add(1);
+		// i.add(2);
+		// ItemSet s = new ItemSet();
+		// s.add(3);
+		//
+		// AssociationRule ar = new AssociationRule(i, s);
+		//
+		// HashMap<AssociationRule, Double> ass = new HashMap<>();
+		// ass.put(ar, 0.0);
+		//
+		// System.out.println(ass);
+		//
+		// Iterator<AssociationRule> it = ass.keySet().iterator();
+		// while (it.hasNext()) {
+		// AssociationRule a = it.next();
+		// ass.put(a, 1.1);
+		// }
+		//
+		// System.out.println(ass);
+		//
+		// System.out.println(Arrays.toString(generateSubsets(new ItemSet(ar))));
 
 	}
-
-	
 
 }

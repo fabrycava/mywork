@@ -2,6 +2,7 @@ package apriori;
 
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 public class ItemSet implements Iterable<Integer>, Cloneable {
 
@@ -12,6 +13,16 @@ public class ItemSet implements Iterable<Integer>, Cloneable {
 	public ItemSet() {
 
 		elements = new HashSet<>();
+	}
+
+	public ItemSet(AssociationRule ar) {
+		elements = new HashSet<>();
+		elements.addAll(ar.getI().elements);
+		elements.addAll(ar.getS().elements);
+	}
+
+	public ItemSet(Set<Integer> set) {
+		elements = (HashSet<Integer>) set;
 	}
 
 	@Override
@@ -27,6 +38,12 @@ public class ItemSet implements Iterable<Integer>, Cloneable {
 		elements.add(x);
 	}
 
+	public void addItemset(ItemSet is) {
+
+		elements.addAll(is.elements);
+	}
+
+	@Override
 	public boolean equals(Object o) {
 		if (o == null)
 			return false;
@@ -41,7 +58,7 @@ public class ItemSet implements Iterable<Integer>, Cloneable {
 		return false;
 
 	}
-	
+
 	public int getMax() {
 		return max;
 	}
@@ -57,7 +74,7 @@ public class ItemSet implements Iterable<Integer>, Cloneable {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("{");
+		sb.append("(");
 		Iterator<Integer> it = iterator();
 		while (it.hasNext()) {
 			sb.append(it.next());
@@ -65,7 +82,7 @@ public class ItemSet implements Iterable<Integer>, Cloneable {
 				sb.append(", ");
 
 		}
-		sb.append("}");
+		sb.append(")");
 		return sb.toString();
 	}
 
@@ -90,4 +107,13 @@ public class ItemSet implements Iterable<Integer>, Cloneable {
 		return elements.contains(x);
 	}
 
+	public boolean nullIntersection(ItemSet is) {
+		Iterator<Integer> it = is.elements.iterator();
+		while (it.hasNext()) {
+			if (elements.contains(it.next()))				return false;
+
+		}
+		return true;
+
+	}
 }
