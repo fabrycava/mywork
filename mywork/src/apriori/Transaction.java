@@ -28,6 +28,7 @@ public class Transaction{
 	}
 	
 	
+	
 	public boolean containsItemset(ItemSet is){
 		return items.containsAll(is.getElements());
 	}
