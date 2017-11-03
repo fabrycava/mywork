@@ -110,10 +110,19 @@ public class ItemSet implements Iterable<Integer>, Cloneable {
 	public boolean nullIntersection(ItemSet is) {
 		Iterator<Integer> it = is.elements.iterator();
 		while (it.hasNext()) {
-			if (elements.contains(it.next()))				return false;
+			if (elements.contains(it.next()))
+				return false;
 
 		}
 		return true;
 
+	}
+	
+	public boolean containsAll(ItemSet is) {
+		return this.elements.containsAll(is.elements);
+	}
+	
+	public void remove(Integer x) {
+		elements.remove(x);
 	}
 }

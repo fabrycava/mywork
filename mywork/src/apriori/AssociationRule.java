@@ -1,8 +1,11 @@
 package apriori;
 
-public class AssociationRule {
+import java.util.Comparator;
+
+public class AssociationRule implements Comparable<AssociationRule> {
 	private ItemSet i, s;
 
+	
 	private double confidence = 0.0;
 
 	public AssociationRule(ItemSet i, ItemSet s) {
@@ -21,19 +24,17 @@ public class AssociationRule {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(i + "\t==>\t" + s + "\t:\t" + confidence+"\n");
+		sb.append(i + "\t==>\t" + s + "\t:\t" + confidence + "\n");
 
 		return sb.toString();
 
 	}
 
-	
-	 @Override
+	@Override
 	public int hashCode() {
-		return i.hashCode()*s.hashCode()*57;
+		return i.hashCode() * s.hashCode() * 57;
 	}
-	
-	
+
 	@Override
 	public boolean equals(Object o) {
 		if (o == this)
@@ -43,7 +44,7 @@ public class AssociationRule {
 			return false;
 		if (o instanceof AssociationRule) {
 			AssociationRule ar = (AssociationRule) o;
-			return this.i.equals(ar.i) && this.s .equals(ar.s);
+			return this.i.equals(ar.i) && this.s.equals(ar.s);
 		}
 		return false;
 	}
@@ -54,5 +55,42 @@ public class AssociationRule {
 
 	public double getConfidence() {
 		return confidence;
+	}
+
+	public boolean contains(AssociationRule ar1) {
+		if (this.i == null || this.s == null || ar1.s == null || ar1.s == null)
+			return false;
+
+		if (this.i.cardinality() > ar1.i.cardinality() && this.s.cardinality() >= ar1.s.cardinality())
+			return this.i.containsAll(ar1.i) && this.s.containsAll(ar1.s);
+		return false;
+	}
+
+	@Override
+	public int compareTo(AssociationRule o) {
+		if (this.i.cardinality() == o.i.cardinality())
+
+			if (this.s.cardinality() == o.s.cardinality())
+				return 0;
+			else if (this.s.cardinality() > o.s.cardinality())
+				return 1;
+			else
+				return -1;
+		else
+			return this.i.cardinality() > o.i.cardinality() ? 1 : -1;
+
+	}
+	
+	public static AssociationRuleComparator getComparator() {
+		return new AssociationRuleComparator();
+	}
+
+	private static class AssociationRuleComparator implements Comparator<AssociationRule> {		
+		
+		@Override
+		public int compare(AssociationRule o1, AssociationRule o2) {
+			return o1.compareTo(o2)*(-1);
+		};
+
 	}
 }
