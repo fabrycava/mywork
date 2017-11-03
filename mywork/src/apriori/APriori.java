@@ -260,7 +260,7 @@ public class APriori implements AprioriInterface, Cloneable {
 		double start=System.currentTimeMillis();
 		LinkedList<AssociationRule> ass = new LinkedList<>(assoc);
 		ass.sort(AssociationRule.getComparator());
-		System.out.println("tempo trascorso per ordinamento" + (System.currentTimeMillis()-start));
+		System.out.println("tempo trascorso per ordinamento " + (System.currentTimeMillis()-start));
 
 
 	}
