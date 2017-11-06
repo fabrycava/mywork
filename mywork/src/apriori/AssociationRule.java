@@ -5,7 +5,6 @@ import java.util.Comparator;
 public class AssociationRule implements Comparable<AssociationRule> {
 	private ItemSet i, s;
 
-	
 	private double confidence = 0.0;
 
 	public AssociationRule(ItemSet i, ItemSet s) {
@@ -24,7 +23,7 @@ public class AssociationRule implements Comparable<AssociationRule> {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(i + "\t==>\t" + s + "\t:\t" + confidence + "\n");
+		sb.append(i + "\t==>\t" + s + "\t\t" + confidence + "\n");
 
 		return sb.toString();
 
@@ -80,16 +79,26 @@ public class AssociationRule implements Comparable<AssociationRule> {
 			return this.i.cardinality() > o.i.cardinality() ? 1 : -1;
 
 	}
-	
-	public static AssociationRuleComparator getComparator() {
-		return new AssociationRuleComparator();
+
+	public static Comparator<AssociationRule> getComparator(Order order) {
+		return order == Order.ASCENDING ? new AscendingAssociationRuleComparator()
+				: new DescendingAssociationRuleComparator();
 	}
 
-	private static class AssociationRuleComparator implements Comparator<AssociationRule> {		
-		
+	private static class AscendingAssociationRuleComparator implements Comparator<AssociationRule> {
+
 		@Override
 		public int compare(AssociationRule o1, AssociationRule o2) {
-			return o1.compareTo(o2)*(-1);
+			return o1.compareTo(o2);
+		};
+
+	}
+
+	private static class DescendingAssociationRuleComparator implements Comparator<AssociationRule> {
+
+		@Override
+		public int compare(AssociationRule o1, AssociationRule o2) {
+			return o1.compareTo(o2) * (-1);
 		};
 
 	}

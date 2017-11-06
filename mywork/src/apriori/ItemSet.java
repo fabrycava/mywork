@@ -1,8 +1,14 @@
 package apriori;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Set;
+
+import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 
 public class ItemSet implements Iterable<Integer>, Cloneable {
 
@@ -117,12 +123,31 @@ public class ItemSet implements Iterable<Integer>, Cloneable {
 		return true;
 
 	}
-	
+
 	public boolean containsAll(ItemSet is) {
 		return this.elements.containsAll(is.elements);
 	}
-	
+
 	public void remove(Integer x) {
 		elements.remove(x);
+	}
+
+	public LinkedList<Integer> getSortedElements() {
+		LinkedList<Integer> linkedList = new LinkedList<>(elements);
+		System.out.println(linkedList);
+		Collections.sort(linkedList);
+		System.out.println(linkedList);
+		return linkedList;
+	}
+
+	public static void main(String[] args) {
+
+		ItemSet is = new ItemSet();
+
+		int[] a = { 1, 2, 3, 4, 5, 6, 7, 8 };
+		for (int i = a.length-1; i >=0 ; i--)
+			is.add(a[i]);
+
+		LinkedList<Integer> l = is.getSortedElements();
 	}
 }

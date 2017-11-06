@@ -150,9 +150,9 @@ public class APriori implements AprioriInterface, Cloneable {
 		prune(1);
 
 		sb.append("Found " + frequentItemsTable.size() + " frequent itemsets of size 1" + " (with support "
-				+ (minimumSupport * 100) + "%)\n");
+				+ (minimumSupport * 100) + "%)\n\n");
 		System.out.println("Found " + frequentItemsTable.size() + " frequent itemsets of size 1" + " (with support "
-				+ (minimumSupport * 100) + "%)");
+				+ (minimumSupport * 100) + "%)\n");
 		// System.out.println(frequentItemsTable);
 		for (int k = 2; frequentItemsTable.size() != 0; k++) {
 			sb.append("generating all the tuples of size " + k + "\n");
@@ -171,8 +171,8 @@ public class APriori implements AprioriInterface, Cloneable {
 
 			prune(k);
 
-			sb.append("currentItems size(" + k + ") = " + currentItems.size() + "\n");
-			System.out.println("currentItems size(" + k + ") = " + currentItems.size());
+			sb.append("currentItems size(" + k + ") = " + currentItems.size() + "\n\n");
+			System.out.println("currentItems size(" + k + ") = " + currentItems.size()+"\n");
 
 		}
 
@@ -189,20 +189,31 @@ public class APriori implements AprioriInterface, Cloneable {
 	}
 
 	private void assocRules() {
+		double start = System.currentTimeMillis();		
 		generateAssocRules();
-		// System.out.println(assoc);
-		computeAssocRules2();
+		System.out.println(assoc);
+		computeAssocRules();
 		printAssocRules();
+		System.out.println("Elapsed time for AR " + (System.currentTimeMillis() - start));
+		sb.append("Elapsed time for AR " + (System.currentTimeMillis() - start+"\n"));
 
 	}
 
 	private void printAssocRules() {
+		
+		
+		
 		sb.append("Found " + assoc.size() + " Association rules" + " (with confidence " + (minimumConfidence * 100)
 				+ "%)\n");
 		System.out.println("Found " + assoc.size() + " Association rules" + " (with confidence "
 				+ (minimumConfidence * 100) + "%)\n");
-		// sb.append(assoc);
-		// System.out.println(assoc);
+		LinkedList<AssociationRule> ass = new LinkedList<>(assoc);
+		ass.sort(AssociationRule.getComparator(Order.ASCENDING));
+		System.out.println(ass+"\n");
+		sb.append(assoc+"\n\n");
+
+		sb.append(assoc+"\n\n");
+		System.out.println(assoc+"\n");
 
 	}
 
@@ -248,20 +259,40 @@ public class APriori implements AprioriInterface, Cloneable {
 		while (it.hasNext()) {
 			AssociationRule ar = it.next();
 			double conf = computeConfidence(ar);
-			if (conf < minimumConfidence)
+			ar.setConfidence(conf);
+			if (conf < minimumConfidence) {
+				System.out.println("removed " + ar);
+				sb.append("removed " + ar);
 				it.remove();
-			else {
-				ar.setConfidence(conf);
 			}
 		}
 
 		System.out.println("#assoc after computing confidence" + " = " + assoc.size());
 
-		double start=System.currentTimeMillis();
-		LinkedList<AssociationRule> ass = new LinkedList<>(assoc);
-		ass.sort(AssociationRule.getComparator());
-		System.out.println("tempo trascorso per ordinamento " + (System.currentTimeMillis()-start));
+		it = toDelete.iterator();
+		while (it.hasNext()) {
+			AssociationRule ar = it.next();
+			assoc.remove(ar);
+			System.out.println("removed " + ar);
+			sb.append("removed " + ar);
+		}
 
+		double start = System.currentTimeMillis();
+		LinkedList<AssociationRule> ass = new LinkedList<>(assoc);
+		ass.sort(AssociationRule.getComparator(Order.DESCENDING));
+		System.out.println(ass);
+		System.out.println("tempo trascorso per ordinamento " + (System.currentTimeMillis() - start));
+
+		while (ass.size() != 0) {
+			AssociationRule ar = ass.getFirst();
+			it=assoc.iterator();
+			while(it.hasNext()) {
+				AssociationRule curr=it.next();
+				if(ar.contains(curr))
+					it.remove();
+			}
+			ass.removeFirst();
+		}
 
 	}
 
@@ -273,6 +304,8 @@ public class APriori implements AprioriInterface, Cloneable {
 	}
 
 	private void generateAssocRules() {
+		System.out.println("Generating the Associaton Rules from " + frequent.size()+" itemsets"  );
+		sb.append("Generating the Associaton Rules from " + frequent.size()+" itemsets\n" );
 		assoc = new HashSet();
 		Iterator<ItemSet> it = frequent.keySet().iterator();
 		while (it.hasNext()) {
@@ -288,9 +321,11 @@ public class APriori implements AprioriInterface, Cloneable {
 				}
 			}
 		}
+		System.out.println(assoc.size()+ " candidate AR have been generated");
+		sb.append(assoc.size()+ " candidate AR have been generated\n");
 	}
 
-	private static ItemSet[] generateSubsets(ItemSet curr) {
+	private ItemSet[] generateSubsets(ItemSet curr) {
 		Set<Set<Integer>> subsets = Subset.powerSet(curr.getElements());
 		// System.out.println(subsets);
 		ItemSet[] subsetsArray = new ItemSet[subsets.size()];
@@ -407,46 +442,43 @@ public class APriori implements AprioriInterface, Cloneable {
 	}
 
 	public static void main(String[] args) throws Exception {
-		APriori ap = new APriori("chess6.dat", (double) 0.7, 0.8);
+		APriori ap = new APriori("kosarak.dat.txt", (double) 0.05, 0.2);
 
 		ap.compute();
 
-//		 ItemSet i = new ItemSet();
-//		 i.add(1);
-//		 i.add(2);
-//		 ItemSet s = new ItemSet();
-//		 s.add(3);
-//		
-//		 ItemSet i1 = new ItemSet();
-//		 i1.add(1);
-//		 ItemSet s1 = new ItemSet();
-//		 s1.add(3);
-//		 AssociationRule ar = new AssociationRule(i, s);
-//		 AssociationRule ar1 = new AssociationRule(i1, s1);
-////		 System.out.println(ar);
-////		 System.out.println(ar1);
-////		 System.out.println(ar1.compareTo(ar));
-//		 
-//		 ItemSet i3=new ItemSet();
-//		 i3.add(1);
-//		 i3.add(2);
-//		 i3.add(4);
-//		 AssociationRule ar2=new AssociationRule(i3, s1);
-//		 
-//		 LinkedList<AssociationRule> ass=new LinkedList<>();
-//		 
-//		 ass.add(ar);
-//		 ass.add(ar1);
-//		 ass.add(ar2);
-//		 
-//		 System.out.println(ass);
-//
-//		 ass.sort(AssociationRule.getComparator());
-//		 
-//		 System.out.println(ass);
-		 
-		 
-
+		// ItemSet i = new ItemSet();
+		// i.add(1);
+		// i.add(2);
+		// ItemSet s = new ItemSet();
+		// s.add(3);
+		//
+		// ItemSet i1 = new ItemSet();
+		// i1.add(1);
+		// ItemSet s1 = new ItemSet();
+		// s1.add(3);
+		// AssociationRule ar = new AssociationRule(i, s);
+		// AssociationRule ar1 = new AssociationRule(i1, s1);
+		//// System.out.println(ar);
+		//// System.out.println(ar1);
+		//// System.out.println(ar1.compareTo(ar));
+		//
+		// ItemSet i3=new ItemSet();
+		// i3.add(1);
+		// i3.add(2);
+		// i3.add(4);
+		// AssociationRule ar2=new AssociationRule(i3, s1);
+		//
+		// LinkedList<AssociationRule> ass=new LinkedList<>();
+		//
+		// ass.add(ar);
+		// ass.add(ar1);
+		// ass.add(ar2);
+		//
+		// System.out.println(ass);
+		//
+		// ass.sort(AssociationRule.getComparator());
+		//
+		// System.out.println(ass);
 
 	}
 
