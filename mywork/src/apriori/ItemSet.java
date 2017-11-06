@@ -1,53 +1,46 @@
 package apriori;
 
+import java.security.AllPermission;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Set;
 
-import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
-
-public class ItemSet implements Iterable<Integer>, Cloneable {
-
-	private HashSet<Integer> elements;
+public class ItemSet extends HashSet<Integer> implements ItemSetIF {
 
 	private int max = 0;
 
 	public ItemSet() {
-
-		elements = new HashSet<>();
+		super();
 	}
 
 	public ItemSet(AssociationRule ar) {
-		elements = new HashSet<>();
-		elements.addAll(ar.getI().elements);
-		elements.addAll(ar.getS().elements);
+		super();
+		super.addAll((Collection<? extends Integer>) ar.getX());
+		super.addAll((Collection<? extends Integer>) ar.getY());
+
 	}
 
 	public ItemSet(Set<Integer> set) {
-		elements = (HashSet<Integer>) set;
+		super(set);
 	}
 
 	@Override
-	public Iterator<Integer> iterator() {
-		return elements.iterator();
-	}
-
-	public void add(int x) {
-		if (elements.isEmpty())
+	public boolean add(Integer x) {
+		if (isEmpty())
 			max = x;
 		else if (x > max)
 			max = x;
-		elements.add(x);
+		return super.add(x);
 	}
 
-	public void addItemset(ItemSet is) {
-
-		elements.addAll(is.elements);
-	}
+	// public void addItemset(ItemSet is) {
+	//
+	// elements.addAll(is.elements);
+	// }
 
 	@Override
 	public boolean equals(Object o) {
@@ -58,24 +51,24 @@ public class ItemSet implements Iterable<Integer>, Cloneable {
 			return true;
 
 		if (o instanceof ItemSet) {
-			ItemSet other = (ItemSet) o;
-			return this.elements.equals(other.getElements());
+			return super.equals(o);
 		}
 		return false;
 
 	}
 
+	@Override
 	public int getMax() {
 		return max;
 	}
 
-	public int cardinality() {
-		return elements.size();
-	}
+	// public int cardinality() {
+	// return elements.size();
+	// }
 
-	public HashSet<Integer> getElements() {
-		return elements;
-	}
+	// public HashSet<Integer> getElements() {
+	// return elements;
+	// }
 
 	@Override
 	public String toString() {
@@ -96,44 +89,55 @@ public class ItemSet implements Iterable<Integer>, Cloneable {
 	public int hashCode() {
 		// System.out.println("invoking hashcode ");
 		int x = 1;
-		for (Integer integer : elements) {
+		for (Integer integer : this) {
 			x *= integer;
 		}
 		return x * 157;
 	}
 
+	@Override
 	public ItemSet clone() {
 		ItemSet is = new ItemSet();
-		for (Integer i : this.elements)
-			is.elements.add(i);
+		for (Integer i : this)
+			is.add(i);
 		return is;
 	}
 
-	public boolean contains(Integer x) {
-		return elements.contains(x);
-	}
+	// public boolean contains(Integer x) {
+	// return elements.contains(x);
+	// }
 
-	public boolean nullIntersection(ItemSet is) {
-		Iterator<Integer> it = is.elements.iterator();
+	// public boolean nullIntersection(ItemSet is) {
+	// Iterator<Integer> it = is.elements.iterator();
+	// while (it.hasNext()) {
+	// if (elements.contains(it.next()))
+	// return false;
+	//
+	// }
+	// return true;
+	// }
+
+	@Override
+	public boolean nullIntersection(ItemSetIF is) {
+		Iterator<Integer> it = ((ItemSet) is).iterator();
 		while (it.hasNext()) {
-			if (elements.contains(it.next()))
+			if (this.contains(it.next()))
 				return false;
-
 		}
 		return true;
-
 	}
 
-	public boolean containsAll(ItemSet is) {
-		return this.elements.containsAll(is.elements);
-	}
+	// public boolean containsAll(ItemSet is) {
+	// return this.elements.containsAll(is.elements);
+	// }
 
-	public void remove(Integer x) {
-		elements.remove(x);
-	}
+	// public void remove(Integer x) {
+	// elements.remove(x);
+	// }
 
+	@Override
 	public LinkedList<Integer> getSortedElements() {
-		LinkedList<Integer> linkedList = new LinkedList<>(elements);
+		LinkedList<Integer> linkedList = new LinkedList<>(this);
 		System.out.println(linkedList);
 		Collections.sort(linkedList);
 		System.out.println(linkedList);
@@ -142,12 +146,24 @@ public class ItemSet implements Iterable<Integer>, Cloneable {
 
 	public static void main(String[] args) {
 
-		ItemSet is = new ItemSet();
+		ItemSetIF is = new ItemSet();
 
 		int[] a = { 1, 2, 3, 4, 5, 6, 7, 8 };
-		for (int i = a.length-1; i >=0 ; i--)
+		for (int i = a.length - 1; i >= 0; i--)
 			is.add(a[i]);
 
 		LinkedList<Integer> l = is.getSortedElements();
+
+		ArrayList<Boolean> al = new ArrayList<Boolean>();
+		System.out.println(al);
+		al.add(true);
+		al.add(false);
+		System.out.println(al);
+
+	}
+
+	@Override
+	public boolean containsAll(ItemSetIF y) {
+		return super.containsAll((Collection<?>) y);
 	}
 }

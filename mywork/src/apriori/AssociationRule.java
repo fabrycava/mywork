@@ -3,27 +3,27 @@ package apriori;
 import java.util.Comparator;
 
 public class AssociationRule implements Comparable<AssociationRule> {
-	private ItemSet i, s;
+	private ItemSetIF X, Y;
 
 	private double confidence = 0.0;
 
 	public AssociationRule(ItemSet i, ItemSet s) {
-		this.i = i;
-		this.s = s;
+		this.X = i;
+		this.Y = s;
 	}
 
-	public ItemSet getI() {
-		return i;
+	public ItemSetIF getX() {
+		return X;
 	}
 
-	public ItemSet getS() {
-		return s;
+	public ItemSetIF getY() {
+		return Y;
 	}
 
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(i + "\t==>\t" + s + "\t\t" + confidence + "\n");
+		sb.append(X + "\t==>\t" + Y + "\t\t" + confidence + "\n");
 
 		return sb.toString();
 
@@ -31,7 +31,7 @@ public class AssociationRule implements Comparable<AssociationRule> {
 
 	@Override
 	public int hashCode() {
-		return i.hashCode() * s.hashCode() * 57;
+		return X.hashCode() * Y.hashCode() * 57;
 	}
 
 	@Override
@@ -43,7 +43,7 @@ public class AssociationRule implements Comparable<AssociationRule> {
 			return false;
 		if (o instanceof AssociationRule) {
 			AssociationRule ar = (AssociationRule) o;
-			return this.i.equals(ar.i) && this.s.equals(ar.s);
+			return this.X.equals(ar.X) && this.Y.equals(ar.Y);
 		}
 		return false;
 	}
@@ -57,26 +57,26 @@ public class AssociationRule implements Comparable<AssociationRule> {
 	}
 
 	public boolean contains(AssociationRule ar1) {
-		if (this.i == null || this.s == null || ar1.s == null || ar1.s == null)
+		if (X == null || Y == null || ar1.Y == null || ar1.Y == null)
 			return false;
 
-		if (this.i.cardinality() > ar1.i.cardinality() && this.s.cardinality() >= ar1.s.cardinality())
-			return this.i.containsAll(ar1.i) && this.s.containsAll(ar1.s);
+		if (X.size() > ar1.X.size() && Y.size() >= ar1.Y.size())
+			return X.containsAll(ar1.X) && Y.containsAll(ar1.Y);
 		return false;
 	}
 
 	@Override
 	public int compareTo(AssociationRule o) {
-		if (this.i.cardinality() == o.i.cardinality())
+		if (X.size() == o.X.size())
 
-			if (this.s.cardinality() == o.s.cardinality())
+			if (Y.size() == o.Y.size())
 				return 0;
-			else if (this.s.cardinality() > o.s.cardinality())
+			else if (Y.size() > o.Y.size())
 				return 1;
 			else
 				return -1;
 		else
-			return this.i.cardinality() > o.i.cardinality() ? 1 : -1;
+			return X.size() > o.X.size() ? 1 : -1;
 
 	}
 

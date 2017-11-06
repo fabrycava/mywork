@@ -20,7 +20,7 @@ import java.util.StringTokenizer;
 import util.Printer;
 import util.Subset;
 
-public class APriori implements AprioriInterface, Cloneable {
+public class APrioriBits implements AprioriInterface, Cloneable {
 
 	// private List<int[]> itemsets;
 	private String fileName, outputFile;
@@ -30,10 +30,10 @@ public class APriori implements AprioriInterface, Cloneable {
 
 	protected double minimumSupport;
 	private double minimumConfidence;
-	protected HashMap<ItemSet, Integer> frequentItemsTable;
+	protected HashMap<ItemSetBits, Integer> frequentItemsTable;
 	protected HashMap<Integer, Boolean> currentItems;
 
-	protected HashMap<ItemSet, Double> frequent;
+	protected HashMap<ItemSetBits, Double> frequent;
 	protected HashSet<AssociationRule> assoc;
 
 	private List<Transaction> transactions;
@@ -46,7 +46,7 @@ public class APriori implements AprioriInterface, Cloneable {
 
 	protected long start = System.currentTimeMillis();
 
-	public APriori(String fileName, double minimumSupport, double minimumConfidence) throws Exception {
+	public APrioriBits(String fileName, double minimumSupport, double minimumConfidence) throws Exception {
 		this.fileName = fileName;
 		this.outputFile = outputFile;
 		frequent = new HashMap<>();
@@ -101,7 +101,7 @@ public class APriori implements AprioriInterface, Cloneable {
 		return T;
 	}
 
-	public HashMap<ItemSet, Integer> getItemsCountMap() {
+	public HashMap<ItemSetBits, Integer> getItemsCountMap() {
 		return frequentItemsTable;
 
 	}
@@ -120,7 +120,7 @@ public class APriori implements AprioriInterface, Cloneable {
 			StringTokenizer st = new StringTokenizer(s, " ");
 			while (st.hasMoreTokens()) {
 				int x = Integer.parseInt(st.nextToken());
-				ItemSet unary = new ItemSet();
+				ItemSetBits unary = new ItemSetBits();
 				unary.add(x);
 				t.add(x);
 				currentItems.put(x, false);
@@ -440,7 +440,7 @@ public class APriori implements AprioriInterface, Cloneable {
 	}
 
 	public static void main(String[] args) throws Exception {
-		APriori ap = new APriori("toy.txt", (double) 2 / 9, 0.7);
+		APrioriArray ap = new APrioriArray("toy.txt", (double) 2 / 9, 0.7);
 		// APriori ap = new APriori("kosarak.dat.txt", (double) 0.05, 0.4);
 
 		ap.compute();
