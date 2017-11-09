@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import apriori.ItemSet;
+import itemset.ItemSet;
 
 public class Clone {
 

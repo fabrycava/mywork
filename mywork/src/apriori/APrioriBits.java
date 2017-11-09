@@ -14,6 +14,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import associationRule.AssociationRule;
+import enums.Order;
+import itemset.ItemSet;
+import itemset.ItemSetBits;
+import itemset.ItemSetIF;
+import transaction.Transaction;
+import transaction.TransactionSet;
+
 import java.util.Set;
 import java.util.StringTokenizer;
 

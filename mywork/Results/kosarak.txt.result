@@ -1,0 +1,107 @@
+Folder:Datasets\
+fileName:kosarak.txt
+
+Input configuration: 
+41270 items, 990002 transactions, Min Sup = 0.05, Min Conf = 0.7%
+
+Pruning occurrencies of size 1pruned 41260 itemsets from itemsets of size 1 and 41260 elements
+Found 10 frequent itemsets of size 1 (with support 5.0%)
+
+generating all the tuples of size 2
+45 of size 2 have been generated
+pruned 31 itemsets from itemsets of size 2 and 2 elements
+currentItems size(2) = 8
+
+generating all the tuples of size 3
+36 of size 3 have been generated
+pruned 28 itemsets from itemsets of size 3 and 1 elements
+currentItems size(3) = 7
+
+generating all the tuples of size 4
+11 of size 4 have been generated
+pruned 10 itemsets from itemsets of size 4 and 3 elements
+currentItems size(4) = 4
+
+generating all the tuples of size 5
+0 of size 5 have been generated
+pruned 0 itemsets from itemsets of size 5 and 0 elements
+currentItems size(5) = 4
+
+Generating the Associaton Rules from 33 itemsets
+90 candidate AR have been generated
+removed (1)	==>	(3)		0.4286104838954648
+removed (3)	==>	(1)		0.18812037392979594
+removed (1)	==>	(6)		0.668852077236966
+removed (6)	==>	(1)		0.21968525410144105
+removed (11)	==>	(148)		0.15315671652040155
+removed (218)	==>	(11)		0.6959073568252104
+removed (11)	==>	(218)		0.1693543735321989
+removed (3)	==>	(6)		0.5892482962284821
+removed (6)	==>	(3)		0.44095687542195044
+removed (1)	==>	(3, 6)		0.2926357570295967
+removed (3)	==>	(1, 6)		0.12844004079718954
+removed (1, 3)	==>	(6)		0.6827545476021735
+removed (6)	==>	(1, 3)		0.09611655974485096
+removed (1, 6)	==>	(3)		0.4375193962744015
+removed (3, 6)	==>	(1)		0.21797269779018028
+removed (6)	==>	(218)		0.12916255109133418
+removed (1)	==>	(11)		0.4651734996607973
+removed (11)	==>	(1)		0.25237800942139454
+removed (3)	==>	(11)		0.35838864433783446
+removed (11)	==>	(3)		0.443014296897532
+removed (6)	==>	(148)		0.10767010213278261
+removed (6, 11)	==>	(148, 218)		0.15390123235796094
+removed (6, 218)	==>	(148, 11)		0.6419826198905697
+removed (6)	==>	(148, 218, 11)		0.08292011294136428
+removed (11)	==>	(148, 6, 218)		0.13697004655762018
+removed (218)	==>	(148, 6, 11)		0.5628343754938034
+removed (6, 11)	==>	(148)		0.1704561236740501
+removed (6)	==>	(148, 11)		0.09183968711650321
+removed (11)	==>	(148, 6)		0.1517036792880392
+removed (6)	==>	(7)		0.1224030303937317
+removed (6)	==>	(27)		0.09880373943668999
+removed (6)	==>	(148, 218)		0.09451356393858065
+removed (218)	==>	(148, 6)		0.6415268967696788
+removed (6)	==>	(11)		0.5387878425073249
+removed (1)	==>	(6, 11)		0.43586030923137675
+removed (6, 11)	==>	(1)		0.2657053883640471
+removed (6)	==>	(1, 11)		0.1431588329392358
+removed (1, 6)	==>	(11)		0.6516542656665127
+removed (11)	==>	(1, 6)		0.23647425597077443
+removed (218)	==>	(148, 11)		0.5654529447617327
+removed (11)	==>	(148, 218)		0.1376072954005466
+removed (6, 11)	==>	(3)		0.4434451704098292
+removed (3)	==>	(6, 11)		0.3192713390855296
+removed (6)	==>	(3, 11)		0.23892286663540493
+removed (3, 6)	==>	(11)		0.5418281921713552
+removed (11)	==>	(3, 6)		0.3946602941782374
+removed (6, 11)	==>	(218)		0.18712212164326741
+removed (6)	==>	(218, 11)		0.10081912420556925
+removed (218)	==>	(6, 11)		0.6843269599765232
+removed (11)	==>	(6, 218)		0.166536195459602
+removed (218)	==>	(148)		0.6639314657215739
+removed (6, 11)	==>	(7)		0.1723233327057865
+removed (6)	==>	(7, 11)		0.09284571664222266
+removed (7)	==>	(6, 11)		0.6425349260052016
+removed (11)	==>	(6, 7)		0.15336547045170504
+removed (7)	==>	(11)		0.6567930217036065
+removed (11)	==>	(7)		0.1567687088844025
+Found 14 Association rules (with confidence 70.0%)
+[(27)	==>	(6)		0.8237169711925029
+, (148)	==>	(6, 218, 11)		0.713166099367867
+, (1, 11)	==>	(6)		0.9369843930258375
+, (3, 11)	==>	(6)		0.8908522748409657
+, (7, 11)	==>	(6)		0.9782913410659846
+, (6, 7)	==>	(11)		0.7585246569759544
+, (148, 6)	==>	(218, 11)		0.770131274131274
+, (218, 11)	==>	(148, 6)		0.8087777345270534
+, (148, 218)	==>	(6, 11)		0.847729629566666
+, (148, 11)	==>	(6, 218)		0.894313025699887
+, (148, 6, 11)	==>	(218)		0.9028788701792504
+, (148, 6, 218)	==>	(11)		0.8773355853478306
+, (6, 218, 11)	==>	(148)		0.8224641266699653
+, (148, 218, 11)	==>	(6)		0.9953690766098447
+]
+
+Elapsed time for AR 18.0
+Elapsed time = 22504

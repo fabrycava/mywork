@@ -1,0 +1,20 @@
+Input configuration: 
+340522 items, 105277 transactions, Min Sup = 0.02, Min Conf = 0.5%
+
+Pruning occurrencies of size 1pruned 340521 itemsets from itemsets of size 1 and 340521 elements
+Found 1 frequent itemsets of size 1 (with support 2.0%)
+
+generating all the tuples of size 2
+0 of size 2 have been generated
+pruned 0 itemsets from itemsets of size 2 and 0 elements
+currentItems size(2) = 1
+
+Generating the Associaton Rules from 1 itemsets
+0 candidate AR have been generated
+Found 0 Association rules (with confidence 50.0%)
+[]
+
+[]
+
+Elapsed time for AR 4.0
+Elapsed time = 224570

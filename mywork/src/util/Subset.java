@@ -8,36 +8,29 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import apriori.AssociationRule;
-import apriori.ItemSet;
+import associationRule.AssociationRule;
+import itemset.ItemSet;
 
 public class Subset {
 
-
-	
-	
 	public static <T> Set<Set<T>> powerSet(Set<T> originalSet) {
-	    Set<Set<T>> sets = new HashSet<Set<T>>();
-	    if (originalSet.isEmpty()) {
-	        sets.add(new HashSet<T>());
-	        return sets;
-	    }
-	    List<T> list = new ArrayList<T>(originalSet);
-	    T head = list.get(0);
-	    Set<T> rest = new HashSet<T>(list.subList(1, list.size())); 
-	    for (Set<T> set : powerSet(rest)) {
-	        Set<T> newSet = new HashSet<T>();
-	        newSet.add(head);
-	        newSet.addAll(set);
-	        sets.add(newSet);
-	        sets.add(set);
-	    }       
-	    return sets;
-	}  
-	
-	
-	
-	
+		Set<Set<T>> sets = new HashSet<Set<T>>();
+		if (originalSet.isEmpty()) {
+			sets.add(new HashSet<T>());
+			return sets;
+		}
+		List<T> list = new ArrayList<T>(originalSet);
+		T head = list.get(0);
+		Set<T> rest = new HashSet<T>(list.subList(1, list.size()));
+		for (Set<T> set : powerSet(rest)) {
+			Set<T> newSet = new HashSet<T>();
+			newSet.add(head);
+			newSet.addAll(set);
+			sets.add(newSet);
+			sets.add(set);
+		}
+		return sets;
+	}
 
 	public static void main(String[] args) {
 		ItemSet i = new ItemSet();
@@ -61,6 +54,6 @@ public class Subset {
 
 		System.out.println(ass);
 
-	//	System.out.println(Arrays.toString(generateSubsets(new ItemSet(ar))));
+		// System.out.println(Arrays.toString(generateSubsets(new ItemSet(ar))));
 	}
 }

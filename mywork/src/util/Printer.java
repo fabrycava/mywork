@@ -8,15 +8,16 @@ import apriori.APrioriBits;
 public class Printer {
 
 	APriori ap;
-	String fileName;
+	String fileName, folderData;
 	PrintWriter pw;
-	
+
 	APrioriBits apb;
 
 	public Printer(APriori ap) throws Exception {
 		this.ap = ap;
-
 		pw = ap.getPrintWriter();
+		this.folderData = ap.getFolderData();
+		this.fileName=ap.getFileName();
 	}
 
 	public Printer(APrioriBits apb) {
@@ -25,11 +26,11 @@ public class Printer {
 		pw = apb.getPrintWriter();
 	}
 
-	
 	public void printInputSettings() {
 		// System.out.println("Transactions:\n"+ getTransactions());
 
 		StringBuilder sb = new StringBuilder();
+		sb.append("Folder:" + folderData + "\n" + "fileName:"+fileName+"\n\n");
 		sb.append("Input configuration: \n" + ap.getN() + " items, " + ap.getT() + " transactions, ");
 		sb.append("Min Sup = " + ap.getMinimumSupport());
 		sb.append(", Min Conf = " + ap.getMinimumConfidence() + "%\n");
