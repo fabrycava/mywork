@@ -23,6 +23,7 @@ public class Reader {
 		BufferedReader br = new BufferedReader(new FileReader(new File(folderData+ ap.getFileName())));
 		int currBasket = -1;
 		Transaction t = null;
+		boolean flag=false;
 		br.readLine();
 		br.readLine();
 		while (br.ready()) {
@@ -36,14 +37,16 @@ public class Reader {
 			}
 
 			int basket = Integer.parseInt(st.nextToken());
+			if(basket==4)
+				System.err.println("aaaaaaaaaaaaaaa");
 			if (currBasket != basket) {
-
-				if (currBasket != -1) {
+				if (flag) {
 					T++;
 					ap.transactionsAdd(t);
 				}
 				currBasket = basket;
 				t = new TransactionSet();
+				flag=true;
 			}
 			int item = Integer.parseInt(st.nextToken());
 			ItemSet unary = new ItemSet();
@@ -60,13 +63,14 @@ public class Reader {
 				ap.fITPut(unary, ++old);
 			}
 		}
+		ap.transactionsAdd(t);
 		br.close();
 
 		ap.setN(N);
 		ap.setT(T);
 		ap.setMax(max);
 
-		PrintWriter pw = new PrintWriter(new File("conversion"));
+		PrintWriter pw = new PrintWriter(new File(folderData+"conversion"));
 		for (Transaction trans : ap.getTransactions())
 			pw.print(trans);
 			

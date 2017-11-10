@@ -81,14 +81,14 @@ public class APriori implements AprioriInterface, Cloneable {
 
 		Reader.readTransations(this, classification,folderData);
 
-		System.out.println(max);
-		if (T != transactions.size())
-			System.err.println("ERRRRRRRR" + T + " " + transactions.size());
+//		System.out.println(max);
+//		if (T != transactions.size())
+//			System.err.println("ERRRRRRRR" + T + " " + transactions.size());
 
 		printer.printInputSettings();
 
 		// System.out.println(frequentItemsTable);
-		// System.out.println(transactions);
+		 //System.out.println(transactions);
 		// System.out.println(currentItems);
 	}
 
@@ -258,16 +258,16 @@ public class APriori implements AprioriInterface, Cloneable {
 
 		resetCurrentItems();
 
-		sb.append("pruned " + numRemoved + " itemsets from itemsets of size " + k + " and " + c + " elements\n");
+		sb.append("pruned " + numRemoved + " itemsets of size " + k + " and " + c + " elements\n");
 
-		System.out.println("pruned " + numRemoved + " itemsets from itemsets of size " + k + " and " + c + " elements");
+		System.out.println("pruned " + numRemoved + " itemsetsof size " + k + " and " + c + " elements");
 
 	}
 
 	private void assocRules() {
 		double start = System.currentTimeMillis();
 		generateAssocRules();
-		System.out.println(assoc);
+		//System.out.println(assoc);
 		computeAssocRules2();
 		printAssocRules();
 		System.out.println("Elapsed time for AR " + (System.currentTimeMillis() - start));
@@ -321,8 +321,8 @@ public class APriori implements AprioriInterface, Cloneable {
 		while (it.hasNext()) {
 			AssociationRule ar = it.next();
 			assoc.remove(ar);
-			System.out.println("removed " + ar);
-			sb.append("removed " + ar);
+//			System.out.println("removed " + ar);
+//			sb.append("removed " + ar);
 		}
 	}
 
@@ -335,8 +335,8 @@ public class APriori implements AprioriInterface, Cloneable {
 			double conf = computeConfidence(ar);
 			ar.setConfidence(conf);
 			if (conf < minimumConfidence) {
-				System.out.println("removed " + ar);
-				sb.append("removed " + ar);
+				//System.out.println("removed " + ar);
+				//sb.append("removed " + ar);
 				it.remove();
 			}
 		}
@@ -347,14 +347,14 @@ public class APriori implements AprioriInterface, Cloneable {
 		while (it.hasNext()) {
 			AssociationRule ar = it.next();
 			assoc.remove(ar);
-			System.out.println("removed " + ar);
-			sb.append("removed " + ar);
+//			System.out.println("removed " + ar);
+//			sb.append("removed " + ar);
 		}
 
 		double start = System.currentTimeMillis();
 		LinkedList<AssociationRule> ass = new LinkedList<>(assoc);
 		ass.sort(AssociationRule.getComparator(Order.DESCENDING));
-		System.out.println(ass);
+		//System.out.println(ass);
 		System.out.println("tempo trascorso per ordinamento " + (System.currentTimeMillis() - start));
 
 		while (ass.size() != 0) {
@@ -469,18 +469,18 @@ public class APriori implements AprioriInterface, Cloneable {
 	}
 
 	public static void main(String[] args) throws Exception {
-		// APriori ap = new APriori("books.dat", (double) 0.02, 0.5,
-		// Classification.BIPARTITEbi);
-		// // APriori ap = new APriori("kosarak.dat.txt", (double) 0.05,
-		// // 0.4,Classification.BIPARTITE);
-		// APriori ap1 = new APriori("conversion", (double) 0.02, 0.5,
-		// Classification.TRANSACTIONS);
-		//
-		// ap1.compute();
-		// ap.compute();
+		 APriori ap = new APriori("books.dat", (double) 0.001, 0.2,
+		 Classification.BIPARTITEbi);
+		 ap.compute();
+		 
+		 APriori ap1 = new APriori("conversion", (double) 0.001, 0.2,
+		 Classification.TRANSACTIONS);
+		
+		 ap1.compute();
+		
 
-		APriori ap = new APriori("kosarak.txt", (double) 0.05, 0.7, Classification.TRANSACTIONS);
-		ap.compute();
+//		APriori ap = new APriori("kosarak.txt", (double) 0.05 , 0.7, Classification.TRANSACTIONS);
+//		ap.compute();
 
 		// ItemSet i = new ItemSet();
 		// i.add(1);
