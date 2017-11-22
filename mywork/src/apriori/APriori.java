@@ -212,7 +212,7 @@ public class APriori implements AprioriInterface {
 			newCurrentItems.put(i, false);
 		currentItems = newCurrentItems;
 
-	}
+	} 
 
 	// after the counting of the candidate tuples Ck,
 	// it prunes all the unfrequent tuples
