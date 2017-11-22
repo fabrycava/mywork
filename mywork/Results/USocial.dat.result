@@ -42,5 +42,5 @@ Found 14 Association rules (with confidence 10.0%)
 , (2, 3)	==>	(1)		1.0
 ]
 
-Elapsed time for AR 6.0
-Elapsed time = 18
+Elapsed time for AR 7.0
+Elapsed time = 19

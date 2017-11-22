@@ -15,6 +15,7 @@ import java.util.Map.Entry;
 
 import associationRule.AssociationRule;
 import associationRule.AssociationRuleGenerator;
+import communityDetection.CommunityDetection;
 
 import java.util.Set;
 import java.util.StringTokenizer;
@@ -140,6 +141,8 @@ public class APriori implements AprioriInterface {
 
 		pw.print(sb.toString());
 		pw.close();
+		
+		CommunityDetection cm=new CommunityDetection(frequentItemset);
 
 	}
 

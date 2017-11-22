@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.Set;
 
 import apriori.APriori;
+import enums.ARParameter;
 import enums.Order;
 import itemset.ItemSet;
 import itemset.ItemSetIF;
@@ -28,6 +29,11 @@ public class AssociationRuleGenerator {
 	}
 
 	
+	
+	public  HashSet<AssociationRule> getAssociationRules() {
+		assocRules();
+		return assoc;
+	}
 	public void assocRules() {
 		double start = System.currentTimeMillis();
 		generateAssocRules();
@@ -46,7 +52,7 @@ public class AssociationRuleGenerator {
 		System.out.println("Found " + assoc.size() + " Association rules" + " (with confidence "
 				+ (minimumConfidence * 100) + "%)\n");
 		LinkedList<AssociationRule> ass = new LinkedList<>(assoc);
-		ass.sort(AssociationRule.getComparator(Order.ASCENDING));
+		ass.sort(AssociationRule.getComparator(Order.ASCENDING,ARParameter.SIZE));
 		System.out.println(ass + "\n");
 		sb.append(ass + "\n\n");
 
@@ -117,7 +123,7 @@ public class AssociationRuleGenerator {
 
 		double start = System.currentTimeMillis();
 		LinkedList<AssociationRule> ass = new LinkedList<>(assoc);
-		ass.sort(AssociationRule.getComparator(Order.DESCENDING));
+		ass.sort(AssociationRule.getComparator(Order.DESCENDING,ARParameter.SIZE));
 		// System.out.println(ass);
 		System.out.println("tempo trascorso per ordinamento " + (System.currentTimeMillis() - start));
 

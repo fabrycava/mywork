@@ -3,12 +3,14 @@ package itemset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Set;
 
 import associationRule.AssociationRule;
+import enums.Order;
 
 public class ItemSet extends HashSet<Integer> implements ItemSetIF {
 
@@ -167,4 +169,38 @@ public class ItemSet extends HashSet<Integer> implements ItemSetIF {
 	public boolean containsAll(ItemSetIF y) {
 		return super.containsAll((Collection<?>) y);
 	}
+
+	public static Comparator<ItemSet> getComparator(Order order) {
+		return order == Order.ASCENDING ? new AscendingItemSetComparator() : new DescendingItemSetComparator();
+	}
+
+	private static class DescendingItemSetComparator implements Comparator<ItemSet> {
+
+		@Override
+		public int compare(ItemSet i1, ItemSet i2) {
+			if (i1.size() > i2.size())
+				return -1;
+			else if (i1.size() < i2.size())
+				return 1;
+
+			return 0;
+		};
+
+	}
+
+	
+	private static class AscendingItemSetComparator implements Comparator<ItemSet> {
+
+		@Override
+		public int compare(ItemSet i1, ItemSet i2) {
+			if (i1.size() < i2.size())
+				return -1;
+			else if (i1.size() > i2.size())
+				return 1;
+
+			return 0;
+		};
+
+	}
+
 }

@@ -2,6 +2,7 @@ package associationRule;
 
 import java.util.Comparator;
 
+import enums.ARParameter;
 import enums.Order;
 import itemset.ItemSet;
 import itemset.ItemSetIF;
@@ -84,25 +85,41 @@ public class AssociationRule implements Comparable<AssociationRule> {
 
 	}
 
-	public static Comparator<AssociationRule> getComparator(Order order) {
-		return order == Order.ASCENDING ? new AscendingAssociationRuleComparator()
-				: new DescendingAssociationRuleComparator();
+	public static Comparator<AssociationRule> getComparator(Order order, ARParameter arp) {
+		return order == Order.ASCENDING ? new AscendingAssociationRuleComparator(arp)
+				: new DescendingAssociationRuleComparator(arp);
 	}
 
 	private static class AscendingAssociationRuleComparator implements Comparator<AssociationRule> {
 
+		ARParameter arp;
+
+		public AscendingAssociationRuleComparator(ARParameter arp) {
+			this.arp = arp;
+		}
+
 		@Override
 		public int compare(AssociationRule o1, AssociationRule o2) {
-			return o1.compareTo(o2);
+			if (arp == ARParameter.SIZE)
+				return o1.compareTo(o2);
+			return o1.confidence > o2.confidence ? 1 : o1.confidence < o2.confidence ? (-1) : 0;
 		};
 
 	}
 
 	private static class DescendingAssociationRuleComparator implements Comparator<AssociationRule> {
+		ARParameter arp;
+
+		public DescendingAssociationRuleComparator(ARParameter arp) {
+			this.arp = arp;
+		}
 
 		@Override
 		public int compare(AssociationRule o1, AssociationRule o2) {
-			return o1.compareTo(o2) * (-1);
+			if (arp == ARParameter.CONFIDENCE)
+				return o1.compareTo(o2) * (-1);
+			return (-1) * o1.confidence > o2.confidence ? 1 : o1.confidence < o2.confidence ? (-1) : 0;
+
 		};
 
 	}
