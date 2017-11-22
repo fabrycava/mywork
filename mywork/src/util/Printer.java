@@ -3,7 +3,6 @@ package util;
 import java.io.PrintWriter;
 
 import apriori.APriori;
-import apriori.APrioriBits;
 
 public class Printer {
 
@@ -11,7 +10,7 @@ public class Printer {
 	String fileName, folderData;
 	PrintWriter pw;
 
-	APrioriBits apb;
+	
 
 	public Printer(APriori ap) throws Exception {
 		this.ap = ap;
@@ -20,11 +19,7 @@ public class Printer {
 		this.fileName=ap.getFileName();
 	}
 
-	public Printer(APrioriBits apb) {
-		this.apb = apb;
-
-		pw = apb.getPrintWriter();
-	}
+	
 
 	public void printInputSettings() {
 		// System.out.println("Transactions:\n"+ getTransactions());

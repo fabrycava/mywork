@@ -1,0 +1,47 @@
+Folder:Datasets\
+fileName:retail.dat
+
+Input configuration: 
+16470 items, 88162 transactions, Min Sup = 0.02, Min Conf = 0.7%
+
+Pruning occurrencies of size 1
+pruned 16450 itemsets of size 1 and 16450 elements
+Found 20 frequent itemsets of size 1 (with support 2.0%)
+
+generating all the tuples of size 2
+190 of size 2 have been generated
+pruned 168 itemsets of size 2 and 7 elements
+currentItems size(2) = 13
+
+generating all the tuples of size 3
+134 of size 3 have been generated
+pruned 122 itemsets of size 3 and 4 elements
+currentItems size(3) = 9
+
+generating all the tuples of size 4
+36 of size 4 have been generated
+pruned 35 itemsets of size 4 and 5 elements
+currentItems size(4) = 4
+
+generating all the tuples of size 5
+0 of size 5 have been generated
+pruned 0 itemsets of size 5 and 0 elements
+currentItems size(5) = 4
+
+Generating the Associaton Rules from 55 itemsets
+130 candidate AR have been generated
+Found 10 Association rules (with confidence 70.0%)
+[(110)	==>	(38)		0.9753042233357193
+, (310)	==>	(39)		0.7139552814186585
+, (225)	==>	(39)		0.7218299048203868
+, (39, 170)	==>	(38)		0.9805730937348227
+, (36, 39)	==>	(38)		0.9548355424644084
+, (39, 89)	==>	(48)		0.7730083666787922
+, (48, 89)	==>	(39)		0.7594710507505361
+, (48, 65)	==>	(39)		0.7105575326215896
+, (32, 41)	==>	(39)		0.73811013767209
+, (48, 38, 41)	==>	(39)		0.8386689132266217
+]
+
+Elapsed time for AR 12.0
+Elapsed time = 4660

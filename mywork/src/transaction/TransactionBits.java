@@ -5,16 +5,19 @@ import java.util.BitSet;
 import itemset.ItemSetBits;
 import itemset.ItemSetIF;
 
-public class TransactionBits extends BitSet implements Transaction {
+public class TransactionBits extends AbstractTransaction {
+	
+	BitSet transaction;
 
 	public TransactionBits() {
 		super();
+		transaction=new BitSet();
 	}
 
 	@Override
 	public boolean containsAll(ItemSetIF is) {
 		BitSet temp=(ItemSetBits)is.clone();
-		temp.xor(this);
+		temp.xor(transaction);
 		return temp.isEmpty();		
 	}
 
@@ -25,7 +28,7 @@ public class TransactionBits extends BitSet implements Transaction {
 
 	@Override
 	public boolean add(Integer x) {
-		set(x+1);
+		transaction.set(x+1);
 		return true;
 	}
 

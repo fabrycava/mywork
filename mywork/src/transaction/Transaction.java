@@ -2,13 +2,22 @@ package transaction;
 
 import itemset.ItemSetIF;
 
-public interface Transaction {	
-	
+public interface Transaction {
+
 	@Override
 	String toString();
-	public boolean add(Integer x);
-	boolean containsAll(ItemSetIF is);
-	
 
+	boolean add(Integer x);
+
+	boolean containsAll(ItemSetIF is);
+
+	public int getId();
+
+	@Override
+	
+	public boolean equals(Object o);
+
+	@Override
+	public int hashCode();
 
 }
