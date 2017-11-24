@@ -16,9 +16,9 @@ public class TransactionSet extends AbstractTransaction {
 	private HashSet<Integer> transaction;
 
 	public TransactionSet(int id) {
-		super();
+		super(id);
 		transaction = new HashSet<>();
-		this.id=id;
+		
 	}
 
 	public boolean containsAll(ItemSetIF is) {

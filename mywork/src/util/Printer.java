@@ -3,16 +3,18 @@ package util;
 import java.io.PrintWriter;
 
 import apriori.APriori;
+import apriori.AbstractAPriori;
+import apriori.AprioriInterface;
 
 public class Printer {
 
-	APriori ap;
+	AbstractAPriori ap;
 	String fileName, folderData;
 	PrintWriter pw;
 
 	
 
-	public Printer(APriori ap) throws Exception {
+	public Printer(AbstractAPriori ap) throws Exception {
 		this.ap = ap;
 		pw = ap.getPrintWriter();
 		this.folderData = ap.getFolderData();

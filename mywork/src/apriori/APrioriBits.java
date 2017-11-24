@@ -30,16 +30,22 @@ import util.Printer;
 import util.Reader;
 import util.Subset;
 
-public class APriori extends AbstractAPriori{
+public class APrioriBits extends AbstractAPriori {
 
-	
+	// private List<int[]> itemsets;
+	private String fileName, outputFile, folderData = "Datasets\\", folderResults = "Results\\";;
+	private int N, T;
+
+	protected double minimumSupport;
+	private double minimumConfidence;
+	protected HashMap<ItemSet, Integer> frequentItemsTable;
 	protected HashMap<Integer, Boolean> currentItems;
 
 	protected HashMap<ItemSet, Double> frequentItemset;
-	protected HashMap<ItemSet, Integer> frequentItemsTable;
 
+	private List<Transaction> transactions;
 
-
+	protected PrintWriter pw;
 
 	StringBuilder sb = new StringBuilder();
 
@@ -47,12 +53,27 @@ public class APriori extends AbstractAPriori{
 
 	protected long start = System.currentTimeMillis();
 
-	public APriori(String fileName, double minimumSupport, double minimumConfidence, Classification classification)
+	public APrioriBits(String fileName, double minimumSupport, double minimumConfidence, Classification classification)
 			throws Exception {
-		super(fileName, minimumSupport, minimumConfidence, classification);
-		frequentItemset = new HashMap<>();	
+		super(fileName, minimumConfidence, minimumConfidence, classification);
+		this.fileName = fileName;
+		this.outputFile = outputFile;
+		frequentItemset = new HashMap<>();
 
-		//printer = new Printer(this);
+		if (minimumConfidence > 1 || minimumConfidence < 0)
+			throw new IllegalArgumentException("confidence must be expressed between 0 and 1 (included)");
+		else
+			this.minimumConfidence = minimumConfidence;
+
+		if (minimumSupport > 1 || minimumSupport < 0)
+			throw new IllegalArgumentException(
+					"support must be expressed with a double value between 0 and 1 (included)");
+		else
+			this.minimumSupport = minimumSupport;
+
+		pw = new PrintWriter(new File(folderResults + fileName + ".result"));
+
+		printer = new Printer(this);
 
 		frequentItemsTable = new HashMap<>();
 		transactions = new ArrayList<>();
@@ -60,8 +81,11 @@ public class APriori extends AbstractAPriori{
 
 		Reader.readTransations(this, classification, folderData);
 
-	
+		// System.out.println(max);
+		// if (T != transactions.size())
+		// System.err.println("ERRRRRRRR" + T + " " + transactions.size());
 
+		printer.printInputSettings();
 
 //		System.out.println(frequentItemsTable);
 		System.out.println(transactions);
@@ -228,7 +252,12 @@ public class APriori extends AbstractAPriori{
 		frequentItemsTable = newMap;
 	}
 
-	
+	private double computeSup(int value) {
+
+		double sup = ((double) value / T);
+
+		return sup;
+	}
 
 	@Override
 	public void results() {
@@ -246,7 +275,7 @@ public class APriori extends AbstractAPriori{
 		//
 		// ap1.compute();
 
-		APriori ap = new APriori("USocial.dat", (double) 0.2, 0.1, Classification.USOCIAL);
+		APrioriBits ap = new APrioriBits("USocial.dat", (double) 0.2, 0.1, Classification.USOCIAL);
 		ap.compute();
 
 	}
@@ -255,7 +284,9 @@ public class APriori extends AbstractAPriori{
 		currentItems.put(x, b);
 	}
 
-	
+	public String getFolderData() {
+		return folderData;
+	}
 
 	public boolean fITContains(ItemSet unary) {
 		return frequentItemsTable.containsKey(unary);
@@ -269,7 +300,46 @@ public class APriori extends AbstractAPriori{
 		return frequentItemsTable.get(is);
 	}
 
+	public PrintWriter getPrintWriter() {
+		return pw;
+	}
 
+	public void transactionsAdd(Transaction t) {
+		transactions.add(t);
+	}
+
+	public void setN(int x) {
+		N = x;
+	}
+
+	public void setT(int x) {
+		T = x;
+	}
+
+	public double getMinimumSupport() {
+		return minimumSupport;
+	}
+
+	public double getMinimumConfidence() {
+		return minimumConfidence;
+	}
+
+	public List<Transaction> getTransactions() {
+		return transactions;
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public int getN() {
+		return N;
+	}
+
+	public int getT() {
+
+		return T;
+	}
 
 	public HashMap<ItemSet, Integer> getItemsCountMap() {
 		return frequentItemsTable;

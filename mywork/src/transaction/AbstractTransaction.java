@@ -1,10 +1,17 @@
 package transaction;
 
+import java.util.HashSet;
+
 import itemset.ItemSetIF;
 
 public abstract class AbstractTransaction implements Transaction {
 	
 	protected int id;
+	
+	public AbstractTransaction(int id) {
+		
+		this.id=id;
+	}
 
 	public abstract boolean add(Integer x) ;
 	

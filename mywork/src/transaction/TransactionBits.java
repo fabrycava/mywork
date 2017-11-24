@@ -9,8 +9,8 @@ public class TransactionBits extends AbstractTransaction {
 	
 	BitSet transaction;
 
-	public TransactionBits() {
-		super();
+	public TransactionBits(int id) {
+		super(id);
 		transaction=new BitSet();
 	}
 
@@ -23,12 +23,12 @@ public class TransactionBits extends AbstractTransaction {
 
 	@Override
 	public String toString() {
-		return super.toString() + "\n";
+		return transaction.toString() + "\n";
 	}
 
 	@Override
 	public boolean add(Integer x) {
-		transaction.set(x+1);
+		transaction.set(x);
 		return true;
 	}
 
@@ -45,7 +45,10 @@ public class TransactionBits extends AbstractTransaction {
 
 		BitSet b2 = (BitSet) b.clone();
 		
-		
+		TransactionBits tr=new TransactionBits(1);
+		tr.add(1);
+		tr.add(2);
+		System.out.println(tr);
 		b.xor(b2);
 
 		

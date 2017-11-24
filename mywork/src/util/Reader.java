@@ -10,6 +10,7 @@ import apriori.APriori;
 import enums.Classification;
 import itemset.ItemSet;
 import transaction.Transaction;
+import transaction.TransactionBits;
 import transaction.TransactionSet;
 
 public class Reader {
@@ -86,7 +87,7 @@ public class Reader {
 		while (br.ready()) {
 			String s = br.readLine();
 			T++;
-			Transaction t = new TransactionSet(id++);
+			Transaction t = new TransactionBits(id++);
 			StringTokenizer st = new StringTokenizer(s, " [],\t");
 			while (st.hasMoreTokens()) {
 				int x = Integer.parseInt(st.nextToken());

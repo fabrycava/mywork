@@ -1,9 +1,3 @@
-Folder:Datasets\
-fileName:USocialCom.dat
-
-Input configuration: 
-7 items, 20 transactions, Min Sup = 0.05, Min Conf = 0.1%
-
 Pruning occurrencies of size 1
 pruned 0 itemsets of size 1 and 0 elements
 Found 7 frequent itemsets of size 1 (with support 5.0%)
@@ -43,4 +37,4 @@ generating all the tuples of size 8
 pruned 0 itemsets of size 8 and 0 elements
 currentItems size(8) = 7
 
-Elapsed time = 16
+Elapsed time = 17
