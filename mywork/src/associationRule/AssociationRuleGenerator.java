@@ -10,7 +10,6 @@ import apriori.APriori;
 import enums.ARParameter;
 import enums.Order;
 import itemset.ItemSet;
-import itemset.ItemSetIF;
 import util.Subset;
 
 public class AssociationRuleGenerator {
@@ -20,26 +19,24 @@ public class AssociationRuleGenerator {
 	private HashSet<AssociationRule> assoc;
 	private StringBuilder sb;
 
-	
-
-	public AssociationRuleGenerator(HashMap<ItemSet, Double> frequentItemset,double  minimumConfidence,StringBuilder sb) {
+	public AssociationRuleGenerator(HashMap<ItemSet, Double> frequentItemset, double minimumConfidence,
+			StringBuilder sb) {
 		this.frequentItemset = frequentItemset;
 		this.minimumConfidence = minimumConfidence;
-		this.sb=sb;
+		this.sb = sb;
 	}
 
-	
-	
-	public  HashSet<AssociationRule> getAssociationRules() {
+	public HashSet<AssociationRule> getAssociationRules() {
 		assocRules();
 		return assoc;
 	}
+
 	public void assocRules() {
 		double start = System.currentTimeMillis();
 		generateAssocRules();
 		// System.out.println(assoc);
 		computeAssocRules2();
-		printAssocRules();
+		//printAssocRules();
 		System.out.println("Elapsed time for AR " + (System.currentTimeMillis() - start));
 		sb.append("Elapsed time for AR " + (System.currentTimeMillis() - start + "\n"));
 
@@ -52,7 +49,7 @@ public class AssociationRuleGenerator {
 		System.out.println("Found " + assoc.size() + " Association rules" + " (with confidence "
 				+ (minimumConfidence * 100) + "%)\n");
 		LinkedList<AssociationRule> ass = new LinkedList<>(assoc);
-		ass.sort(AssociationRule.getComparator(Order.ASCENDING,ARParameter.SIZE));
+		ass.sort(AssociationRule.getComparator(Order.ASCENDING, ARParameter.SIZE));
 		System.out.println(ass + "\n");
 		sb.append(ass + "\n\n");
 
@@ -123,7 +120,7 @@ public class AssociationRuleGenerator {
 
 		double start = System.currentTimeMillis();
 		LinkedList<AssociationRule> ass = new LinkedList<>(assoc);
-		ass.sort(AssociationRule.getComparator(Order.DESCENDING,ARParameter.SIZE));
+		ass.sort(AssociationRule.getComparator(Order.DESCENDING, ARParameter.SIZE));
 		// System.out.println(ass);
 		System.out.println("tempo trascorso per ordinamento " + (System.currentTimeMillis() - start));
 
@@ -141,7 +138,7 @@ public class AssociationRuleGenerator {
 	}
 
 	private double computeConfidence(AssociationRule ar) {
-		ItemSetIF XY = new ItemSet(ar);
+		ItemSet XY = new ItemSet(ar);
 		double suppXY = frequentItemset.get(XY);
 		double suppX = frequentItemset.get(ar.getX());
 		return (double) suppXY / suppX;
@@ -159,7 +156,13 @@ public class AssociationRuleGenerator {
 				for (int j = 0; j < subsets.length; j++) {
 					if (i != j && subsets[i].size() != 0 && subsets[j].size() != 0
 							&& subsets[i].nullIntersection(subsets[j])) {
+						subsets[i].searchMax();
+						subsets[j].searchMax();
+
 						AssociationRule ar = new AssociationRule(subsets[i], subsets[j]);
+						ar.getX().searchMax();
+						ar.getY().searchMax();
+
 						assoc.add(ar);
 					}
 				}

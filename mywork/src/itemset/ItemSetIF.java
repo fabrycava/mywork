@@ -23,6 +23,6 @@ public interface ItemSetIF {
 	
 	int size();
 
-	boolean containsAll(ItemSetIF y);
+	//boolean containsAll(ItemSetIF y);
 
 }

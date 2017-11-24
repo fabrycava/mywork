@@ -71,7 +71,7 @@ public class ItemSetBits extends BitSet implements ItemSetIF {
 		return linkedList;
 	}
 
-	@Override
+	
 	public boolean containsAll(ItemSetIF is) {
 		BitSet temp = (ItemSetBits) is.clone();
 		temp.xor(this);

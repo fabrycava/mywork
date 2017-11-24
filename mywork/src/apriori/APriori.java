@@ -86,9 +86,9 @@ public class APriori implements AprioriInterface {
 
 		printer.printInputSettings();
 
-		System.out.println(frequentItemsTable);
+//		System.out.println(frequentItemsTable);
 		System.out.println(transactions);
-		System.out.println(currentItems);
+//		System.out.println(currentItems);
 	}
 
 	@Override
@@ -130,9 +130,9 @@ public class APriori implements AprioriInterface {
 
 		}
 
-		System.out.println(frequentItemset);	
+		//System.out.println(frequentItemset);	
 		
-		assocRules();
+		//assocRules();
 
 		long elapsedTime = System.currentTimeMillis() - start;
 
@@ -142,14 +142,13 @@ public class APriori implements AprioriInterface {
 		pw.print(sb.toString());
 		pw.close();
 		
-		CommunityDetection cm=new CommunityDetection(frequentItemset);
 
 	}
 
-	private void assocRules() {
-		AssociationRuleGenerator arg=new AssociationRuleGenerator(frequentItemset, minimumConfidence, sb);
-		arg.assocRules();		
-	}
+//	private void assocRules() {
+//		AssociationRuleGenerator arg=new AssociationRuleGenerator(frequentItemset, minimumConfidence, sb);
+//		arg.assocRules();		
+//	}
 
 	protected void prune(int k) {
 		Iterator<Entry<ItemSet, Integer>> it = frequentItemsTable.entrySet().iterator();

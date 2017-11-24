@@ -14,7 +14,7 @@ import enums.Order;
 
 public class ItemSet extends HashSet<Integer> implements ItemSetIF {
 
-	private int max = 0;
+	private int max = -1;
 
 	public ItemSet() {
 		super();
@@ -62,16 +62,9 @@ public class ItemSet extends HashSet<Integer> implements ItemSetIF {
 
 	@Override
 	public int getMax() {
+
 		return max;
 	}
-
-	// public int cardinality() {
-	// return elements.size();
-	// }
-
-	// public HashSet<Integer> getElements() {
-	// return elements;
-	// }
 
 	@Override
 	public String toString() {
@@ -90,7 +83,6 @@ public class ItemSet extends HashSet<Integer> implements ItemSetIF {
 
 	@Override
 	public int hashCode() {
-		// System.out.println("invoking hashcode ");
 		int x = 1;
 		for (Integer integer : this) {
 			x *= integer;
@@ -106,20 +98,6 @@ public class ItemSet extends HashSet<Integer> implements ItemSetIF {
 		return is;
 	}
 
-	// public boolean contains(Integer x) {
-	// return elements.contains(x);
-	// }
-
-	// public boolean nullIntersection(ItemSet is) {
-	// Iterator<Integer> it = is.elements.iterator();
-	// while (it.hasNext()) {
-	// if (elements.contains(it.next()))
-	// return false;
-	//
-	// }
-	// return true;
-	// }
-
 	@Override
 	public boolean nullIntersection(ItemSetIF is) {
 		Iterator<Integer> it = ((ItemSet) is).iterator();
@@ -130,14 +108,6 @@ public class ItemSet extends HashSet<Integer> implements ItemSetIF {
 		return true;
 	}
 
-	// public boolean containsAll(ItemSet is) {
-	// return this.elements.containsAll(is.elements);
-	// }
-
-	// public void remove(Integer x) {
-	// elements.remove(x);
-	// }
-
 	@Override
 	public LinkedList<Integer> getSortedElements() {
 		LinkedList<Integer> linkedList = new LinkedList<>(this);
@@ -145,29 +115,6 @@ public class ItemSet extends HashSet<Integer> implements ItemSetIF {
 		Collections.sort(linkedList);
 		System.out.println(linkedList);
 		return linkedList;
-	}
-
-	public static void main(String[] args) {
-
-		ItemSetIF is = new ItemSet();
-
-		int[] a = { 1, 2, 3, 4, 5, 6, 7, 8 };
-		for (int i = a.length - 1; i >= 0; i--)
-			is.add(a[i]);
-
-		LinkedList<Integer> l = is.getSortedElements();
-
-		ArrayList<Boolean> al = new ArrayList<Boolean>();
-		System.out.println(al);
-		al.add(true);
-		al.add(false);
-		System.out.println(al);
-
-	}
-
-	@Override
-	public boolean containsAll(ItemSetIF y) {
-		return super.containsAll((Collection<?>) y);
 	}
 
 	public static Comparator<ItemSet> getComparator(Order order) {
@@ -188,7 +135,6 @@ public class ItemSet extends HashSet<Integer> implements ItemSetIF {
 
 	}
 
-	
 	private static class AscendingItemSetComparator implements Comparator<ItemSet> {
 
 		@Override
@@ -200,6 +146,48 @@ public class ItemSet extends HashSet<Integer> implements ItemSetIF {
 
 			return 0;
 		};
+
+	}
+
+	public void searchMax() {
+		for (Integer x : this) 
+			if (x > max) 
+				max=x;
+			
+	}
+
+	public static void main(String[] args) {
+
+		ItemSetIF is = new ItemSet();
+
+		int[] a = { 1, 2, 3, 4, 5, 6, 7, 8 };
+		for (int i = a.length - 1; i >= 0; i--)
+			is.add(a[i]);
+
+		LinkedList<Integer> l = is.getSortedElements();
+
+		ArrayList<Boolean> al = new ArrayList<Boolean>();
+		System.out.println(al);
+		al.add(true);
+		al.add(false);
+		System.out.println(al);
+		ItemSet i = new ItemSet();
+		System.out.println(i.getMax());
+		i.add(1);
+		System.out.println(i.getMax());
+
+		ItemSet i2 = new ItemSet();
+		i2.add(2);
+		i2.add(3);
+		System.out.println(i2.getMax());
+
+		AssociationRule ar = new AssociationRule(i, i2);
+		System.out.println(ar);
+		i = null;
+		i2 = null;
+		ItemSet s1 = (ItemSet) ar.getX();
+		ItemSet s2 = (ItemSet) ar.getY();
+		System.out.println(s2.getMax());
 
 	}
 

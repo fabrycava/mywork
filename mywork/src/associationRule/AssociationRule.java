@@ -8,20 +8,21 @@ import itemset.ItemSet;
 import itemset.ItemSetIF;
 
 public class AssociationRule implements Comparable<AssociationRule> {
-	private ItemSetIF X, Y;
+	private ItemSet X, Y;
 
 	private double confidence = 0.0;
 
 	public AssociationRule(ItemSet i, ItemSet s) {
+		
 		this.X = i;
 		this.Y = s;
 	}
 
-	public ItemSetIF getX() {
+	public ItemSet getX() {
 		return X;
 	}
 
-	public ItemSetIF getY() {
+	public ItemSet getY() {
 		return Y;
 	}
 
@@ -116,9 +117,10 @@ public class AssociationRule implements Comparable<AssociationRule> {
 
 		@Override
 		public int compare(AssociationRule o1, AssociationRule o2) {
-			if (arp == ARParameter.CONFIDENCE)
+			if (arp == ARParameter.SIZE)
 				return o1.compareTo(o2) * (-1);
-			return (-1) * o1.confidence > o2.confidence ? 1 : o1.confidence < o2.confidence ? (-1) : 0;
+			//System.out.println("AAAAAAAAAAAAAAAAA");
+			return  o1.confidence > o2.confidence ? -1 : o1.confidence < o2.confidence ? (1) : 0;
 
 		};
 

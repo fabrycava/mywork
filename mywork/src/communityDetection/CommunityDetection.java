@@ -4,13 +4,16 @@ import java.security.KeyStore.Entry;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import apriori.APriori;
 import associationRule.AssociationRule;
 import associationRule.AssociationRuleGenerator;
 import enums.ARParameter;
+import enums.Classification;
 import enums.Order;
 import itemset.ItemSet;
 
@@ -20,32 +23,86 @@ public class CommunityDetection {
 
 	private HashMap<ItemSet, Double> frequentItemset;
 	AssociationRuleGenerator arg;
-
-	
-	
-	
+	private HashMap<Integer, Integer> elementCommunity;
+	private HashMap<Integer, ItemSet> communities;
 
 	public CommunityDetection(HashMap<ItemSet, Double> frequentItemset) {
 		// this.frequentItemset = new LinkedList<>(frequentItemset.keySet());
 		// this.frequentItemset.sort(ItemSet.getComparator(Order.DESCENDING));
 
 		this.frequentItemset = frequentItemset;
-		
-		arg=new AssociationRuleGenerator(frequentItemset, 0.1, new StringBuilder());
-		
-		findCommunities();
+		elementCommunity = new HashMap<>();
+		arg = new AssociationRuleGenerator(frequentItemset, 0.1, new StringBuilder());
+
+	}
+
+	public static void main(String[] args) throws Exception {
+		APriori ap = new APriori("USocialCom.dat", (double) 0.05, 0.1, Classification.USOCIAL);
+		ap.compute();
+		CommunityDetection cm = new CommunityDetection(ap.getFrequentItemset());
+		ap = null;
+		cm.findCommunities();
 	}
 
 	public void findCommunities() {
-		// List<Map.Entry<ItemSet, Double>> list = new
-		// LinkedList<>(frequentItemset.entrySet());
-		// list.sort(new ItemSetDoubleComparator());
-		// System.out.println(list);
 
 		List<AssociationRule> list = new LinkedList<>(arg.getAssociationRules());
 		list.sort(AssociationRule.getComparator(Order.DESCENDING, ARParameter.CONFIDENCE));
 		System.out.println(list);
+		Iterator<AssociationRule> it = list.listIterator();
+		while (it.hasNext()) {
+			AssociationRule ar = it.next();
+			ItemSet x = (ItemSet) ar.getX();
+			ItemSet y = (ItemSet) ar.getY();
+			int max = y.getMax();
 
+			// for (Integer i : x) {
+			// if (!elementCommunity.containsKey(i))
+			// if (!y.isEmpty())
+			// elementCommunity.put(i, max);
+			//
+			// else {
+			// for (Integer j : y)
+			// if (elementCommunity.containsKey(j)) {
+			// elementCommunity.put(i, j);
+			// break;
+			// }
+			// elementCommunity.put(max, max);
+			// elementCommunity.put(i, max);
+			// }
+			// }
+
+			for (Integer i : x) {
+				if (!elementCommunity.containsKey(i)) {
+					System.out.println(ar);
+					elementCommunity.put(i, max);
+					for (Integer j : y)
+						if (!elementCommunity.containsKey(j))
+							elementCommunity.put(j, max);
+
+				}
+			}
+
+		}
+		System.out.println(elementCommunity);
+
+		printCommunities();
+
+	}
+
+	private void printCommunities() {
+		Iterator<Map.Entry<Integer, Integer>> it = elementCommunity.entrySet().iterator();
+		communities = new HashMap<>();
+		while (it.hasNext()) {
+			Map.Entry<Integer, Integer> pair = it.next();
+			if (!communities.containsKey(pair.getValue())) {
+				communities.put(pair.getValue(), new ItemSet());
+			}
+			communities.get(pair.getValue()).add(pair.getKey());
+
+		}
+
+		System.out.println(communities);
 	}
 
 	private class ItemSetDoubleComparator implements Comparator<Map.Entry<ItemSet, Double>> {
