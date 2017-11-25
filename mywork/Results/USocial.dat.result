@@ -2,31 +2,36 @@ Folder:Datasets\
 fileName:USocial.dat
 
 Input configuration: 
-0 items, 0 transactions, Min Sup = 20.0%
+7 items, 9 transactions, Min Sup = 5.0%
 Min Conf = 10.0%
 
 Pruning occurrencies of size 1
 pruned 0 itemsets of size 1 and 0 elements
-Found 7 frequent itemsets of size 1 (with support 20.0%)
+Found 7 frequent itemsets of size 1 (with support 5.0%)
 
 generating all the tuples of size 2
 21 of size 2 have been generated
-pruned 11 itemsets of size 2 and 0 elements
+pruned 6 itemsets of size 2 and 0 elements
 currentItems size(2) = 7
 
 generating all the tuples of size 3
-20 of size 3 have been generated
+29 of size 3 have been generated
 pruned 15 itemsets of size 3 and 0 elements
 currentItems size(3) = 7
 
 generating all the tuples of size 4
-5 of size 4 have been generated
-pruned 4 itemsets of size 4 and 3 elements
-currentItems size(4) = 4
+18 of size 4 have been generated
+pruned 12 itemsets of size 4 and 0 elements
+currentItems size(4) = 7
 
 generating all the tuples of size 5
-0 of size 5 have been generated
-pruned 0 itemsets of size 5 and 0 elements
-currentItems size(5) = 4
+4 of size 5 have been generated
+pruned 3 itemsets of size 5 and 2 elements
+currentItems size(5) = 5
 
-Elapsed time = 8
+generating all the tuples of size 6
+0 of size 6 have been generated
+pruned 0 itemsets of size 6 and 0 elements
+currentItems size(6) = 5
+
+Elapsed time = 13

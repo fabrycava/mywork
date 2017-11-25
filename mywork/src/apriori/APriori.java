@@ -1,71 +1,46 @@
 package apriori;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import associationRule.AssociationRule;
-import associationRule.AssociationRuleGenerator;
-import communityDetection.CommunityDetection;
-
-import java.util.Set;
-import java.util.StringTokenizer;
-
 import enums.Classification;
-import enums.Order;
 import itemset.ItemSet;
 import itemset.ItemSetIF;
 import transaction.Transaction;
-import transaction.TransactionSet;
-import util.Printer;
 import util.Reader;
-import util.Subset;
 
-public class APriori extends AbstractAPriori{
+public class APriori extends AbstractAPriori {
 
-	
-	protected HashMap<Integer, Boolean> currentItems;
-
-	protected HashMap<ItemSet, Double> frequentItemset;
 	protected HashMap<ItemSet, Integer> frequentItemsTable;
+	
+	
 
-
-
-
-	StringBuilder sb = new StringBuilder();
-
-	private Printer printer;
-
-	protected long start = System.currentTimeMillis();
 
 	public APriori(String fileName, double minimumSupport, double minimumConfidence, Classification classification)
 			throws Exception {
 		super(fileName, minimumSupport, minimumConfidence, classification);
-		frequentItemset = new HashMap<>();	
 
-		//printer = new Printer(this);
 
 		frequentItemsTable = new HashMap<>();
-		transactions = new ArrayList<>();
-		currentItems = new HashMap();
 
 		Reader.readTransations(this, classification, folderData);
+		StringBuilder sb = new StringBuilder();
+		sb.append("Folder:" + folderData + "\n" + "fileName:" + fileName + "\n\n");
+		sb.append("Input configuration: \n" + N + " items, " + T + " transactions, ");
+		sb.append("Min Sup = " + (minimumSupport * 100) + "%\n");
+		sb.append("Min Conf = " + (minimumConfidence * 100) + "%\n");
 
-	
+		pw.write(sb.toString() + "\n");
 
+		System.out.println(sb.toString());
 
-//		System.out.println(frequentItemsTable);
-		System.out.println(transactions);
-//		System.out.println(currentItems);
+		// System.out.println(frequentItemsTable);
+		//System.out.println(transactions);
+		// System.out.println(currentItems);
 	}
 
 	@Override
@@ -78,6 +53,7 @@ public class APriori extends AbstractAPriori{
 		// System.out.println(frequentItemsTable);
 		System.out.println("Pruning occurrencies of size 1");
 		sb.append("Pruning occurrencies of size 1\n");
+		minimumSupport=80;
 		prune(1);
 
 		sb.append("Found " + frequentItemsTable.size() + " frequent itemsets of size 1" + " (with support "
@@ -86,6 +62,7 @@ public class APriori extends AbstractAPriori{
 				+ (minimumSupport * 100) + "%)\n");
 		// System.out.println(frequentItemsTable);
 		for (int k = 2; frequentItemsTable.size() != 0; k++) {
+			minimumSupport=Math.max(minimumSupport, k);
 			sb.append("generating all the tuples of size " + k + "\n");
 			System.out.println("generating all the tuples of size " + k);
 			generateCk();
@@ -107,9 +84,9 @@ public class APriori extends AbstractAPriori{
 
 		}
 
-		//System.out.println(frequentItemset);	
-		
-		//assocRules();
+		// System.out.println(frequentItemset);
+
+		// assocRules();
 
 		long elapsedTime = System.currentTimeMillis() - start;
 
@@ -118,14 +95,14 @@ public class APriori extends AbstractAPriori{
 
 		pw.print(sb.toString());
 		pw.close();
-		
 
 	}
 
-//	private void assocRules() {
-//		AssociationRuleGenerator arg=new AssociationRuleGenerator(frequentItemset, minimumConfidence, sb);
-//		arg.assocRules();		
-//	}
+	// private void assocRules() {
+	// AssociationRuleGenerator arg=new AssociationRuleGenerator(frequentItemset,
+	// minimumConfidence, sb);
+	// arg.assocRules();
+	// }
 
 	protected void prune(int k) {
 		Iterator<Entry<ItemSet, Integer>> it = frequentItemsTable.entrySet().iterator();
@@ -136,9 +113,9 @@ public class APriori extends AbstractAPriori{
 		// compute the support for all the itemsets in Ck
 		while (it.hasNext()) {
 			Map.Entry<ItemSet, Integer> pair = (Map.Entry) it.next();
-			double sup = computeSup(pair.getValue());
+			//double sup = computeSup(pair.getValue());
 			// System.out.println("sup of " + pair.getKey() + " = " + sup);
-			if (sup < minimumSupport)
+			if (pair.getValue() < minimumSupport)
 				toDelete.add(pair.getKey());
 			else {// itemset is frequen
 				for (Integer i : pair.getKey()) {// if an itemset is frequent then all the items in it are frequent
@@ -146,7 +123,7 @@ public class APriori extends AbstractAPriori{
 				}
 				// add the frequent itemset to the frequent so i can count the confidence later.
 				if (pair.getKey().size() > 0)
-					frequentItemset.put(pair.getKey(), sup);
+					frequentItemset.put(pair.getKey(), Double.valueOf(pair.getValue()));
 			}
 		}
 		int numRemoved = toDelete.size();
@@ -182,8 +159,6 @@ public class APriori extends AbstractAPriori{
 
 	}
 
-
-
 	// reset all the items at false
 	protected void resetCurrentItems() {
 		HashMap<Integer, Boolean> newCurrentItems = new HashMap<>();
@@ -191,7 +166,7 @@ public class APriori extends AbstractAPriori{
 			newCurrentItems.put(i, false);
 		currentItems = newCurrentItems;
 
-	} 
+	}
 
 	// after the counting of the candidate tuples Ck,
 	// it prunes all the unfrequent tuples
@@ -228,8 +203,6 @@ public class APriori extends AbstractAPriori{
 		frequentItemsTable = newMap;
 	}
 
-	
-
 	@Override
 	public void results() {
 		// TODO Auto-generated method stub
@@ -246,7 +219,7 @@ public class APriori extends AbstractAPriori{
 		//
 		// ap1.compute();
 
-		APriori ap = new APriori("USocial.dat", (double) 0.2, 0.1, Classification.USOCIAL);
+		APriori ap = new APriori("kosarak.dat", (double) 0.02, 0.1, Classification.TRANSACTIONS);
 		ap.compute();
 
 	}
@@ -254,8 +227,6 @@ public class APriori extends AbstractAPriori{
 	public void currentItemsPut(int x, Boolean b) {
 		currentItems.put(x, b);
 	}
-
-	
 
 	public boolean fITContains(ItemSet unary) {
 		return frequentItemsTable.containsKey(unary);
@@ -269,16 +240,15 @@ public class APriori extends AbstractAPriori{
 		return frequentItemsTable.get(is);
 	}
 
-
-
 	public HashMap<ItemSet, Integer> getItemsCountMap() {
 		return frequentItemsTable;
 
 	}
-	
-	public HashMap<ItemSet,Double> getFrequentItemset(){
+
+	public HashMap<ItemSet, Double> getFrequentItemset() {
 		return frequentItemset;
 	}
+
 	public StringBuilder getStringBuilder() {
 		return sb;
 	}

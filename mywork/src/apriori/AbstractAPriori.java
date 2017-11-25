@@ -7,35 +7,39 @@ import java.util.HashMap;
 import java.util.List;
 
 import enums.Classification;
+import itemset.ItemSet;
 import itemset.ItemSetIF;
 import transaction.Transaction;
 import util.Printer;
 import util.Reader;
 
-public abstract class AbstractAPriori implements AprioriInterface{
+public abstract class AbstractAPriori implements AprioriInterface {
 
-	protected String fileName, outputFile, folderData = "Datasets\\", folderResults = "Results\\";;
+	protected String fileName, folderData = "Datasets\\", folderResults = "Results\\";;
 	protected int N, T;
 
 	protected double minimumSupport;
 	protected double minimumConfidence;
-//	protected Printer printer;
-	
+	// protected Printer printer;
+
 	protected List<Transaction> transactions;
 
-	protected HashMap<ItemSetIF, Integer> frequentItemsTable;
+	protected HashMap<Integer, Boolean> currentItems;
 
+	protected HashMap<ItemSet, Integer> frequentItemsTable;
+
+	protected HashMap<ItemSet, Double> frequentItemset;
+	protected StringBuilder sb;
+
+	
 	protected PrintWriter pw;
+	protected long start;
 
-	
-	
-	
-	
-	public AbstractAPriori(String fileName, double minimumSupport, double minimumConfidence, Classification classification)
-			throws Exception {
+	public AbstractAPriori(String fileName, double minimumSupport, double minimumConfidence,
+			Classification classification) throws Exception {
+		start = System.currentTimeMillis();
 		this.fileName = fileName;
-		this.outputFile = outputFile;
-		//frequentItemset = new HashMap<>();
+		// frequentItemset = new HashMap<>();
 
 		if (minimumConfidence > 1 || minimumConfidence < 0)
 			throw new IllegalArgumentException("confidence must be expressed between 0 and 1 (included)");
@@ -50,35 +54,16 @@ public abstract class AbstractAPriori implements AprioriInterface{
 
 		pw = new PrintWriter(new File(folderResults + fileName + ".result"));
 
+		sb = new StringBuilder();
 
 		frequentItemsTable = new HashMap<>();
 		transactions = new ArrayList<>();
-//		currentItems = new HashMap();
+		currentItems = new HashMap();
+		frequentItemset=new HashMap<>();
 
-		//Reader.readTransations(this, classification, folderData);
-
-		// System.out.println(max);
-		// if (T != transactions.size())
-		// System.err.println("ERRRRRRRR" + T + " " + transactions.size());
-
-		StringBuilder sb = new StringBuilder();
-		sb.append("Folder:" + folderData + "\n" + "fileName:"+fileName+"\n\n");
-		sb.append("Input configuration: \n" + N + " items, " + T + " transactions, ");
-		sb.append("Min Sup = " + (minimumSupport*100)+"%\n");
-		sb.append("Min Conf = " + (minimumConfidence*100) + "%\n");
-
-		pw.write(sb.toString() + "\n");
-
-		System.out.println(sb.toString());
-
-//		System.out.println(frequentItemsTable);
-		System.out.println(transactions);
-//		System.out.println(currentItems);
+		
 	}
-	
-	
-	
-	
+
 	public PrintWriter getPrintWriter() {
 		return pw;
 	}
@@ -98,6 +83,7 @@ public abstract class AbstractAPriori implements AprioriInterface{
 	public double getMinimumSupport() {
 		return minimumSupport;
 	}
+
 	protected double computeSup(int value) {
 
 		double sup = ((double) value / T);
@@ -125,9 +111,9 @@ public abstract class AbstractAPriori implements AprioriInterface{
 
 		return T;
 	}
-	
+
 	public String getFolderData() {
 		return folderData;
 	}
-	
+
 }

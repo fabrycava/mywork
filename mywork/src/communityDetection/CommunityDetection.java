@@ -37,7 +37,7 @@ public class CommunityDetection {
 	}
 
 	public static void main(String[] args) throws Exception {
-		APriori ap = new APriori("USocialCom.dat", (double) 0.05, 0.1, Classification.USOCIAL);
+		APriori ap = new APriori("facebook.dat", (double) 0.0021, 0.99, Classification.USOCIAL);
 		ap.compute();
 		CommunityDetection cm = new CommunityDetection(ap.getFrequentItemset());
 		ap = null;
@@ -45,10 +45,12 @@ public class CommunityDetection {
 	}
 
 	public void findCommunities() {
+		
+		System.out.println(frequentItemset+"\n");
 
 		List<AssociationRule> list = new LinkedList<>(arg.getAssociationRules());
 		list.sort(AssociationRule.getComparator(Order.DESCENDING, ARParameter.CONFIDENCE));
-		System.out.println(list);
+		//System.out.println(list);
 		Iterator<AssociationRule> it = list.listIterator();
 		while (it.hasNext()) {
 			AssociationRule ar = it.next();
@@ -74,7 +76,7 @@ public class CommunityDetection {
 
 			for (Integer i : x) {
 				if (!elementCommunity.containsKey(i)) {
-					System.out.println(ar);
+					//System.out.println(ar);
 					elementCommunity.put(i, max);
 					for (Integer j : y)
 						if (!elementCommunity.containsKey(j))
@@ -84,7 +86,7 @@ public class CommunityDetection {
 			}
 
 		}
-		System.out.println(elementCommunity);
+		//System.out.println(elementCommunity);
 
 		printCommunities();
 
@@ -102,7 +104,10 @@ public class CommunityDetection {
 
 		}
 
-		System.out.println(communities);
+		System.out.println("Found " + communities.size()+ " communities");
+		for(ItemSet i:communities.values()) {
+			System.out.println(i);
+		}
 	}
 
 	private class ItemSetDoubleComparator implements Comparator<Map.Entry<ItemSet, Double>> {

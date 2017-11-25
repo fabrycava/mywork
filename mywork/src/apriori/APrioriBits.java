@@ -1,95 +1,39 @@
 package apriori;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import associationRule.AssociationRule;
-import associationRule.AssociationRuleGenerator;
-import communityDetection.CommunityDetection;
-
-import java.util.Set;
-import java.util.StringTokenizer;
-
 import enums.Classification;
-import enums.Order;
 import itemset.ItemSet;
 import itemset.ItemSetIF;
 import transaction.Transaction;
-import transaction.TransactionSet;
-import util.Printer;
 import util.Reader;
-import util.Subset;
 
 public class APrioriBits extends AbstractAPriori {
 
-	// private List<int[]> itemsets;
-	private String fileName, outputFile, folderData = "Datasets\\", folderResults = "Results\\";;
-	private int N, T;
-
-	protected double minimumSupport;
-	private double minimumConfidence;
 	protected HashMap<ItemSet, Integer> frequentItemsTable;
-	protected HashMap<Integer, Boolean> currentItems;
 
-	protected HashMap<ItemSet, Double> frequentItemset;
-
-	private List<Transaction> transactions;
-
-	protected PrintWriter pw;
-
-	StringBuilder sb = new StringBuilder();
-
-	private Printer printer;
-
-	protected long start = System.currentTimeMillis();
 
 	public APrioriBits(String fileName, double minimumSupport, double minimumConfidence, Classification classification)
 			throws Exception {
-		super(fileName, minimumConfidence, minimumConfidence, classification);
-		this.fileName = fileName;
-		this.outputFile = outputFile;
+		super(fileName, minimumSupport, minimumConfidence, classification);
 		frequentItemset = new HashMap<>();
 
-		if (minimumConfidence > 1 || minimumConfidence < 0)
-			throw new IllegalArgumentException("confidence must be expressed between 0 and 1 (included)");
-		else
-			this.minimumConfidence = minimumConfidence;
-
-		if (minimumSupport > 1 || minimumSupport < 0)
-			throw new IllegalArgumentException(
-					"support must be expressed with a double value between 0 and 1 (included)");
-		else
-			this.minimumSupport = minimumSupport;
-
-		pw = new PrintWriter(new File(folderResults + fileName + ".result"));
-
-		printer = new Printer(this);
+		// printer = new Printer(this);
 
 		frequentItemsTable = new HashMap<>();
 		transactions = new ArrayList<>();
 		currentItems = new HashMap();
 
-		Reader.readTransations(this, classification, folderData);
+		//Reader.readTransations(this, classification, folderData);
 
-		// System.out.println(max);
-		// if (T != transactions.size())
-		// System.err.println("ERRRRRRRR" + T + " " + transactions.size());
-
-		printer.printInputSettings();
-
-//		System.out.println(frequentItemsTable);
+		// System.out.println(frequentItemsTable);
 		System.out.println(transactions);
-//		System.out.println(currentItems);
+		// System.out.println(currentItems);
 	}
 
 	@Override
@@ -131,9 +75,9 @@ public class APrioriBits extends AbstractAPriori {
 
 		}
 
-		//System.out.println(frequentItemset);	
-		
-		//assocRules();
+		// System.out.println(frequentItemset);
+
+		// assocRules();
 
 		long elapsedTime = System.currentTimeMillis() - start;
 
@@ -142,14 +86,14 @@ public class APrioriBits extends AbstractAPriori {
 
 		pw.print(sb.toString());
 		pw.close();
-		
 
 	}
 
-//	private void assocRules() {
-//		AssociationRuleGenerator arg=new AssociationRuleGenerator(frequentItemset, minimumConfidence, sb);
-//		arg.assocRules();		
-//	}
+	// private void assocRules() {
+	// AssociationRuleGenerator arg=new AssociationRuleGenerator(frequentItemset,
+	// minimumConfidence, sb);
+	// arg.assocRules();
+	// }
 
 	protected void prune(int k) {
 		Iterator<Entry<ItemSet, Integer>> it = frequentItemsTable.entrySet().iterator();
@@ -206,8 +150,6 @@ public class APrioriBits extends AbstractAPriori {
 
 	}
 
-
-
 	// reset all the items at false
 	protected void resetCurrentItems() {
 		HashMap<Integer, Boolean> newCurrentItems = new HashMap<>();
@@ -215,7 +157,7 @@ public class APrioriBits extends AbstractAPriori {
 			newCurrentItems.put(i, false);
 		currentItems = newCurrentItems;
 
-	} 
+	}
 
 	// after the counting of the candidate tuples Ck,
 	// it prunes all the unfrequent tuples
@@ -252,13 +194,6 @@ public class APrioriBits extends AbstractAPriori {
 		frequentItemsTable = newMap;
 	}
 
-	private double computeSup(int value) {
-
-		double sup = ((double) value / T);
-
-		return sup;
-	}
-
 	@Override
 	public void results() {
 		// TODO Auto-generated method stub
@@ -284,10 +219,6 @@ public class APrioriBits extends AbstractAPriori {
 		currentItems.put(x, b);
 	}
 
-	public String getFolderData() {
-		return folderData;
-	}
-
 	public boolean fITContains(ItemSet unary) {
 		return frequentItemsTable.containsKey(unary);
 	}
@@ -300,55 +231,15 @@ public class APrioriBits extends AbstractAPriori {
 		return frequentItemsTable.get(is);
 	}
 
-	public PrintWriter getPrintWriter() {
-		return pw;
-	}
-
-	public void transactionsAdd(Transaction t) {
-		transactions.add(t);
-	}
-
-	public void setN(int x) {
-		N = x;
-	}
-
-	public void setT(int x) {
-		T = x;
-	}
-
-	public double getMinimumSupport() {
-		return minimumSupport;
-	}
-
-	public double getMinimumConfidence() {
-		return minimumConfidence;
-	}
-
-	public List<Transaction> getTransactions() {
-		return transactions;
-	}
-
-	public String getFileName() {
-		return fileName;
-	}
-
-	public int getN() {
-		return N;
-	}
-
-	public int getT() {
-
-		return T;
-	}
-
 	public HashMap<ItemSet, Integer> getItemsCountMap() {
 		return frequentItemsTable;
 
 	}
-	
-	public HashMap<ItemSet,Double> getFrequentItemset(){
+
+	public HashMap<ItemSet, Double> getFrequentItemset() {
 		return frequentItemset;
 	}
+
 	public StringBuilder getStringBuilder() {
 		return sb;
 	}

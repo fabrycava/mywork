@@ -37,8 +37,8 @@ public class AssociationRuleGenerator {
 		// System.out.println(assoc);
 		computeAssocRules2();
 		//printAssocRules();
-		System.out.println("Elapsed time for AR " + (System.currentTimeMillis() - start));
-		sb.append("Elapsed time for AR " + (System.currentTimeMillis() - start + "\n"));
+		System.out.println("Elapsed time for AR " + (System.currentTimeMillis() - start+"\n"));
+		sb.append("Elapsed time for AR " + (System.currentTimeMillis() - start + "\n\n"));
 
 	}
 

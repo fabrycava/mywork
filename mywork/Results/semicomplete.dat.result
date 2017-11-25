@@ -1,0 +1,27 @@
+Folder:Datasets\
+fileName:semicomplete.dat
+
+Input configuration: 
+12 items, 15 transactions, Min Sup = 15.0%
+Min Conf = 10.0%
+
+Pruning occurrencies of size 1
+pruned 0 itemsets of size 1 and 0 elements
+Found 12 frequent itemsets of size 1 (with support 15.0%)
+
+generating all the tuples of size 2
+66 of size 2 have been generated
+pruned 54 itemsets of size 2 and 0 elements
+currentItems size(2) = 12
+
+generating all the tuples of size 3
+58 of size 3 have been generated
+pruned 54 itemsets of size 3 and 0 elements
+currentItems size(3) = 12
+
+generating all the tuples of size 4
+18 of size 4 have been generated
+pruned 18 itemsets of size 4 and 12 elements
+currentItems size(4) = 0
+
+Elapsed time = 13

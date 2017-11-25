@@ -87,7 +87,7 @@ public class Reader {
 		while (br.ready()) {
 			String s = br.readLine();
 			T++;
-			Transaction t = new TransactionBits(id++);
+			Transaction t = new TransactionSet(id++);
 			StringTokenizer st = new StringTokenizer(s, " [],\t");
 			while (st.hasMoreTokens()) {
 				int x = Integer.parseInt(st.nextToken());
