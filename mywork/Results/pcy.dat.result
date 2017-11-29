@@ -1,0 +1,30 @@
+Folder:Datasets\
+fileName:pcy.dat
+
+Input configuration: 
+6 items, 12 transactions, Min Sup = 33.0%
+Min Conf = 10.0%
+
+Folder:Datasets\
+fileName:pcy.dat
+
+Input configuration: 
+6 items, 12 transactions, Min Sup = 33.0%
+Min Conf = 10.0%
+Pruning occurrencies of size 1
+pruned 0 itemsets of size 1 and 0 elements
+Found 6 frequent itemsets of size 1 (with support 33.0%)
+
+Starting the PCY # 2
+generating all the tuples of size 2
+8 of size 2 have been generated
+pruned 5 itemsets of size 2 and 2 elements
+currentItems size(2) = 4
+
+Starting the PCY # 3
+generating all the tuples of size 3
+0 of size 3 have been generated
+pruned 0 itemsets of size 3 and 0 elements
+currentItems size(3) = 4
+
+Elapsed time = 10

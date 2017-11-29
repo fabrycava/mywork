@@ -1,7 +1,5 @@
 package communityDetection;
 
-import java.security.KeyStore.Entry;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -10,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 
 import apriori.APriori;
+import apriori.AprioriInterface;
+import apriori.PCY;
 import associationRule.AssociationRule;
 import associationRule.AssociationRuleGenerator;
 import enums.ARParameter;
@@ -37,20 +37,30 @@ public class CommunityDetection {
 	}
 
 	public static void main(String[] args) throws Exception {
-		APriori ap = new APriori("facebook.dat", (double) 0.0021, 0.99, Classification.USOCIAL);
+		// APriori ap = new APriori("facebook.dat", (double) 0.01, 0.99,
+		// Classification.USOCIAL);
+		// ap.compute();
+		PCY pcy = new PCY("facebook.dat", (double) 0.035, 0.99, Classification.USOCIAL);
+		pcy.compute();
+		CommunityDetection cm = new CommunityDetection(pcy.getFrequentItemset());
+		
+		cm.findCommunities();
+		APriori ap = new APriori("facebook.dat", (double) 0.035, 0.99, Classification.USOCIAL);
 		ap.compute();
-		CommunityDetection cm = new CommunityDetection(ap.getFrequentItemset());
+		cm = new CommunityDetection(ap.getFrequentItemset());
+		
 		ap = null;
 		cm.findCommunities();
+
 	}
 
 	public void findCommunities() {
-		
-		System.out.println(frequentItemset+"\n");
+
+		System.out.println(frequentItemset + "\n");
 
 		List<AssociationRule> list = new LinkedList<>(arg.getAssociationRules());
 		list.sort(AssociationRule.getComparator(Order.DESCENDING, ARParameter.CONFIDENCE));
-		//System.out.println(list);
+		// System.out.println(list);
 		Iterator<AssociationRule> it = list.listIterator();
 		while (it.hasNext()) {
 			AssociationRule ar = it.next();
@@ -76,7 +86,7 @@ public class CommunityDetection {
 
 			for (Integer i : x) {
 				if (!elementCommunity.containsKey(i)) {
-					//System.out.println(ar);
+					// System.out.println(ar);
 					elementCommunity.put(i, max);
 					for (Integer j : y)
 						if (!elementCommunity.containsKey(j))
@@ -86,7 +96,7 @@ public class CommunityDetection {
 			}
 
 		}
-		//System.out.println(elementCommunity);
+		// System.out.println(elementCommunity);
 
 		printCommunities();
 
@@ -104,8 +114,8 @@ public class CommunityDetection {
 
 		}
 
-		System.out.println("Found " + communities.size()+ " communities");
-		for(ItemSet i:communities.values()) {
+		System.out.println("Found " + communities.size() + " communities");
+		for (ItemSet i : communities.values()) {
 			System.out.println(i);
 		}
 	}

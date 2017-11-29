@@ -4,9 +4,12 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.PrintWriter;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.StringTokenizer;
 
 import apriori.APriori;
+import apriori.AbstractAPriori;
 import enums.Classification;
 import itemset.ItemSet;
 import transaction.Transaction;
@@ -15,7 +18,7 @@ import transaction.TransactionSet;
 
 public class Reader {
 
-	private static void readFromBipartiteGraphBI(APriori ap, String folderData) throws Exception {
+	private static void readFromBipartiteGraphBI(AbstractAPriori ap, String folderData) throws Exception {
 
 		int N = 0;
 		int T = 0;
@@ -78,7 +81,7 @@ public class Reader {
 
 	}
 
-	private static void readFromBaskets(APriori ap, String folderData) throws Exception {
+	private static void readFromBaskets(AbstractAPriori ap, String folderData) throws Exception {
 		int N = 0;
 		int T = 0;
 		int id = 0;
@@ -112,7 +115,7 @@ public class Reader {
 		ap.setT(T);
 	}
 
-	public static void readTransations(APriori ap, Classification classification, String folderData) throws Exception {
+	public static void readTransations(AbstractAPriori ap, Classification classification, String folderData) throws Exception {
 		switch (classification) {
 		case BIPARTITEbi:
 			readFromBipartiteGraphBI(ap, folderData);
@@ -133,8 +136,9 @@ public class Reader {
 		// readFromBaskets(ap, folderData);
 	}
 
-	private static void readUndirectedToBipartiteGraph(APriori ap, String folderData) throws Exception {
+	private static void readUndirectedToBipartiteGraph(AbstractAPriori ap, String folderData) throws Exception {
 
+		boolean flagZero=false;
 		int N = 0;
 		int T = 0;
 		Transaction t;
@@ -143,11 +147,12 @@ public class Reader {
 
 		while (br.ready()) {
 			String s = br.readLine();
-			T++;
+			
 			StringTokenizer st = new StringTokenizer(s, " \t,[]");
 
 			int x = Integer.parseInt(st.nextToken());
 			int y = Integer.parseInt(st.nextToken());
+			if(x==0||y==0) flagZero=true;
 			ItemSet unaryX = new ItemSet();
 			ItemSet unaryY = new ItemSet();
 			unaryX.add(x);
@@ -158,16 +163,17 @@ public class Reader {
 			if (!ap.fITContains(unaryX)) {
 				ap.fITPut(unaryX, 2);
 				N++;
+				T++;
 			} else {
 				int old = ap.fITGet(unaryX);
-				ap.fITPut(unaryX, ++old);
-			}
+				ap.fITPut(unaryX, ++old);			}
 
 			// add itemY
 			ap.currentItemsPut(y, false);
 			if (!ap.fITContains(unaryY)) {
 				ap.fITPut(unaryY, 2);
 				N++;
+				T++;
 			} else {
 				int old = ap.fITGet(unaryY);
 				ap.fITPut(unaryY, ++old);
@@ -198,10 +204,17 @@ public class Reader {
 
 		ap.setN(N);
 		ap.setT(T);
+		
+		if(flagZero)
+			increase(ap);
 
 	}
 
-	private static void readFromBipartiteGraphIB(APriori ap, String folderData) throws Exception {
+	private static void increase(AbstractAPriori ap) {
+		
+	}
+
+	private static void readFromBipartiteGraphIB(AbstractAPriori ap, String folderData) throws Exception {
 
 		int N = 0;
 		int T = 0;
@@ -236,6 +249,20 @@ public class Reader {
 		ap.setN(N);
 		ap.setT(T);
 
+	}
+	
+	public static void main(String[] args) {
+		HashSet<Integer> tr=new HashSet<>();
+		tr.add(1);
+		tr.add(2);
+		tr.add(3);
+		
+		Iterator<Integer> it=tr.iterator();
+		while(it.hasNext()) {
+			it.next();
+		}
+		
+		System.out.println(tr);
 	}
 
 }

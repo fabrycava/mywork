@@ -37,6 +37,11 @@ public class TransactionSet extends AbstractTransaction {
 	}
 
 	
+	public Iterator<Integer> iterator(){
+		return transaction.iterator();
+	}
+	
+	
 	public static void main(String[] args) {
 		TransactionSet t=new TransactionSet(2);
 		t.add(1);

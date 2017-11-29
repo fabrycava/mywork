@@ -87,7 +87,7 @@ public class ItemSet extends HashSet<Integer> implements ItemSetIF {
 		for (Integer integer : this) {
 			x *= integer;
 		}
-		return x * 157;
+		return x ;
 	}
 
 	@Override

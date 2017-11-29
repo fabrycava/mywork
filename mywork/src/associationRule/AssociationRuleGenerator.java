@@ -27,7 +27,7 @@ public class AssociationRuleGenerator {
 	}
 
 	public HashSet<AssociationRule> getAssociationRules() {
-		assocRules();
+		//assocRules();
 		return assoc;
 	}
 
@@ -36,26 +36,22 @@ public class AssociationRuleGenerator {
 		generateAssocRules();
 		// System.out.println(assoc);
 		computeAssocRules2();
-		//printAssocRules();
-		System.out.println("Elapsed time for AR " + (System.currentTimeMillis() - start+"\n"));
+		printAssocRules();
+		System.out.println("Elapsed time for AR " + (System.currentTimeMillis() - start + "\n"));
 		sb.append("Elapsed time for AR " + (System.currentTimeMillis() - start + "\n\n"));
 
 	}
 
 	private void printAssocRules() {
-
-		sb.append("Found " + assoc.size() + " Association rules" + " (with confidence " + (minimumConfidence * 100)
-				+ "%)\n");
-		System.out.println("Found " + assoc.size() + " Association rules" + " (with confidence "
-				+ (minimumConfidence * 100) + "%)\n");
+		String s = "Found " + assoc.size() + " Association rules" + " (with confidence " + (minimumConfidence * 100)
+				+ "%)\n";
+		sb.append(s + "\n");
+		System.out.println(s);
 		LinkedList<AssociationRule> ass = new LinkedList<>(assoc);
 		ass.sort(AssociationRule.getComparator(Order.ASCENDING, ARParameter.SIZE));
-		System.out.println(ass + "\n");
-		sb.append(ass + "\n\n");
-
-		// sb.append(assoc + "\n\n");
-		// System.out.println(assoc + "\n");
-
+		s = ass + "\n";
+		System.out.println(s);
+		sb.append(s + "\n");
 	}
 
 	private void computeAssocRules() {
@@ -145,8 +141,9 @@ public class AssociationRuleGenerator {
 	}
 
 	private void generateAssocRules() {
-		System.out.println("Generating the Associaton Rules from " + frequentItemset.size() + " itemsets");
-		sb.append("Generating the Associaton Rules from " + frequentItemset.size() + " itemsets\n");
+		String s = "Generating the Associaton Rules from " + frequentItemset.size() + " itemsets";
+		System.out.println(s);
+		sb.append(s + "\n");
 		assoc = new HashSet();
 		Iterator<ItemSet> it = frequentItemset.keySet().iterator();
 		while (it.hasNext()) {
