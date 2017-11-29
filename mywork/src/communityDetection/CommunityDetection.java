@@ -40,12 +40,12 @@ public class CommunityDetection {
 		// APriori ap = new APriori("facebook.dat", (double) 0.01, 0.99,
 		// Classification.USOCIAL);
 		// ap.compute();
-		PCY pcy = new PCY("facebook.dat", (double) 0.035, 0.99, Classification.USOCIAL);
+		PCY pcy = new PCY("facebook.dat", (double) 0.04, 0.99, Classification.USOCIAL);
 		pcy.compute();
 		CommunityDetection cm = new CommunityDetection(pcy.getFrequentItemset());
 		
 		cm.findCommunities();
-		APriori ap = new APriori("facebook.dat", (double) 0.035, 0.99, Classification.USOCIAL);
+		APriori ap = new APriori("facebook.dat", (double) 0.04, 0.99, Classification.USOCIAL);
 		ap.compute();
 		cm = new CommunityDetection(ap.getFrequentItemset());
 		
