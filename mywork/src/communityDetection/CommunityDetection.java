@@ -32,7 +32,8 @@ public class CommunityDetection {
 
 		this.frequentItemset = frequentItemset;
 		elementCommunity = new HashMap<>();
-		arg = new AssociationRuleGenerator(frequentItemset, 0.1, new StringBuilder());
+		// arg = new AssociationRuleGenerator(frequentItemset, 0.1, new
+		// StringBuilder());
 
 	}
 
@@ -40,23 +41,51 @@ public class CommunityDetection {
 		// APriori ap = new APriori("facebook.dat", (double) 0.01, 0.99,
 		// Classification.USOCIAL);
 		// ap.compute();
-		PCY pcy = new PCY("facebook.dat", (double) 0.04, 0.99, Classification.USOCIAL);
+		PCY pcy = new PCY("facebook.dat", (double) 0.03, 0.9, Classification.USOCIAL);
 		pcy.compute();
 		CommunityDetection cm = new CommunityDetection(pcy.getFrequentItemset());
-		
-		cm.findCommunities();
-		APriori ap = new APriori("facebook.dat", (double) 0.04, 0.99, Classification.USOCIAL);
-		ap.compute();
-		cm = new CommunityDetection(ap.getFrequentItemset());
-		
-		ap = null;
-		cm.findCommunities();
+		System.out.println("k = " + pcy.getK());
+		// cm.cleanFrequentItemset(pcy.getK());
+		System.out.println("Found " + cm.getFrequentItemset().size() + " of size " + (pcy.getK() - 2));
+		System.out.println(cm.getFrequentItemset());
+		// cm.findCommunities();
+		//
+		// APriori ap = new APriori("facebook.dat", (double) 0.02, 0.9,
+		// Classification.USOCIAL);
+		// ap.compute();
+		// cm = new CommunityDetection(ap.getFrequentItemset());
+		// cm.cleanFrequentItemset(ap.getK());
+		// System.out.println("Found " + cm.getFrequentItemset().size() + " of size " +
+		// (pcy.getK() - 2));
+		// System.out.println(cm.getFrequentItemset());
 
+		// ap = null;
+		// cm.findCommunities();
+
+	}
+
+	public HashMap<ItemSet, Double> getFrequentItemset() {
+		return frequentItemset;
+	}
+
+	// Clean the frequent Items, leaving only the last iteration, the biggest
+	private void cleanFrequentItemset(int k) {
+		int max = 0;
+		Iterator<ItemSet> it = frequentItemset.keySet().iterator();
+		while (it.hasNext()) {
+
+			ItemSet is = it.next();
+			int size = is.size();
+			max = Math.max(max, size);
+			if (!(size == k - 2))
+				it.remove();
+		}
+		System.out.println("max = " + max);
 	}
 
 	public void findCommunities() {
 
-		System.out.println(frequentItemset + "\n");
+		// System.out.println(frequentItemset + "\n");
 
 		List<AssociationRule> list = new LinkedList<>(arg.getAssociationRules());
 		list.sort(AssociationRule.getComparator(Order.DESCENDING, ARParameter.CONFIDENCE));
@@ -67,23 +96,6 @@ public class CommunityDetection {
 			ItemSet x = (ItemSet) ar.getX();
 			ItemSet y = (ItemSet) ar.getY();
 			int max = y.getMax();
-
-			// for (Integer i : x) {
-			// if (!elementCommunity.containsKey(i))
-			// if (!y.isEmpty())
-			// elementCommunity.put(i, max);
-			//
-			// else {
-			// for (Integer j : y)
-			// if (elementCommunity.containsKey(j)) {
-			// elementCommunity.put(i, j);
-			// break;
-			// }
-			// elementCommunity.put(max, max);
-			// elementCommunity.put(i, max);
-			// }
-			// }
-
 			for (Integer i : x) {
 				if (!elementCommunity.containsKey(i)) {
 					// System.out.println(ar);
@@ -94,10 +106,9 @@ public class CommunityDetection {
 
 				}
 			}
-
 		}
-		// System.out.println(elementCommunity);
 
+		// System.out.println(elementCommunity);
 		printCommunities();
 
 	}

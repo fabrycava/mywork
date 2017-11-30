@@ -12,10 +12,13 @@ import itemset.ItemSet;
 import itemset.ItemSetIF;
 import transaction.Transaction;
 import util.Reader;
+import util.Subset;
 
 public class APriori extends AbstractAPriori {
 
 	// protected HashMap<ItemSet, Integer> frequentItemsTable;
+	
+	int total=0;
 
 	public APriori(String fileName, double minimumSupport, double minimumConfidence, Classification classification)
 			throws Exception {
@@ -29,7 +32,7 @@ public class APriori extends AbstractAPriori {
 	public void compute() {
 		super.compute();
 		// System.out.println(frequentItemsTable.size());
-		for (int k = 2; frequentItemsTable.size() != 0; k++) {
+		for ( k = 2; frequentItemsTable.size() != 0; k++) {
 			long timeStep = System.currentTimeMillis();
 
 			generateCk(k);
@@ -41,6 +44,7 @@ public class APriori extends AbstractAPriori {
 
 		}
 
+		System.out.println(total +" risparmiate grazie all' accorgimento ;)");
 		long elapsedTime = System.currentTimeMillis() - start;
 
 		s = "Elapsed time(s)= " + (double) elapsedTime / 1000 + "\n";
@@ -59,6 +63,7 @@ public class APriori extends AbstractAPriori {
 		System.out.println(s);
 		HashMap<ItemSet, Integer> newMap = new HashMap<>();
 		Iterator<ItemSet> it = frequentItemsTable.keySet().iterator();
+		
 		while (it.hasNext()) {
 			ItemSetIF temp = it.next();
 			Iterator<Integer> it1 = currentItems.keySet().iterator();
@@ -67,7 +72,17 @@ public class APriori extends AbstractAPriori {
 				if (x > temp.getMax()) {// ensure the monotonicity
 					ItemSet previous = (ItemSet) temp.clone();
 					previous.add(x);
-					//if (!newMap.containsKey(previous))
+					ItemSet[] sub = Subset.generateSubsets(previous);
+					boolean flag = true;
+					for (int i = 0; i < sub.length; i++) {
+						if (sub[i].size() == k - 1 && !frequentItemset.containsKey(sub[i])) {
+							flag = false;
+							total++;
+							break;
+						}
+					}
+
+					if (flag )
 						newMap.put(previous, 0);
 				}
 			}

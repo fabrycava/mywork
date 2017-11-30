@@ -13,7 +13,7 @@ import itemset.ItemSet;
 
 public class Subset {
 
-	public static <T> Set<Set<T>> powerSet(Set<T> originalSet) {
+	private static <T> Set<Set<T>> powerSet(Set<T> originalSet) {
 		Set<Set<T>> sets = new HashSet<Set<T>>();
 		if (originalSet.isEmpty()) {
 			sets.add(new HashSet<T>());
@@ -30,6 +30,19 @@ public class Subset {
 			sets.add(set);
 		}
 		return sets;
+	}
+	
+	
+	public static ItemSet[] generateSubsets(ItemSet curr) {
+		Set<Set<Integer>> subsets = Subset.powerSet(curr);
+		// System.out.println(subsets);
+		ItemSet[] subsetsArray = new ItemSet[subsets.size()];
+		Iterator<Set<Integer>> it = subsets.iterator();
+		int i = 0;
+		while (it.hasNext())
+			subsetsArray[i++] = new ItemSet(it.next());
+		return subsetsArray;
+
 	}
 
 	public static void main(String[] args) {

@@ -21,7 +21,7 @@ public abstract class AbstractAPriori implements AprioriInterface {
 	protected int N, T;
 
 	String s;
-	protected double minimumSupport;
+	protected double minimumSupport, fixedSupport;
 	protected double minimumConfidence;
 	// protected Printer printer;
 
@@ -36,6 +36,8 @@ public abstract class AbstractAPriori implements AprioriInterface {
 
 	protected PrintWriter pw;
 	protected long start;
+	protected int k, reductionStep, maxItem;
+	protected boolean CD = false;
 
 	public AbstractAPriori(String fileName, double minimumSupport, double minimumConfidence,
 			Classification classification) throws Exception {
@@ -51,8 +53,10 @@ public abstract class AbstractAPriori implements AprioriInterface {
 		if (minimumSupport > 1 || minimumSupport < 0)
 			throw new IllegalArgumentException(
 					"support must be expressed with a double value between 0 and 1 (included)");
-		else
+		else {
 			this.minimumSupport = minimumSupport;
+			fixedSupport = minimumSupport;
+		}
 
 		pw = new PrintWriter(new File(folderResults + fileName + ".result"));
 
@@ -63,6 +67,10 @@ public abstract class AbstractAPriori implements AprioriInterface {
 		currentItems = new HashMap();
 		frequentItemset = new HashMap<>();
 
+	}
+
+	protected void contractSupport() {
+		minimumSupport = (minimumSupport * k) / 10;
 	}
 
 	protected void printInputSettings() {
@@ -76,6 +84,10 @@ public abstract class AbstractAPriori implements AprioriInterface {
 
 	public PrintWriter getPrintWriter() {
 		return pw;
+	}
+
+	public void setMaxItem(int i) {
+		maxItem = i;
 	}
 
 	public void transactionsAdd(Transaction t) {
@@ -190,13 +202,14 @@ public abstract class AbstractAPriori implements AprioriInterface {
 	@Override
 	public void compute() {
 		prune(1);
+		reductionStep = 0;
 
 	}
 
 	// after the counting of the candidate tuples Ck,
 	// it prunes all the unfrequent tuples
 	protected void prune(int k) {
-		s = "Pruning occurrencies of size 1";
+		s = "Pruning occurrencies of size " + k;
 		System.out.println(s);
 		sb.append(s + "\n");
 
@@ -232,6 +245,9 @@ public abstract class AbstractAPriori implements AprioriInterface {
 				}
 			}
 		}
+
+		if (CD && !frequentItemsTable.isEmpty())
+			cleanFrequentItemset(k);
 		resetCurrentItems();
 		s = "pruned " + numRemoved + " itemsetsof size " + k + " and " + c + " elements";
 		sb.append(s + "\n");
@@ -241,7 +257,7 @@ public abstract class AbstractAPriori implements AprioriInterface {
 				+ (minimumSupport * 100) + "%)";
 		sb.append(s + "\n");
 		System.out.println(s);
-		s = "Items currently frequent= " + currentItems.size() + "\n";
+		s = "Items currently frequent= " + currentItems.size();
 		System.out.println(s);
 		sb.append(s + "\n");
 
@@ -249,6 +265,28 @@ public abstract class AbstractAPriori implements AprioriInterface {
 
 	public HashMap<ItemSet, Integer> getFIT() {
 		return frequentItemsTable;
+	}
+
+	public int getK() {
+		return k;
+	}
+
+	private void cleanFrequentItemset(int k) {
+		int max = 0;
+		Iterator<ItemSet> it = frequentItemset.keySet().iterator();
+		while (it.hasNext()) {
+
+			ItemSet is = it.next();
+			int size = is.size();
+			max = Math.max(max, size);
+			if (!(size == k))
+				it.remove();
+		}
+		System.out.println("max = " + max + "\tk =" + k);
+	}
+
+	public void setCD() {
+		CD = true;
 	}
 
 }

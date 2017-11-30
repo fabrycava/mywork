@@ -3,8 +3,7 @@ package apriori;
 import java.util.BitSet;
 import java.util.HashMap;
 import java.util.Iterator;
-
-import org.apache.commons.math3.util.CombinatoricsUtils;
+import java.util.Map;
 
 import associationRule.AssociationRuleGenerator;
 import enums.Classification;
@@ -12,14 +11,20 @@ import itemset.ItemSet;
 import itemset.ItemSetIF;
 import transaction.Transaction;
 import util.Reader;
+import util.Subset;
 
 public class PCY extends AbstractAPriori {
 
-	private int[] buckets;
+	private HashMap<Integer, Integer> buckets;
 
 	private BitSet bitmap;
 
+	boolean flag = false;
+
+	int count = 0;
 	int tuplesAvoided = 0, tuplesGenerated, mod = 0;
+
+	int totalAccorgimento = 0;
 
 	public PCY(String fileName, double minimumSupport, double minimumConfidence, Classification classification)
 			throws Exception {
@@ -34,22 +39,41 @@ public class PCY extends AbstractAPriori {
 	public void compute() {
 		super.compute();
 		long timeStep;
-		for (int k = 2; frequentItemsTable.size() != 0; k++) {
+		int previousSize = currentItems.size();
+		for (k = 2; frequentItemsTable.size() != 0; k++) {
+			double delta = minimumSupport / 10;
+			if (currentItems.size() > 120) {
+				minimumSupport += delta;
+				System.out.println("new minimum support = " + minimumSupport*100);
+			} else if (currentItems.size() < 100 && k > 5) {
+				if (flag)
+					minimumSupport -= delta;
+				else
+					minimumSupport += delta;
+				System.out.println("new minimum support = " + minimumSupport*100);
+			}
 			timeStep = System.currentTimeMillis();
 			pcyStep(k);
 			generateCk(k);
 			countOccurrences();
 			prune(k);
+			if (previousSize > currentItems.size()) {// the number of items is decreasing
+				flag = true;
+			} else// number of items is not decreasing
+				flag = false;
+			previousSize = currentItems.size();
 
-			s = "Elapsed time(s) for step #" + k + " = " + (System.currentTimeMillis() - timeStep) / 1000+"\n";
+			s = "Elapsed time(s) for step #" + k + " = " + (System.currentTimeMillis() - timeStep) / 1000 + "\n";
 			sb.append(s + "\n");
-			System.out.println(s+"");
+			System.out.println(s);
 		}
 
 		long elapsedTime = System.currentTimeMillis() - start;
 
 		s = "A total of " + tuplesAvoided + " tuples generation over " + (tuplesGenerated + tuplesAvoided)
 				+ " has been avoided thanks the PCY\n";
+
+		System.out.println(totalAccorgimento + " risparmiate grazie all' accorgimento ;)");
 
 		sb.append(s);
 		System.out.println(s + "\n");
@@ -66,41 +90,26 @@ public class PCY extends AbstractAPriori {
 		for (Transaction t : transactions)
 			if (t.containsAll(is))
 				value++;
-
 		int ind = hashFunction(is);
-
-		if (ind < 0) {
-			System.out.println(is);
-			System.out.println(is.hashCode());
-			System.out.println(ind);
+		if (!buckets.containsKey(ind))
+			buckets.put(ind, value);
+		else {
+			int old = buckets.get(ind);
+			old += value;
+			buckets.put(ind, old);
 		}
-
-		// System.out.println(hashFunction(is));
-		buckets[hashFunction(is)] += value;
-
 	}
 
 	private int hashFunction(ItemSet is) {
 		int hash = is.hashCode() % (mod);
 		if (hash < 0) {
-//			System.out.println("cazzoooooooooooooooooooo");
-//			if(is.hashCode()<0)
-//				System.out.println("e perche?");
 			Iterator<Integer> it = is.iterator();
 			int newhash = 1;
 			while (it.hasNext()) {
 				newhash += it.next();
 			}
-			//newhash *= 157;
-//			if (newhash >= 0)
-//				System.out.println("se po fa " + hash + " " + newhash);
-//			else
-//				System.out.println("eche cavolo ancoraaaaaa" + hash + " " + newhash);
-			hash = newhash;
-			return hash % mod;
-
+			return newhash % mod;
 		}
-
 		return hash;
 	}
 
@@ -108,10 +117,9 @@ public class PCY extends AbstractAPriori {
 		s = "Starting the PCY # " + (k - 1) + "\n";
 		sb.append(s + "\n");
 		System.out.println(s);
-
-		int coeff = (int) (CombinatoricsUtils.binomialCoefficient(currentItems.size(), k));
-		mod = Math.max(((coeff * 3) / 4), 1);
-		buckets = new int[mod];
+		mod=N;
+		// buckets = new int[mod];
+		buckets = new HashMap<>();
 		Iterator<ItemSet> it = frequentItemsTable.keySet().iterator();
 		while (it.hasNext()) {
 			ItemSetIF temp = it.next();
@@ -121,7 +129,17 @@ public class PCY extends AbstractAPriori {
 				if (x > temp.getMax()) {// ensure the monotonicity
 					ItemSet previous = (ItemSet) temp.clone();
 					previous.add(x);
-					countOccurrencesPCY(previous);
+
+					ItemSet[] sub = Subset.generateSubsets(previous);
+					boolean flag = true;
+					for (int i = 0; i < sub.length; i++) {
+						if (sub[i].size() == k - 1 && !frequentItemset.containsKey(sub[i])) {
+							flag = false;
+							break;
+						}
+					}
+					if (flag)
+						countOccurrencesPCY(previous);
 				}
 			}
 		}
@@ -132,19 +150,17 @@ public class PCY extends AbstractAPriori {
 
 	private void calculateBitmap() {
 		bitmap = new BitSet();
-		for (int i = 0; i < buckets.length; i++) {
-			if (computeSup(buckets[i]) >= minimumSupport)
-				bitmap.set(i);
-		}
-		// System.out.println("aaaaaaaaaaaaaaa");
-
+		for (Map.Entry<Integer, Integer> pair : buckets.entrySet())
+			if (computeSup(pair.getValue()) >= minimumSupport)
+				bitmap.set(pair.getKey());
+		buckets = null;
 	}
 
 	protected void generateCk(int k) {
 		s = "generating all the tuples of size " + k;
 		sb.append(s + "\n");
 		System.out.println(s);
-		int tempAcc = 0;
+		int tempAcc = 0, t = 0;
 		HashMap<ItemSet, Integer> newMap = new HashMap<>();
 		Iterator<ItemSet> it = frequentItemsTable.keySet().iterator();
 		while (it.hasNext()) {
@@ -156,21 +172,36 @@ public class PCY extends AbstractAPriori {
 					ItemSet previous = (ItemSet) temp.clone();
 					previous.add(x);
 
-					if (bitmap.get(hashFunction(previous)))
-						newMap.put(previous, 0);
+					ItemSet[] sub = Subset.generateSubsets(previous);
+					boolean flag = true;
+					if (bitmap.get(hashFunction(previous))) {
+						for (int i = 0; i < sub.length; i++) {
+							if (sub[i].size() == k - 1 && !frequentItemset.containsKey(sub[i])) {
+								flag = false;
+								t++;
+								break;
+							}
 
-					else
+						}
+						if (flag)
+							newMap.put(previous, 0);
+					} else
 						tempAcc++;
 
 				}
 			}
 			it.remove();
 		}
+		s = t + " avoided accorgimento in step #" + k;
+		System.out.println(s);
+		sb.append(s);
+
+		totalAccorgimento += t;
 		frequentItemsTable = newMap;
 		tuplesAvoided += tempAcc;
 		tuplesGenerated += frequentItemsTable.size();
 
-		s = tempAcc + " avoided in step #" + k;
+		s = tempAcc + " avoided PCY in step #" + k;
 		System.out.println(s);
 		sb.append(s);
 

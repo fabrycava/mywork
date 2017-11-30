@@ -27,7 +27,7 @@ public class AssociationRuleGenerator {
 	}
 
 	public HashSet<AssociationRule> getAssociationRules() {
-		//assocRules();
+		assocRules();
 		return assoc;
 	}
 
@@ -36,7 +36,7 @@ public class AssociationRuleGenerator {
 		generateAssocRules();
 		// System.out.println(assoc);
 		computeAssocRules2();
-		printAssocRules();
+		//printAssocRules();
 		System.out.println("Elapsed time for AR " + (System.currentTimeMillis() - start + "\n"));
 		sb.append("Elapsed time for AR " + (System.currentTimeMillis() - start + "\n\n"));
 
@@ -148,7 +148,7 @@ public class AssociationRuleGenerator {
 		Iterator<ItemSet> it = frequentItemset.keySet().iterator();
 		while (it.hasNext()) {
 			ItemSet curr = it.next();
-			ItemSet[] subsets = generateSubsets(curr);
+			ItemSet[] subsets = Subset.generateSubsets(curr);
 			for (int i = 0; i < subsets.length; i++) {
 				for (int j = 0; j < subsets.length; j++) {
 					if (i != j && subsets[i].size() != 0 && subsets[j].size() != 0
@@ -169,15 +169,5 @@ public class AssociationRuleGenerator {
 		sb.append(assoc.size() + " candidate AR have been generated\n");
 	}
 
-	private ItemSet[] generateSubsets(ItemSet curr) {
-		Set<Set<Integer>> subsets = Subset.powerSet(curr);
-		// System.out.println(subsets);
-		ItemSet[] subsetsArray = new ItemSet[subsets.size()];
-		Iterator<Set<Integer>> it = subsets.iterator();
-		int i = 0;
-		while (it.hasNext())
-			subsetsArray[i++] = new ItemSet(it.next());
-		return subsetsArray;
-
-	}
+	
 }

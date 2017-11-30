@@ -81,14 +81,14 @@ public class ItemSet extends HashSet<Integer> implements ItemSetIF {
 		return sb.toString();
 	}
 
-	@Override
-	public int hashCode() {
-		int x = 1;
-		for (Integer integer : this) {
-			x *= integer;
-		}
-		return x ;
-	}
+//	@Override
+//	public int hashCode() {
+//		int x = 1;
+//		for (Integer integer : this) {
+//			x *= integer;
+//		}
+//		return x ;
+//	}
 
 	@Override
 	public ItemSet clone() {
