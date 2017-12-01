@@ -1,0 +1,76 @@
+Folder:Datasets\
+fileName:kosarak.dat
+
+Input configuration: 
+41270 items, 990002 transactions, Min Sup = 2.1999999999999997%
+Min Conf = 80.0%
+
+Folder:Datasets\
+fileName:kosarak.dat
+
+Input configuration: 
+41270 items, 990002 transactions, Min Sup = 2.1999999999999997%
+Min Conf = 80.0%
+Pruning occurrencies of size 1
+pruned 41247 itemsetsof size 1 and 41247 elements
+Found 23 frequent itemsets of size 1 (with support 2.1999999999999997%)
+Items currently frequent= 23
+Starting the PCY # 1
+
+generating all the tuples of size 2
+0 avoided accorgimento in step #2187 avoided PCY in step #266 of size 2 have been generated from 23 items
+Counting all the occurrences...
+Pruning occurrencies of size 2
+pruned 27 itemsetsof size 2 and 6 elements
+Found 39 frequent itemsets of size 2 (with support 2.1999999999999997%)
+Items currently frequent= 17
+Elapsed time(s) for step #2 = 25
+
+Starting the PCY # 2
+
+generating all the tuples of size 3
+12 avoided accorgimento in step #3226 avoided PCY in step #331 of size 3 have been generated from 17 items
+Counting all the occurrences...
+Pruning occurrencies of size 3
+pruned 1 itemsetsof size 3 and 4 elements
+Found 30 frequent itemsets of size 3 (with support 2.1999999999999997%)
+Items currently frequent= 13
+Elapsed time(s) for step #3 = 6
+
+Starting the PCY # 3
+
+generating all the tuples of size 4
+0 avoided accorgimento in step #491 avoided PCY in step #411 of size 4 have been generated from 13 items
+Counting all the occurrences...
+Pruning occurrencies of size 4
+pruned 0 itemsetsof size 4 and 0 elements
+Found 11 frequent itemsets of size 4 (with support 2.1999999999999997%)
+Items currently frequent= 13
+Elapsed time(s) for step #4 = 1
+
+Starting the PCY # 4
+
+generating all the tuples of size 5
+0 avoided accorgimento in step #521 avoided PCY in step #51 of size 5 have been generated from 13 items
+Counting all the occurrences...
+Pruning occurrencies of size 5
+pruned 0 itemsetsof size 5 and 0 elements
+Found 1 frequent itemsets of size 5 (with support 2.1999999999999997%)
+Items currently frequent= 13
+Elapsed time(s) for step #5 = 0
+
+Starting the PCY # 5
+
+generating all the tuples of size 6
+0 avoided accorgimento in step #60 avoided PCY in step #60 of size 6 have been generated from 13 items
+Counting all the occurrences...
+Pruning occurrencies of size 6
+pruned 0 itemsetsof size 6 and 0 elements
+Found 0 frequent itemsets of size 6 (with support 2.42%)
+Items currently frequent= 13
+Elapsed time(s) for step #6 = 0
+
+A total of 525 tuples generation over 634 has been avoided thanks the PCY
+Elapsed time(s)= 44.861
+
+

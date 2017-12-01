@@ -14,7 +14,7 @@ import util.Reader;
 import util.Subset;
 import util.SubsetIterator;
 
-public class PCY extends AbstractAPriori {
+public class PCY2 extends AbstractAPriori {
 
 	private HashMap<Integer, Integer> buckets;
 
@@ -27,7 +27,7 @@ public class PCY extends AbstractAPriori {
 
 	int totalAccorgimento = 0;
 
-	public PCY(String fileName, double minimumSupport, double minimumConfidence, Classification classification)
+	public PCY2(String fileName, double minimumSupport, double minimumConfidence, Classification classification)
 			throws Exception {
 		super(fileName, minimumSupport, minimumConfidence, classification);
 		frequentItemsTable = new HashMap<>();
@@ -130,8 +130,7 @@ public class PCY extends AbstractAPriori {
 				if (x > temp.getMax()) {// ensure the monotonicity
 					ItemSet previous = (ItemSet) temp.clone();
 					previous.add(x);
-
-					boolean flag = true;
+					boolean flag = true;			
 
 					SubsetIterator<Integer> sit = new SubsetIterator<>(previous, k - 1);
 					while (sit.hasNext()) {
@@ -177,15 +176,15 @@ public class PCY extends AbstractAPriori {
 
 					boolean flag = true;
 					if (bitmap.get(hashFunction(previous))) {
-
-						SubsetIterator<Integer> sit = new SubsetIterator<>(previous, k - 1);
-						while (sit.hasNext()) {
-							if (!frequentItemset.containsKey(sit.next())) {
-								flag = false;
-								t++;
-								break;
-							}
-						}
+					
+						 SubsetIterator<Integer> sit = new SubsetIterator<>(previous, k - 1);
+						 while (sit.hasNext()) {
+						 if (!frequentItemset.containsKey(sit.next())) {
+						 flag = false;
+						 t++;
+						 break;
+						 }
+						 }
 
 						if (flag)
 							newMap.put(previous, 0);
