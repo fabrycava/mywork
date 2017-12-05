@@ -42,17 +42,18 @@ public class PCY2 extends AbstractAPriori {
 
 	@Override
 	protected void step(int k) {
-		double delta = minimumSupport / 10;
-		if (currentItems.size() > 120) {
-			minimumSupport += delta;
-			System.out.println("new minimum support = " + minimumSupport * 100);
-		} else if (currentItems.size() < 100 && k > 5) {
-			if (flag)
-				minimumSupport -= delta;
-			else
-				minimumSupport += delta;
-			System.out.println("new minimum support = " + minimumSupport * 100);
-		}
+//		double delta = minimumSupport / 10;
+//		if (currentItems.size() > 120) {
+//			minimumSupport += delta;
+//			System.out.println("new minimum support = " + minimumSupport * 100);
+//		} else if (currentItems.size() < 100 && k > 5) {
+//			if (flag)
+//				minimumSupport -= delta;
+//			else
+//				minimumSupport += delta;
+//			System.out.println("new minimum support = " + minimumSupport * 100);
+//		}
+		tuplesRemoved=0;
 		timeStep = System.currentTimeMillis();
 		pcyStep(k);
 		generateCk(k);

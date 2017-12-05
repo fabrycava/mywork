@@ -2,11 +2,13 @@ package communityDetection;
 
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import apriori.APriori2;
 import apriori.PCY;
 import apriori.PCY2;
 import associationRule.AssociationRule;
@@ -16,64 +18,54 @@ import enums.Classification;
 import enums.Order;
 import itemset.ItemSet;
 
-public class CommunityDetection {
-
-	// private List<ItemSet> frequentItemset;
-
+public class Iterative {
+	
+	
+	
 	private HashMap<ItemSet, Double> frequentItemset;
 	AssociationRuleGenerator arg;
 	private HashMap<Integer, Integer> elementCommunity;
 	private HashMap<Integer, ItemSet> communities;
 
-	public CommunityDetection(HashMap<ItemSet, Double> frequentItemset) {
-		// this.frequentItemset = new LinkedList<>(frequentItemset.keySet());
-		// this.frequentItemset.sort(ItemSet.getComparator(Order.DESCENDING));
-
+	public Iterative(HashMap<ItemSet, Double> frequentItemset) {
+		
 		this.frequentItemset = frequentItemset;
 		elementCommunity = new HashMap<>();
-		// arg = new AssociationRuleGenerator(frequentItemset, 0.1, new
-		// StringBuilder());
-
+		
 	}
 
 	public static void main(String[] args) throws Exception {
-		// APriori ap = new APriori("facebook.dat", (double) 0.01, 0.99,
-		// Classification.USOCIAL);
-		// ap.compute();
-		PCY pcy = new PCY("facebook.dat", (double) 0.042, 0.9, Classification.USOCIAL);
-		pcy.compute();
-		CommunityDetection cm = new CommunityDetection(pcy.getFrequentItemset());
-		System.out.println("k = " + pcy.getK());
-		// cm.cleanFrequentItemset(pcy.getK());
-		System.out.println("Found " + cm.getFrequentItemset().size() + " of size " + (pcy.getK() - 2));
-		//System.out.println(cm.getFrequentItemset());
-		pcy=null;
+	
+//		APriori2 ap2 = new APriori2("facebook.dat", (double) 0.044, 0.9, Classification.USOCIAL);
+//		ap2.compute();
+//		CommunityDetection cm = new CommunityDetection(ap2.getFrequentItemset());
+//		System.out.println("k = " + ap2.getK());
+//		
+//		System.out.println("Found " + cm.getFrequentItemset().size() + " of size " + (ap2.getK() - 2));
+//	
+//		ap2=null;
+//		
+//		PCY2 pcy2 = new PCY2("facebook.dat", (double) 0.044, 0.9, Classification.USOCIAL);
+//		pcy2.compute();
+//		CommunityDetection cm2 = new CommunityDetection(pcy2.getFrequentItemset());
+//		System.out.println("k = " + pcy2.getK());
+//		System.out.println("Found " + cm2.getFrequentItemset().size() + " of size " + (pcy2.getK() - 2));
+//
+//
+//		System.out.println(cm.getFrequentItemset().keySet().equals(cm2.getFrequentItemset().keySet()));
 		
-		PCY2 pcy2 = new PCY2("facebook.dat", (double) 0.042, 0.9, Classification.USOCIAL);
-		pcy2.compute();
-		CommunityDetection cm2 = new CommunityDetection(pcy2.getFrequentItemset());
-		System.out.println("k = " + pcy2.getK());
-		System.out.println("Found " + cm2.getFrequentItemset().size() + " of size " + (pcy2.getK() - 2));
-//		System.out.println(cm.getFrequentItemset());
-//		System.out.println(cm2.getFrequentItemset());
-
-		System.out.println(cm.getFrequentItemset().keySet().equals(cm2.getFrequentItemset().keySet()));
-		
-		// cm.findCommunities();
-		//
-		// APriori ap = new APriori("facebook.dat", (double) 0.02, 0.9,
-		// Classification.USOCIAL);
-		// ap.compute();
-		// cm = new CommunityDetection(ap.getFrequentItemset());
-		// cm.cleanFrequentItemset(ap.getK());
-		// System.out.println("Found " + cm.getFrequentItemset().size() + " of size " +
-		// (pcy.getK() - 2));
-		// System.out.println(cm.getFrequentItemset());
-
-		// ap = null;
-		// cm.findCommunities();
+	
 
 	}
+	
+	
+	private HashSet<ItemSet> growCommunities(HashSet<ItemSet> frequentItemset){
+		HashSet<ItemSet> set=new HashSet<>();
+		int grown=0;
+		return null;
+		
+	}
+	
 
 	public HashMap<ItemSet, Double> getFrequentItemset() {
 		return frequentItemset;

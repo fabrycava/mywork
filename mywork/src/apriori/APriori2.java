@@ -30,7 +30,7 @@ public class APriori2 extends AbstractAPriori {
 		super.compute();
 		// System.out.println(frequentItemsTable.size());
 
-		System.out.println(total + " risparmiate grazie all' accorgimento ;)");
+		System.out.println(totalAccorgimento + " risparmiate grazie all' accorgimento ;)");
 		long elapsedTime = System.currentTimeMillis() - start;
 
 		s = "Elapsed time(s)= " + (double) elapsedTime / 1000 + "\n";
@@ -138,7 +138,7 @@ public class APriori2 extends AbstractAPriori {
 		generateCk(k);
 		countOccurrences();
 		prune(k);
-		s = "Elapsed time for step #" + k + " = " + (System.currentTimeMillis() - timeStep) / 100;
+		s = "Elapsed time for step #" + k + " = " + (System.currentTimeMillis() - timeStep) / 100+"\n";
 		sb.append(s + "\n");
 		System.out.println(s);
 
