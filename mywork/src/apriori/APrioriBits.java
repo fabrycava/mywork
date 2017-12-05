@@ -244,4 +244,10 @@ public class APrioriBits extends AbstractAPriori {
 		return sb;
 	}
 
+	@Override
+	protected void step(int k) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -32,17 +32,7 @@ public class APriori extends AbstractAPriori {
 	public void compute() {
 		super.compute();
 		// System.out.println(frequentItemsTable.size());
-		for ( k = 2; frequentItemsTable.size() != 0; k++) {
-			long timeStep = System.currentTimeMillis();
-
-			generateCk(k);
-			countOccurrences();
-			prune(k);
-			s = "Elapsed time for step #" + k + " = " + (System.currentTimeMillis() - timeStep) / 100;
-			sb.append(s + "\n");
-			System.out.println(s);
-
-		}
+		
 
 		System.out.println(total +" risparmiate grazie all' accorgimento ;)");
 		long elapsedTime = System.currentTimeMillis() - start;
@@ -109,6 +99,19 @@ public class APriori extends AbstractAPriori {
 				ap.getStringBuilder());
 		arg.assocRules();
 
+	}
+
+	@Override
+	protected void step(int k) {
+		long timeStep = System.currentTimeMillis();
+
+		generateCk(k);
+		countOccurrences();
+		prune(k);
+		s = "Elapsed time for step #" + k + " = " + (System.currentTimeMillis() - timeStep) / 100;
+		sb.append(s + "\n");
+		System.out.println(s);
+		
 	}
 
 }

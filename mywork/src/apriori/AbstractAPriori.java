@@ -24,6 +24,7 @@ public abstract class AbstractAPriori implements AprioriInterface {
 	protected double minimumSupport, fixedSupport;
 	protected double minimumConfidence;
 	// protected Printer printer;
+	long timeStep = System.currentTimeMillis();
 
 	protected List<Transaction> transactions;
 
@@ -36,7 +37,7 @@ public abstract class AbstractAPriori implements AprioriInterface {
 
 	protected PrintWriter pw;
 	protected long start;
-	protected int k, reductionStep, maxItem;
+	protected int k, reductionStep, maxItem, tuplesRemoved;
 	protected boolean CD = false;
 
 	public AbstractAPriori(String fileName, double minimumSupport, double minimumConfidence,
@@ -203,6 +204,9 @@ public abstract class AbstractAPriori implements AprioriInterface {
 	public void compute() {
 		prune(1);
 		reductionStep = 0;
+		for (k = 2; frequentItemsTable.size() != 0; k++) {
+			step(k);
+		}
 
 	}
 
@@ -271,7 +275,7 @@ public abstract class AbstractAPriori implements AprioriInterface {
 		return k;
 	}
 
-	private void cleanFrequentItemset(int k) {
+	protected void cleanFrequentItemset(int k) {
 		int max = 0;
 		Iterator<ItemSet> it = frequentItemset.keySet().iterator();
 		while (it.hasNext()) {
@@ -287,6 +291,46 @@ public abstract class AbstractAPriori implements AprioriInterface {
 
 	public void setCD() {
 		CD = true;
+	}
+
+	protected abstract void step(int k);
+
+	protected boolean prune(int k, ItemSet is, HashMap<ItemSet, Integer> newMap) {
+
+		int count = newcountOccurrences(is);
+		double sup = computeSup(count);
+		if (sup >= minimumSupport) {
+			frequentItemset.put(is, Double.valueOf(count));
+			newMap.put(is,count);
+			for (Integer i : is) {// if an itemset is frequent then all the items in it are frequent
+				currentItems.put(i, true);
+			}
+			return false;
+		}
+		return true;
+
+	}
+
+	private int newcountOccurrences(ItemSet is) {
+		int value = 0;
+		for (Transaction t : transactions)
+			if (t.containsAll(is))
+				value++;
+		return value;
+	}
+
+	protected int removeUnfrequentCurrentItems() {
+		// remove from current items
+		int c = 0;
+		Iterator<Map.Entry<Integer, Boolean>> itCurr = currentItems.entrySet().iterator();
+		while (itCurr.hasNext()) {
+			Map.Entry<Integer, Boolean> curr = itCurr.next();
+			if (!curr.getValue()) {
+				c++;
+				itCurr.remove();
+			}
+		}
+		return c;
 	}
 
 }

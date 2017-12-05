@@ -11,7 +11,6 @@ import itemset.ItemSet;
 import itemset.ItemSetIF;
 import transaction.Transaction;
 import util.Reader;
-import util.Subset;
 import util.SubsetIterator;
 
 public class PCY2 extends AbstractAPriori {
@@ -27,47 +26,52 @@ public class PCY2 extends AbstractAPriori {
 
 	int totalAccorgimento = 0;
 
+	private int previousSize;
+
+	private long timeStep;
+
 	public PCY2(String fileName, double minimumSupport, double minimumConfidence, Classification classification)
 			throws Exception {
 		super(fileName, minimumSupport, minimumConfidence, classification);
 		frequentItemsTable = new HashMap<>();
 		Reader.readTransations(this, classification, folderData);
 		printInputSettings();
+		previousSize = currentItems.size();
+
+	}
+
+	@Override
+	protected void step(int k) {
+		double delta = minimumSupport / 10;
+		if (currentItems.size() > 120) {
+			minimumSupport += delta;
+			System.out.println("new minimum support = " + minimumSupport * 100);
+		} else if (currentItems.size() < 100 && k > 5) {
+			if (flag)
+				minimumSupport -= delta;
+			else
+				minimumSupport += delta;
+			System.out.println("new minimum support = " + minimumSupport * 100);
+		}
+		timeStep = System.currentTimeMillis();
+		pcyStep(k);
+		generateCk(k);
+
+		if (previousSize > currentItems.size()) {// the number of items is decreasing
+			flag = true;
+		} else// number of items is not decreasing
+			flag = false;
+		previousSize = currentItems.size();
+
+		s = "Elapsed time(s) for step #" + k + " = " + (System.currentTimeMillis() - timeStep) / 1000 + "\n";
+		sb.append(s + "\n");
+		System.out.println(s);
 
 	}
 
 	@Override
 	public void compute() {
 		super.compute();
-		long timeStep;
-		int previousSize = currentItems.size();
-		for (k = 2; frequentItemsTable.size() != 0; k++) {
-			double delta = minimumSupport / 10;
-			if (currentItems.size() > 120) {
-				minimumSupport += delta;
-				System.out.println("new minimum support = " + minimumSupport * 100);
-			} else if (currentItems.size() < 100 && k > 5) {
-				if (flag)
-					minimumSupport -= delta;
-				else
-					minimumSupport += delta;
-				System.out.println("new minimum support = " + minimumSupport * 100);
-			}
-			timeStep = System.currentTimeMillis();
-			pcyStep(k);
-			generateCk(k);
-			countOccurrences();
-			prune(k);
-			if (previousSize > currentItems.size()) {// the number of items is decreasing
-				flag = true;
-			} else// number of items is not decreasing
-				flag = false;
-			previousSize = currentItems.size();
-
-			s = "Elapsed time(s) for step #" + k + " = " + (System.currentTimeMillis() - timeStep) / 1000 + "\n";
-			sb.append(s + "\n");
-			System.out.println(s);
-		}
 
 		long elapsedTime = System.currentTimeMillis() - start;
 
@@ -118,7 +122,7 @@ public class PCY2 extends AbstractAPriori {
 		s = "Starting the PCY # " + (k - 1) + "\n";
 		sb.append(s + "\n");
 		System.out.println(s);
-		mod = N;
+		mod = 3*N;
 		// buckets = new int[mod];
 		buckets = new HashMap<>();
 		Iterator<ItemSet> it = frequentItemsTable.keySet().iterator();
@@ -130,8 +134,7 @@ public class PCY2 extends AbstractAPriori {
 				if (x > temp.getMax()) {// ensure the monotonicity
 					ItemSet previous = (ItemSet) temp.clone();
 					previous.add(x);
-					boolean flag = true;			
-
+					boolean flag = true;
 					SubsetIterator<Integer> sit = new SubsetIterator<>(previous, k - 1);
 					while (sit.hasNext()) {
 						if (!frequentItemset.containsKey(sit.next())) {
@@ -176,18 +179,20 @@ public class PCY2 extends AbstractAPriori {
 
 					boolean flag = true;
 					if (bitmap.get(hashFunction(previous))) {
-					
-						 SubsetIterator<Integer> sit = new SubsetIterator<>(previous, k - 1);
-						 while (sit.hasNext()) {
-						 if (!frequentItemset.containsKey(sit.next())) {
-						 flag = false;
-						 t++;
-						 break;
-						 }
-						 }
 
+						SubsetIterator<Integer> sit = new SubsetIterator<>(previous, k - 1);
+						while (sit.hasNext()) {
+							if (!frequentItemset.containsKey(sit.next())) {
+								flag = false;
+								t++;
+								break;
+							}
+						}
 						if (flag)
-							newMap.put(previous, 0);
+							// newMap.put(previous, 0);
+							if (prune(k, previous, newMap))
+								tuplesRemoved++;
+
 					} else
 						tempAcc++;
 
@@ -195,14 +200,25 @@ public class PCY2 extends AbstractAPriori {
 			}
 			it.remove();
 		}
-		s = t + " avoided accorgimento in step #" + k;
-		System.out.println(s);
-		sb.append(s);
+
+		// remove from current items
+
+		frequentItemsTable = newMap;
+
+		int itemsRemoved = removeUnfrequentCurrentItems();
+
+		if (CD && !frequentItemsTable.isEmpty())
+			cleanFrequentItemset(k);
+		resetCurrentItems();
 
 		totalAccorgimento += t;
 		frequentItemsTable = newMap;
 		tuplesAvoided += tempAcc;
 		tuplesGenerated += frequentItemsTable.size();
+
+		s = t + " avoided accorgimento in step #" + k;
+		System.out.println(s);
+		sb.append(s);
 
 		s = tempAcc + " avoided PCY in step #" + k;
 		System.out.println(s);
@@ -211,6 +227,22 @@ public class PCY2 extends AbstractAPriori {
 		s = frequentItemsTable.size() + " of size " + k + " have been generated from " + currentItems.size() + " items";
 		sb.append(s + "\n");
 		System.out.println(s);
+
+		s = "pruned " + tuplesRemoved + " itemsetsof size " + k + " and " + itemsRemoved + " elements";
+		sb.append(s + "\n");
+		System.out.println(s);
+
+		s = "Found " + frequentItemsTable.size() + " frequent itemsets of size " + k + " (with support "
+				+ (minimumSupport * 100) + "%)";
+		sb.append(s + "\n");
+		System.out.println(s);
+		s = "Items currently frequent= " + currentItems.size();
+		System.out.println(s);
+		sb.append(s + "\n");
+
+
+		
+
 	}
 
 	public static void main(String[] args) throws Exception {
@@ -237,4 +269,5 @@ public class PCY2 extends AbstractAPriori {
 		// TODO Auto-generated method stub
 
 	}
+
 }

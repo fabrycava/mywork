@@ -23,7 +23,7 @@ public class PCY extends AbstractAPriori {
 	boolean flag = false;
 
 	int count = 0;
-	int tuplesAvoided = 0, tuplesGenerated, mod = 0;
+	int tuplesAvoided = 0, tuplesGenerated, mod = 0,previousSize;
 
 	int totalAccorgimento = 0;
 
@@ -39,36 +39,9 @@ public class PCY extends AbstractAPriori {
 	@Override
 	public void compute() {
 		super.compute();
-		long timeStep;
+		
 		int previousSize = currentItems.size();
-		for (k = 2; frequentItemsTable.size() != 0; k++) {
-			double delta = minimumSupport / 10;
-			if (currentItems.size() > 120) {
-				minimumSupport += delta;
-				System.out.println("new minimum support = " + minimumSupport * 100);
-			} else if (currentItems.size() < 100 && k > 5) {
-				if (flag)
-					minimumSupport -= delta;
-				else
-					minimumSupport += delta;
-				System.out.println("new minimum support = " + minimumSupport * 100);
-			}
-			timeStep = System.currentTimeMillis();
-			pcyStep(k);
-			generateCk(k);
-			countOccurrences();
-			prune(k);
-			if (previousSize > currentItems.size()) {// the number of items is decreasing
-				flag = true;
-			} else// number of items is not decreasing
-				flag = false;
-			previousSize = currentItems.size();
-
-			s = "Elapsed time(s) for step #" + k + " = " + (System.currentTimeMillis() - timeStep) / 1000 + "\n";
-			sb.append(s + "\n");
-			System.out.println(s);
-		}
-
+		
 		long elapsedTime = System.currentTimeMillis() - start;
 
 		s = "A total of " + tuplesAvoided + " tuples generation over " + (tuplesGenerated + tuplesAvoided)
@@ -118,7 +91,7 @@ public class PCY extends AbstractAPriori {
 		s = "Starting the PCY # " + (k - 1) + "\n";
 		sb.append(s + "\n");
 		System.out.println(s);
-		mod = N;
+		mod = 3*N;
 		// buckets = new int[mod];
 		buckets = new HashMap<>();
 		Iterator<ItemSet> it = frequentItemsTable.keySet().iterator();
@@ -216,7 +189,7 @@ public class PCY extends AbstractAPriori {
 
 	public static void main(String[] args) throws Exception {
 
-		PCY pcy = new PCY("kosarak.dat", (double) 0.0005, 0.9, Classification.TRANSACTIONS);
+		PCY pcy = new PCY("kosarak.dat", (double) 0.02, 0.9, Classification.TRANSACTIONS);
 		pcy.compute();
 
 		AssociationRuleGenerator arg = new AssociationRuleGenerator(pcy.getFrequentItemset(),
@@ -237,5 +210,35 @@ public class PCY extends AbstractAPriori {
 	public void results() {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	protected void step(int k) {
+		double delta = minimumSupport / 10;
+		if (currentItems.size() > 120) {
+			minimumSupport += delta;
+			System.out.println("new minimum support = " + minimumSupport * 100);
+		} else if (currentItems.size() < 100 && k > 5) {
+			if (flag)
+				minimumSupport -= delta;
+			else
+				minimumSupport += delta;
+			System.out.println("new minimum support = " + minimumSupport * 100);
+		}
+		timeStep=System.currentTimeMillis();
+		pcyStep(k);
+		generateCk(k);
+		countOccurrences();
+		prune(k);
+		if (previousSize > currentItems.size()) {// the number of items is decreasing
+			flag = true;
+		} else// number of items is not decreasing
+			flag = false;
+		previousSize = currentItems.size();
+
+		s = "Elapsed time(s) for step #" + k + " = " + (System.currentTimeMillis() - timeStep) / 1000 + "\n";
+		sb.append(s + "\n");
+		System.out.println(s);
+		
 	}
 }

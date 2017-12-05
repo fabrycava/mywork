@@ -2,64 +2,56 @@ Folder:Datasets\
 fileName:retail.dat
 
 Input configuration: 
-16470 items, 88162 transactions, Min Sup = 0.5%
+16470 items, 88162 transactions, Min Sup = 0.91%
 Min Conf = 50.0%
 
 Folder:Datasets\
 fileName:retail.dat
 
 Input configuration: 
-16470 items, 88162 transactions, Min Sup = 0.5%
+16470 items, 88162 transactions, Min Sup = 0.91%
 Min Conf = 50.0%
 Pruning occurrencies of size 1
-pruned 16249 itemsetsof size 1 and 16249 elements
-Found 221 frequent itemsets of size 1 (with support 0.5%)
-Items currently frequent= 221
+pruned 16386 itemsetsof size 1 and 16386 elements
+Found 84 frequent itemsets of size 1 (with support 0.91%)
+Items currently frequent= 84
 Starting the PCY # 1
 
 generating all the tuples of size 2
-0 avoided accorgimento in step #221481 avoided PCY in step #22829 of size 2 have been generated from 221 items
-Counting all the occurrences...
-Pruning occurrencies of size 2
-pruned 2627 itemsetsof size 2 and 127 elements
-Found 202 frequent itemsets of size 2 (with support 0.5499999999999999%)
-Items currently frequent= 94
-Elapsed time(s) for step #2 = 214
+0 avoided accorgimento in step #23247 avoided PCY in step #270 of size 2 have been generated from 35 items
+pruned 169 itemsetsof size 2 and 49 elements
+Found 70 frequent itemsets of size 2 (with support 0.91%)
+Items currently frequent= 35
+Elapsed time(s) for step #2 = 48
 
 Starting the PCY # 2
 
 generating all the tuples of size 3
-396 avoided accorgimento in step #39220 avoided PCY in step #3101 of size 3 have been generated from 94 items
-Counting all the occurrences...
-Pruning occurrencies of size 3
-pruned 19 itemsetsof size 3 and 50 elements
-Found 82 frequent itemsets of size 3 (with support 0.5499999999999999%)
-Items currently frequent= 44
-Elapsed time(s) for step #3 = 2
+31 avoided accorgimento in step #31101 avoided PCY in step #328 of size 3 have been generated from 17 items
+pruned 169 itemsetsof size 3 and 18 elements
+Found 28 frequent itemsets of size 3 (with support 0.91%)
+Items currently frequent= 17
+Elapsed time(s) for step #3 = 1
 
 Starting the PCY # 3
 
 generating all the tuples of size 4
-15 avoided accorgimento in step #42007 avoided PCY in step #414 of size 4 have been generated from 44 items
-Counting all the occurrences...
-Pruning occurrencies of size 4
-pruned 0 itemsetsof size 4 and 0 elements
-Found 14 frequent itemsets of size 4 (with support 0.5499999999999999%)
-Items currently frequent= 44
+0 avoided accorgimento in step #4225 avoided PCY in step #46 of size 4 have been generated from 8 items
+pruned 169 itemsetsof size 4 and 9 elements
+Found 6 frequent itemsets of size 4 (with support 0.91%)
+Items currently frequent= 8
 Elapsed time(s) for step #4 = 0
 
 Starting the PCY # 4
 
 generating all the tuples of size 5
-0 avoided accorgimento in step #5439 avoided PCY in step #50 of size 5 have been generated from 44 items
-Counting all the occurrences...
-Pruning occurrencies of size 5
-pruned 0 itemsetsof size 5 and 0 elements
-Found 0 frequent itemsets of size 5 (with support 0.5499999999999999%)
-Items currently frequent= 44
+0 avoided accorgimento in step #59 avoided PCY in step #50 of size 5 have been generated from 0 items
+pruned 169 itemsetsof size 5 and 8 elements
+Found 0 frequent itemsets of size 5 (with support 0.91%)
+Items currently frequent= 0
 Elapsed time(s) for step #5 = 0
 
-A total of 33147 tuples generation over 36091 has been avoided thanks the PCY
-Elapsed time(s)= 218.796
+A total of 4582 tuples generation over 4686 has been avoided thanks the PCY
+Elapsed time(s)= 51.197
 
 

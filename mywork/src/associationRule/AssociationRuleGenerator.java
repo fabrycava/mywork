@@ -1,16 +1,14 @@
 package associationRule;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Set;
 
 import org.apache.commons.math3.util.CombinatoricsUtils;
 
-import apriori.APriori;
 import apriori.PCY;
+import apriori.PCY2;
 import enums.ARParameter;
 import enums.Classification;
 import enums.Order;
@@ -44,7 +42,7 @@ public class AssociationRuleGenerator {
 		generateAssocRules();
 		// System.out.println(assoc);
 		computeAssocRules2();		
-		 printAssocRules();
+		//printAssocRules();
 		System.out.println("Elapsed time for AR " + (System.currentTimeMillis() - start + "\n"));
 		sb.append("Elapsed time for AR " + (System.currentTimeMillis() - start + "\n\n"));
 
@@ -189,11 +187,19 @@ public class AssociationRuleGenerator {
 	}
 
 	public static void main(String[] args) throws Exception {
-		PCY pcy = new PCY("retail.dat", 0.005, 0.5, Classification.TRANSACTIONS);
+		PCY pcy = new PCY("retail.dat", 0.0091, 0.5, Classification.TRANSACTIONS);
 		pcy.compute();
-//		AssociationRuleGenerator arg = new AssociationRuleGenerator(pcy.getFrequentItemset(),
-//				pcy.getMinimumConfidence(), pcy.getStringBuilder());
-//		arg.assocRules();
+		AssociationRuleGenerator arg = new AssociationRuleGenerator(pcy.getFrequentItemset(),
+				pcy.getMinimumConfidence(), pcy.getStringBuilder());
+		arg.assocRules();
+		
+		PCY2 pcy2 = new PCY2("retail.dat", 0.0091, 0.5, Classification.TRANSACTIONS);
+		pcy2.compute();
+		AssociationRuleGenerator arg2 = new AssociationRuleGenerator(pcy2.getFrequentItemset(),
+				pcy2.getMinimumConfidence(), pcy2.getStringBuilder());
+		arg2.assocRules();
+		
+		System.out.println(arg.getAssociationRules().equals(arg2.getAssociationRules()));
 
 	}
 
