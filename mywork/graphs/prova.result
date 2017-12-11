@@ -2,67 +2,26 @@ Folder:Datasets\
 fileName:..\graphs\prova
 
 Input configuration: 
-1000 items, 1000 transactions, Min Sup = 1.0%
-Min Conf = 50.0%
+7500 items, 7500 transactions, Min Sup = 10000.0%
+classification = USOCIAL
 
 Folder:Datasets\
 fileName:..\graphs\prova
 
 Input configuration: 
-1000 items, 1000 transactions, Min Sup = 1.0%
-Min Conf = 50.0%
+7500 items, 7500 transactions, Min Sup = 10000.0%
+classification = USOCIAL
 Pruning occurrencies of size 1
-pruned 0 itemsetsof size 1 and 0 elements
-Found 1000 frequent itemsets of size 1 (with support 1.0%)
-Items currently frequent= 1000
+pruned 555 itemsetsof size 1 and 555 elements
+Found 6945 frequent itemsets of size 1 (with support 10000.0%)
+Items currently frequent= 6945
 generating all the tuples of size 2
-0 avoided accorgimento in step #28763 of size 2 have been generated from 972 items
-pruned 490737 itemsetsof size 2 and 28 elements
-Found 8763 frequent itemsets of size 2 (with support 1.0%)
-Items currently frequent= 972
-Counting all the occurrences...
-Pruning occurrencies of size 2
-pruned 0 itemsetsof size 2 and 0 elements
-Found 8763 frequent itemsets of size 2 (with support 1.0%)
-Items currently frequent= 972
-Elapsed time for step #2 = 228
-
-generating all the tuples of size 3
-4249882 avoided accorgimento in step #31164 of size 3 have been generated from 534 items
-pruned 530673 itemsetsof size 3 and 438 elements
-Found 1164 frequent itemsets of size 3 (with support 1.0%)
-Items currently frequent= 534
-Counting all the occurrences...
-Pruning occurrencies of size 3
-pruned 0 itemsetsof size 3 and 0 elements
-Found 1164 frequent itemsets of size 3 (with support 1.0%)
-Items currently frequent= 534
-Elapsed time for step #3 = 49
-
-generating all the tuples of size 4
-288305 avoided accorgimento in step #417 of size 4 have been generated from 44 items
-pruned 530780 itemsetsof size 4 and 490 elements
-Found 17 frequent itemsets of size 4 (with support 1.0%)
-Items currently frequent= 44
-Counting all the occurrences...
-Pruning occurrencies of size 4
-pruned 0 itemsetsof size 4 and 0 elements
-Found 17 frequent itemsets of size 4 (with support 1.0%)
-Items currently frequent= 44
-Elapsed time for step #4 = 1
-
-generating all the tuples of size 5
-299 avoided accorgimento in step #50 of size 5 have been generated from 0 items
-pruned 530780 itemsetsof size 5 and 44 elements
-Found 0 frequent itemsets of size 5 (with support 1.0%)
+0 avoided accorgimento in step #20 of size 2 have been generated from 0 items
+pruned 24113040 itemsetsof size 2 and 6945 elements
+Found 0 frequent itemsets of size 2 (with support 10000.0%)
 Items currently frequent= 0
-Counting all the occurrences...
-Pruning occurrencies of size 5
-pruned 0 itemsetsof size 5 and 0 elements
-Found 0 frequent itemsets of size 5 (with support 1.0%)
-Items currently frequent= 0
-Elapsed time for step #5 = 0
+Elapsed time for step #2 = 16943
 
-Elapsed time(s)= 28.175
+Elapsed time(s)= 16969.637
 
 

@@ -14,12 +14,11 @@ import util.SubsetIterator;
 public class APriori2 extends AbstractAPriori {
 
 	int total = 0;
-	private int totalAccorgimento = 0;
+	
 	private int tuplesGenerated;
 
-	public APriori2(String fileName, double minimumSupport, double minimumConfidence, Classification classification)
-			throws Exception {
-		super(fileName, minimumSupport, minimumConfidence, classification);
+	public APriori2(String fileName, double minimumSupport, int maxK, Classification classification) throws Exception {
+		super(fileName, minimumSupport, maxK, classification);
 		frequentItemsTable = new HashMap<>();
 		Reader.readTransations(this, classification, folderData);
 		printInputSettings();
@@ -71,8 +70,10 @@ public class APriori2 extends AbstractAPriori {
 					}
 					if (flag)
 						// newMap.put(previous, 0);
-						if (prune(k, previous, newMap))
+						if (prune(k, previous, newMap)) {
 							tuplesRemoved++;
+							//System.out.println(previous+" removed");
+						}
 
 				}
 			}
@@ -96,7 +97,6 @@ public class APriori2 extends AbstractAPriori {
 		s = t + " avoided accorgimento in step #" + k;
 		System.out.println(s);
 		sb.append(s);
-
 
 		s = frequentItemsTable.size() + " of size " + k + " have been generated from " + currentItems.size() + " items";
 		sb.append(s + "\n");
@@ -123,9 +123,9 @@ public class APriori2 extends AbstractAPriori {
 
 	public static void main(String[] args) throws Exception {
 
-		APriori ap = new APriori("kosarak.dat", (double) 0.02, 0.9, Classification.TRANSACTIONS);
+		APriori ap = new APriori("kosarak.dat", (double) 0.02, 0, Classification.TRANSACTIONS);
 		ap.compute();
-		AssociationRuleGenerator arg = new AssociationRuleGenerator(ap.getFrequentItemset(), ap.getMinimumConfidence(),
+		AssociationRuleGenerator arg = new AssociationRuleGenerator(ap.getFrequentItemset(), 0.9,
 				ap.getStringBuilder());
 		arg.assocRules();
 
@@ -135,10 +135,8 @@ public class APriori2 extends AbstractAPriori {
 	protected void step(int k) {
 		long timeStep = System.currentTimeMillis();
 
-		generateCk(k);
-		countOccurrences();
-		prune(k);
-		s = "Elapsed time for step #" + k + " = " + (System.currentTimeMillis() - timeStep) / 100+"\n";
+		generateCk(k);		
+		s = "Elapsed time for step #" + k + " = " + (System.currentTimeMillis() - timeStep) / 1000 + "\n";
 		sb.append(s + "\n");
 		System.out.println(s);
 

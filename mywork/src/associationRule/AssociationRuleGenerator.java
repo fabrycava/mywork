@@ -26,9 +26,20 @@ public class AssociationRuleGenerator {
 
 	public AssociationRuleGenerator(HashMap<ItemSet, Double> frequentItemset, double minimumConfidence,
 			StringBuilder sb) {
+
+		if (minimumConfidence > 1 || minimumConfidence < 0)
+			
+			throw new IllegalArgumentException("confidence must be expressed between 0 and 1 (included)");
+		else
+			this.minimumConfidence = minimumConfidence;
+
 		this.frequentItemset = frequentItemset;
-		this.minimumConfidence = minimumConfidence;
+
 		this.sb = sb;
+
+		String s = "Min Conf = " + (minimumConfidence * 100) + "%\n";
+		sb.append(s + "\n");
+		System.out.println(s);
 	}
 
 	public HashSet<AssociationRule> getAssociationRules() {
@@ -38,11 +49,11 @@ public class AssociationRuleGenerator {
 
 	public void assocRules() {
 		double start = System.currentTimeMillis();
-		//generateAssocRulesOld();
+		// generateAssocRulesOld();
 		generateAssocRules();
 		// System.out.println(assoc);
-		computeAssocRules2();		
-		//printAssocRules();
+		computeAssocRules2();
+		// printAssocRules();
 		System.out.println("Elapsed time for AR " + (System.currentTimeMillis() - start + "\n"));
 		sb.append("Elapsed time for AR " + (System.currentTimeMillis() - start + "\n\n"));
 
@@ -59,8 +70,6 @@ public class AssociationRuleGenerator {
 		System.out.println(s);
 		sb.append(s + "\n");
 	}
-
-	
 
 	private void computeAssocRules2() {
 		Iterator<AssociationRule> it = assoc.iterator();
@@ -124,14 +133,14 @@ public class AssociationRuleGenerator {
 			int dim = 0;
 			for (int i = 1; i <= curr.size(); i++)
 				dim += CombinatoricsUtils.binomialCoefficient(curr.size(), i);
-			SubsetIterator<Integer> sit = new SubsetIterator<>(curr,1, curr.size());
+			SubsetIterator<Integer> sit = new SubsetIterator<>(curr, 1, curr.size());
 			ItemSet[] subsets = new ItemSet[dim];
 			int c = 0;
 			while (sit.hasNext()) {
 				subsets[c++] = sit.next();
-				//System.out.println(Arrays.toString(subsets));
+				// System.out.println(Arrays.toString(subsets));
 			}
-			//System.out.println(Arrays.toString(subsets));
+			// System.out.println(Arrays.toString(subsets));
 			for (int i = 0; i < subsets.length; i++) {
 				for (int j = 0; j < subsets.length; j++) {
 					if (i != j && subsets[i].size() != 0 && subsets[j].size() != 0
@@ -187,18 +196,18 @@ public class AssociationRuleGenerator {
 	}
 
 	public static void main(String[] args) throws Exception {
-		PCY pcy = new PCY("retail.dat", 0.0091, 0.5, Classification.TRANSACTIONS);
+		PCY pcy = new PCY("retail.dat", 0.0091,  0, Classification.TRANSACTIONS);
 		pcy.compute();
-		AssociationRuleGenerator arg = new AssociationRuleGenerator(pcy.getFrequentItemset(),
-				pcy.getMinimumConfidence(), pcy.getStringBuilder());
+		AssociationRuleGenerator arg = new AssociationRuleGenerator(pcy.getFrequentItemset(), 0.5,
+				pcy.getStringBuilder());
 		arg.assocRules();
-		
-		PCY2 pcy2 = new PCY2("retail.dat", 0.0091, 0.5, Classification.TRANSACTIONS);
+
+		PCY2 pcy2 = new PCY2("retail.dat", 0.0091, 0, Classification.TRANSACTIONS);
 		pcy2.compute();
-		AssociationRuleGenerator arg2 = new AssociationRuleGenerator(pcy2.getFrequentItemset(),
-				pcy2.getMinimumConfidence(), pcy2.getStringBuilder());
+		AssociationRuleGenerator arg2 = new AssociationRuleGenerator(pcy2.getFrequentItemset(), 0.5,
+				pcy2.getStringBuilder());
 		arg2.assocRules();
-		
+
 		System.out.println(arg.getAssociationRules().equals(arg2.getAssociationRules()));
 
 	}

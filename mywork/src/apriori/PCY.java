@@ -23,13 +23,12 @@ public class PCY extends AbstractAPriori {
 	boolean flag = false;
 
 	int count = 0;
-	int tuplesAvoided = 0, tuplesGenerated, mod = 0,previousSize;
+	int tuplesAvoided = 0, tuplesGenerated, mod = 0, previousSize;
 
 	int totalAccorgimento = 0;
 
-	public PCY(String fileName, double minimumSupport, double minimumConfidence, Classification classification)
-			throws Exception {
-		super(fileName, minimumSupport, minimumConfidence, classification);
+	public PCY(String fileName, double minimumSupport, int maxK, Classification classification) throws Exception {
+		super(fileName, minimumSupport, maxK, classification);
 		frequentItemsTable = new HashMap<>();
 		Reader.readTransations(this, classification, folderData);
 		printInputSettings();
@@ -39,9 +38,9 @@ public class PCY extends AbstractAPriori {
 	@Override
 	public void compute() {
 		super.compute();
-		
+
 		int previousSize = currentItems.size();
-		
+
 		long elapsedTime = System.currentTimeMillis() - start;
 
 		s = "A total of " + tuplesAvoided + " tuples generation over " + (tuplesGenerated + tuplesAvoided)
@@ -91,7 +90,7 @@ public class PCY extends AbstractAPriori {
 		s = "Starting the PCY # " + (k - 1) + "\n";
 		sb.append(s + "\n");
 		System.out.println(s);
-		mod = 3*N;
+		mod = 3 * N;
 		// buckets = new int[mod];
 		buckets = new HashMap<>();
 		Iterator<ItemSet> it = frequentItemsTable.keySet().iterator();
@@ -189,16 +188,16 @@ public class PCY extends AbstractAPriori {
 
 	public static void main(String[] args) throws Exception {
 
-		PCY pcy = new PCY("kosarak.dat", (double) 0.02, 0.9, Classification.TRANSACTIONS);
+		PCY pcy = new PCY("kosarak.dat", (double) 0.02, 0, Classification.TRANSACTIONS);
 		pcy.compute();
 
-		AssociationRuleGenerator arg = new AssociationRuleGenerator(pcy.getFrequentItemset(),
-				pcy.getMinimumConfidence(), pcy.getStringBuilder());
+		AssociationRuleGenerator arg = new AssociationRuleGenerator(pcy.getFrequentItemset(), 0.9,
+				pcy.getStringBuilder());
 		arg.assocRules();
 
-		APriori ap = new APriori("kosarak.dat", (double) 0.02, 0.9, Classification.TRANSACTIONS);
+		APriori ap = new APriori("kosarak.dat", (double) 0.02, 0, Classification.TRANSACTIONS);
 		ap.compute();
-		AssociationRuleGenerator arg1 = new AssociationRuleGenerator(ap.getFrequentItemset(), ap.getMinimumConfidence(),
+		AssociationRuleGenerator arg1 = new AssociationRuleGenerator(ap.getFrequentItemset(), 0.9,
 				ap.getStringBuilder());
 		arg1.assocRules();
 
@@ -214,18 +213,18 @@ public class PCY extends AbstractAPriori {
 
 	@Override
 	protected void step(int k) {
-//		double delta = minimumSupport / 10;
-//		if (currentItems.size() > 120) {
-//			minimumSupport += delta;
-//			System.out.println("new minimum support = " + minimumSupport * 100);
-//		} else if (currentItems.size() < 100 && k > 5) {
-//			if (flag)
-//				minimumSupport -= delta;
-//			else
-//				minimumSupport += delta;
-//			System.out.println("new minimum support = " + minimumSupport * 100);
-//		}
-		timeStep=System.currentTimeMillis();
+		// double delta = minimumSupport / 10;
+		// if (currentItems.size() > 120) {
+		// minimumSupport += delta;
+		// System.out.println("new minimum support = " + minimumSupport * 100);
+		// } else if (currentItems.size() < 100 && k > 5) {
+		// if (flag)
+		// minimumSupport -= delta;
+		// else
+		// minimumSupport += delta;
+		// System.out.println("new minimum support = " + minimumSupport * 100);
+		// }
+		timeStep = System.currentTimeMillis();
 		pcyStep(k);
 		generateCk(k);
 		countOccurrences();
@@ -239,6 +238,6 @@ public class PCY extends AbstractAPriori {
 		s = "Elapsed time(s) for step #" + k + " = " + (System.currentTimeMillis() - timeStep) / 1000 + "\n";
 		sb.append(s + "\n");
 		System.out.println(s);
-		
+
 	}
 }

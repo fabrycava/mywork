@@ -19,20 +19,20 @@ public class PCY2 extends AbstractAPriori {
 
 	private BitSet bitmap;
 
-	boolean flag = false;
+	private boolean flag = false;
 
-	int count = 0;
-	int tuplesAvoided = 0, tuplesGenerated, mod = 0;
+	private int count = 0,tuplesAvoided = 0, tuplesGenerated, mod = 0;
+	 
 
-	int totalAccorgimento = 0;
+	
 
 	private int previousSize;
 
 	private long timeStep;
 
-	public PCY2(String fileName, double minimumSupport, double minimumConfidence, Classification classification)
+	public PCY2(String fileName, double minimumSupport, int maxK, Classification classification)
 			throws Exception {
-		super(fileName, minimumSupport, minimumConfidence, classification);
+		super(fileName, minimumSupport, maxK, classification);
 		frequentItemsTable = new HashMap<>();
 		Reader.readTransations(this, classification, folderData);
 		printInputSettings();
@@ -248,16 +248,16 @@ public class PCY2 extends AbstractAPriori {
 
 	public static void main(String[] args) throws Exception {
 
-		PCY pcy = new PCY("kosarak.dat", (double) 0.0005, 0.9, Classification.TRANSACTIONS);
+		PCY pcy = new PCY("kosarak.dat", (double) 0.0005, 0, Classification.TRANSACTIONS);
 		pcy.compute();
 
 		AssociationRuleGenerator arg = new AssociationRuleGenerator(pcy.getFrequentItemset(),
-				pcy.getMinimumConfidence(), pcy.getStringBuilder());
+				0.9, pcy.getStringBuilder());
 		arg.assocRules();
 
-		APriori ap = new APriori("kosarak.dat", (double) 0.02, 0.9, Classification.TRANSACTIONS);
+		APriori ap = new APriori("kosarak.dat", (double) 0.02,0, Classification.TRANSACTIONS);
 		ap.compute();
-		AssociationRuleGenerator arg1 = new AssociationRuleGenerator(ap.getFrequentItemset(), ap.getMinimumConfidence(),
+		AssociationRuleGenerator arg1 = new AssociationRuleGenerator(ap.getFrequentItemset(), 0.9,
 				ap.getStringBuilder());
 		arg1.assocRules();
 

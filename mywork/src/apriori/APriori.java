@@ -20,9 +20,9 @@ public class APriori extends AbstractAPriori {
 	
 	int total=0;
 
-	public APriori(String fileName, double minimumSupport, double minimumConfidence, Classification classification)
+	public APriori(String fileName, double minimumSupport, int maxK, Classification classification)
 			throws Exception {
-		super(fileName, minimumSupport, minimumConfidence, classification);
+		super(fileName, minimumSupport,maxK, classification);
 		frequentItemsTable = new HashMap<>();
 		Reader.readTransations(this, classification, folderData);
 		printInputSettings();
@@ -93,9 +93,9 @@ public class APriori extends AbstractAPriori {
 
 	public static void main(String[] args) throws Exception {
 
-		APriori ap = new APriori("kosarak.dat", (double) 0.02, 0.9, Classification.TRANSACTIONS);
+		APriori ap = new APriori("kosarak.dat", (double) 0.02, 5, Classification.TRANSACTIONS);
 		ap.compute();
-		AssociationRuleGenerator arg = new AssociationRuleGenerator(ap.getFrequentItemset(), ap.getMinimumConfidence(),
+		AssociationRuleGenerator arg = new AssociationRuleGenerator(ap.getFrequentItemset(),0.9,
 				ap.getStringBuilder());
 		arg.assocRules();
 
@@ -108,7 +108,7 @@ public class APriori extends AbstractAPriori {
 		generateCk(k);
 		countOccurrences();
 		prune(k);
-		s = "Elapsed time for step #" + k + " = " + (System.currentTimeMillis() - timeStep) / 100;
+		s = "Elapsed time for step #" + k + " = " + (System.currentTimeMillis() - timeStep) / 100+"\n";
 		sb.append(s + "\n");
 		System.out.println(s);
 		

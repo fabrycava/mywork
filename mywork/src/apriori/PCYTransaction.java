@@ -28,9 +28,9 @@ public class PCYTransaction extends AbstractAPriori {
 
 	int totalAccorgimento = 0;
 
-	public PCYTransaction(String fileName, double minimumSupport, double minimumConfidence, Classification classification)
+	public PCYTransaction(String fileName, double minimumSupport, int maxK, Classification classification)
 			throws Exception {
-		super(fileName, minimumSupport, minimumConfidence, classification);
+		super(fileName, minimumSupport, maxK, classification);
 		frequentItemsTable = new HashMap<>();
 		Reader.readTransations(this, classification, folderData);
 		printInputSettings();
