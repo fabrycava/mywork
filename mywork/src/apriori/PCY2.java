@@ -10,59 +10,52 @@ import enums.Classification;
 import itemset.ItemSet;
 import itemset.ItemSetIF;
 import transaction.Transaction;
-import util.Reader;
 import util.SubsetIterator;
 
 public class PCY2 extends AbstractAPriori {
 
 	private HashMap<Integer, Integer> buckets;
 
-	private BitSet bitmap;
+	private BitSet bitmap;	
 
-	private boolean flag = false;
-
-	private int count = 0,tuplesAvoided = 0, tuplesGenerated, mod = 0;
-	 
-
-	
-
-	private int previousSize;
+	private int  tuplesAvoided = 0, tuplesGenerated, mod = 0;	
 
 	private long timeStep;
 
-	public PCY2(String fileName, double minimumSupport, int maxK, Classification classification)
-			throws Exception {
+	public PCY2(String fileName, double minimumSupport, int maxK, Classification classification) throws Exception {
 		super(fileName, minimumSupport, maxK, classification);
-		frequentItemsTable = new HashMap<>();
-		Reader.readTransations(this, classification, folderData);
-		printInputSettings();
-		previousSize = currentItems.size();
-
 	}
 
 	@Override
 	protected void step(int k) {
-//		double delta = minimumSupport / 10;
-//		if (currentItems.size() > 120) {
-//			minimumSupport += delta;
-//			System.out.println("new minimum support = " + minimumSupport * 100);
-//		} else if (currentItems.size() < 100 && k > 5) {
-//			if (flag)
-//				minimumSupport -= delta;
-//			else
-//				minimumSupport += delta;
-//			System.out.println("new minimum support = " + minimumSupport * 100);
-//		}
-		tuplesRemoved=0;
+		
+		tuplesRemoved = 0;
 		timeStep = System.currentTimeMillis();
 		pcyStep(k);
-		generateCk(k);
+		try {
+			generateCk(k);
 
-		if (previousSize > currentItems.size()) {// the number of items is decreasing
-			flag = true;
-		} else// number of items is not decreasing
-			flag = false;
-		previousSize = currentItems.size();
+		} catch (OutOfMemoryError e) {
+
+			System.out.println();
+			long elapsedTime = System.currentTimeMillis() - start;
+
+			s = "Found " + frequentItemsTable.size() + " frequent itemsets of size " + k + " (with support "
+					+ (minimumSupport * 100) + "%)";
+			sb.append(s + "\n\n");
+			System.out.println(s + "\n");
+			s = "APriori crashed due to the OutOfMemory!!!!!!!!\nThe result may be highly incorrect\n\n\n"
+					+ totalAccorgimento + " risparmiate grazie all' accorgimento ;)\nElapsed time(s)= "
+					+ (double) elapsedTime / 1000 + "\n";
+			sb.append(s + "\n\n");
+			System.out.println(s + "\n");
+
+			pw.print(sb.toString());
+			results();
+			pw.close();
+		}
+
+		
 
 		s = "Elapsed time(s) for step #" + k + " = " + (System.currentTimeMillis() - timeStep) / 1000 + "\n";
 		sb.append(s + "\n");
@@ -123,7 +116,7 @@ public class PCY2 extends AbstractAPriori {
 		s = "Starting the PCY # " + (k - 1) + "\n";
 		sb.append(s + "\n");
 		System.out.println(s);
-		mod = 3*N;
+		mod = 3 * N;
 		// buckets = new int[mod];
 		buckets = new HashMap<>();
 		Iterator<ItemSet> it = frequentItemsTable.keySet().iterator();
@@ -208,7 +201,7 @@ public class PCY2 extends AbstractAPriori {
 
 		int itemsRemoved = removeUnfrequentCurrentItems();
 
-		if (CD && !frequentItemsTable.isEmpty())
+		if (!frequentItemsTable.isEmpty())
 			cleanFrequentItemset(k);
 		resetCurrentItems();
 
@@ -241,9 +234,6 @@ public class PCY2 extends AbstractAPriori {
 		System.out.println(s);
 		sb.append(s + "\n");
 
-
-		
-
 	}
 
 	public static void main(String[] args) throws Exception {
@@ -251,11 +241,11 @@ public class PCY2 extends AbstractAPriori {
 		PCY pcy = new PCY("kosarak.dat", (double) 0.0005, 0, Classification.TRANSACTIONS);
 		pcy.compute();
 
-		AssociationRuleGenerator arg = new AssociationRuleGenerator(pcy.getFrequentItemset(),
-				0.9, pcy.getStringBuilder());
+		AssociationRuleGenerator arg = new AssociationRuleGenerator(pcy.getFrequentItemset(), 0.9,
+				pcy.getStringBuilder());
 		arg.assocRules();
 
-		APriori ap = new APriori("kosarak.dat", (double) 0.02,0, Classification.TRANSACTIONS);
+		APriori ap = new APriori("kosarak.dat", (double) 0.02, 0, Classification.TRANSACTIONS);
 		ap.compute();
 		AssociationRuleGenerator arg1 = new AssociationRuleGenerator(ap.getFrequentItemset(), 0.9,
 				ap.getStringBuilder());

@@ -20,12 +20,12 @@ public class CommunityDetection {
 
 	// private List<ItemSet> frequentItemset;
 
-	private HashMap<ItemSet, Double> frequentItemset;
+	private HashMap<ItemSet, Integer> frequentItemset;
 	AssociationRuleGenerator arg;
 	private HashMap<Integer, Integer> elementCommunity;
 	private HashMap<Integer, ItemSet> communities;
 
-	public CommunityDetection(HashMap<ItemSet, Double> frequentItemset) {
+	public CommunityDetection(HashMap<ItemSet, Integer> frequentItemset) {
 		// this.frequentItemset = new LinkedList<>(frequentItemset.keySet());
 		// this.frequentItemset.sort(ItemSet.getComparator(Order.DESCENDING));
 
@@ -75,7 +75,7 @@ public class CommunityDetection {
 
 	}
 
-	public HashMap<ItemSet, Double> getFrequentItemset() {
+	public HashMap<ItemSet, Integer> getFrequentItemset() {
 		return frequentItemset;
 	}
 
@@ -149,5 +149,7 @@ public class CommunityDetection {
 			return o1.getValue() < o2.getValue() ? 1 : o1.getValue() > o2.getValue() ? (-1) : 0;
 		}
 	}
+	
+	
 
 }

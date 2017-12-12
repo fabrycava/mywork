@@ -1,0 +1,60 @@
+Folder:Datasets\
+fileName:..\graphs\N200C50D0.5N0.01
+
+Input configuration: 
+10000 items, 10000 transactions, Min Sup = 22000.0%
+classification = USOCIAL
+
+Folder:Datasets\
+fileName:..\graphs\N200C50D0.5N0.01
+
+Input configuration: 
+10000 items, 10000 transactions, Min Sup = 22000.0%
+classification = USOCIAL
+Pruning occurrencies of size 1
+pruned 9393 itemsetsof size 1 and 9393 elements
+Found 607 frequent itemsets of size 1 (with support 22000.0%)
+Items currently frequent= 607
+generating all the tuples of size 2
+0 avoided accorgimento in step #2
+pruned 180266 itemsetsof size 2 and 0 elements
+3655 of size 2 have been generated from 607 items
+Found 3655 frequent itemsets of size 2 (with support 2200.0%)
+Items currently frequent= 607
+Elapsed time for step #2 = 346
+
+generating all the tuples of size 3
+1115834 avoided accorgimento in step #3
+pruned 180366 itemsetsof size 3 and 0 elements
+14503 of size 3 have been generated from 607 items
+Found 14503 frequent itemsets of size 3 (with support 2200.0%)
+Items currently frequent= 607
+Elapsed time for step #3 = 28
+
+generating all the tuples of size 4
+4602537 avoided accorgimento in step #4
+pruned 213999 itemsetsof size 4 and 3 elements
+8786 of size 4 have been generated from 604 items
+Found 8786 frequent itemsets of size 4 (with support 2200.0%)
+Items currently frequent= 604
+Elapsed time for step #4 = 82
+
+generating all the tuples of size 5
+2808489 avoided accorgimento in step #5
+pruned 216717 itemsetsof size 5 and 537 elements
+25 of size 5 have been generated from 67 items
+Found 25 frequent itemsets of size 5 (with support 2200.0%)
+Items currently frequent= 67
+Elapsed time for step #5 = 6
+
+generating all the tuples of size 6
+807 avoided accorgimento in step #6
+pruned 216717 itemsetsof size 6 and 67 elements
+0 of size 6 have been generated from 0 items
+Found 0 frequent itemsets of size 6 (with support 2200.0%)
+Items currently frequent= 0
+Elapsed time for step #6 = 0
+
+Elapsed time(s)= 553.155
+
+

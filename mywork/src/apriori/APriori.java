@@ -17,24 +17,21 @@ import util.Subset;
 public class APriori extends AbstractAPriori {
 
 	// protected HashMap<ItemSet, Integer> frequentItemsTable;
-	
-	int total=0;
 
-	public APriori(String fileName, double minimumSupport, int maxK, Classification classification)
-			throws Exception {
-		super(fileName, minimumSupport,maxK, classification);
-		frequentItemsTable = new HashMap<>();
-		Reader.readTransations(this, classification, folderData);
-		printInputSettings();
+	int total = 0;
+
+	public APriori(String fileName, double minimumSupport, int maxK, Classification classification) throws Exception {
+		super(fileName, minimumSupport, maxK, classification);
+		
+		
 	}
 
 	@Override
 	public void compute() {
 		super.compute();
 		// System.out.println(frequentItemsTable.size());
-		
 
-		System.out.println(total +" risparmiate grazie all' accorgimento ;)");
+		System.out.println(total + " risparmiate grazie all' accorgimento ;)");
 		long elapsedTime = System.currentTimeMillis() - start;
 
 		s = "Elapsed time(s)= " + (double) elapsedTime / 1000 + "\n";
@@ -53,7 +50,7 @@ public class APriori extends AbstractAPriori {
 		System.out.println(s);
 		HashMap<ItemSet, Integer> newMap = new HashMap<>();
 		Iterator<ItemSet> it = frequentItemsTable.keySet().iterator();
-		
+
 		while (it.hasNext()) {
 			ItemSetIF temp = it.next();
 			Iterator<Integer> it1 = currentItems.keySet().iterator();
@@ -72,7 +69,7 @@ public class APriori extends AbstractAPriori {
 						}
 					}
 
-					if (flag )
+					if (flag)
 						newMap.put(previous, 0);
 				}
 			}
@@ -95,7 +92,7 @@ public class APriori extends AbstractAPriori {
 
 		APriori ap = new APriori("kosarak.dat", (double) 0.02, 5, Classification.TRANSACTIONS);
 		ap.compute();
-		AssociationRuleGenerator arg = new AssociationRuleGenerator(ap.getFrequentItemset(),0.9,
+		AssociationRuleGenerator arg = new AssociationRuleGenerator(ap.getFrequentItemset(), 0.9,
 				ap.getStringBuilder());
 		arg.assocRules();
 
@@ -104,14 +101,34 @@ public class APriori extends AbstractAPriori {
 	@Override
 	protected void step(int k) {
 		long timeStep = System.currentTimeMillis();
+		try {
+			generateCk(k);
+		} catch (OutOfMemoryError e) {
 
-		generateCk(k);
+			System.out.println();
+			long elapsedTime = System.currentTimeMillis() - start;
+
+			s = "Found " + frequentItemsTable.size() + " frequent itemsets of size " + k + " (with support "
+					+ (minimumSupport * 100) + "%)";
+			sb.append(s + "\n\n");
+			System.out.println(s + "\n");
+			s = "APriori crashed due to the OutOfMemory!!!!!!!!\nThe result may be highly incorrect\n\n\n"
+					+ totalAccorgimento + " risparmiate grazie all' accorgimento ;)\nElapsed time(s)= "
+					+ (double) elapsedTime / 1000 + "\n";
+			sb.append(s + "\n\n");
+			System.out.println(s + "\n");
+
+			pw.print(sb.toString());
+			results();
+			pw.close();
+		}
+
 		countOccurrences();
 		prune(k);
-		s = "Elapsed time for step #" + k + " = " + (System.currentTimeMillis() - timeStep) / 100+"\n";
+		s = "Elapsed time for step #" + k + " = " + (System.currentTimeMillis() - timeStep) / 100 + "\n";
 		sb.append(s + "\n");
 		System.out.println(s);
-		
+
 	}
 
 }

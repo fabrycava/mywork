@@ -7,6 +7,7 @@ import java.util.LinkedList;
 
 import org.apache.commons.math3.util.CombinatoricsUtils;
 
+import apriori.APriori2;
 import apriori.PCY;
 import apriori.PCY2;
 import enums.ARParameter;
@@ -18,13 +19,13 @@ import util.SubsetIterator;
 
 public class AssociationRuleGenerator {
 
-	private HashMap<ItemSet, Double> frequentItemset;
+	private HashMap<ItemSet, Integer> frequentItemset;
 	private double minimumConfidence;
 	private HashSet<AssociationRule> assoc, assocOLD;
 
 	private StringBuilder sb;
 
-	public AssociationRuleGenerator(HashMap<ItemSet, Double> frequentItemset, double minimumConfidence,
+	public AssociationRuleGenerator(HashMap<ItemSet, Integer> frequentItemset, double minimumConfidence,
 			StringBuilder sb) {
 
 		if (minimumConfidence > 1 || minimumConfidence < 0)
@@ -49,11 +50,11 @@ public class AssociationRuleGenerator {
 
 	public void assocRules() {
 		double start = System.currentTimeMillis();
-		// generateAssocRulesOld();
-		generateAssocRules();
+		 generateAssocRulesOld();
+		//generateAssocRules();
 		// System.out.println(assoc);
 		computeAssocRules2();
-		// printAssocRules();
+		 printAssocRules();
 		System.out.println("Elapsed time for AR " + (System.currentTimeMillis() - start + "\n"));
 		sb.append("Elapsed time for AR " + (System.currentTimeMillis() - start + "\n\n"));
 
@@ -117,8 +118,8 @@ public class AssociationRuleGenerator {
 
 	private double computeConfidence(AssociationRule ar) {
 		ItemSet XY = new ItemSet(ar);
-		double suppXY = frequentItemset.get(XY);
-		double suppX = frequentItemset.get(ar.getX());
+		double suppXY = (double)frequentItemset.get(XY);
+		double suppX = (double)frequentItemset.get(ar.getX());
 		return (double) suppXY / suppX;
 	}
 
@@ -196,19 +197,28 @@ public class AssociationRuleGenerator {
 	}
 
 	public static void main(String[] args) throws Exception {
-		PCY pcy = new PCY("retail.dat", 0.0091,  0, Classification.TRANSACTIONS);
-		pcy.compute();
-		AssociationRuleGenerator arg = new AssociationRuleGenerator(pcy.getFrequentItemset(), 0.5,
-				pcy.getStringBuilder());
+//		PCY pcy = new PCY("retail.dat", 0.0091,  0, Classification.TRANSACTIONS);
+//		pcy.compute();
+//		AssociationRuleGenerator arg = new AssociationRuleGenerator(pcy.getFrequentItemset(), 0.5,
+//				pcy.getStringBuilder());
+//		arg.assocRules();
+//
+//		PCY2 pcy2 = new PCY2("retail.dat", 0.0091, 0, Classification.TRANSACTIONS);
+//		pcy2.compute();
+//		AssociationRuleGenerator arg2 = new AssociationRuleGenerator(pcy2.getFrequentItemset(), 0.5,
+//				pcy2.getStringBuilder());
+//		arg2.assocRules();
+		
+		
+		APriori2 ap2 = new APriori2("retail.dat",0.005, Integer.MAX_VALUE, Classification.TRANSACTIONS);
+		ap2.compute();
+		AssociationRuleGenerator arg = new AssociationRuleGenerator(ap2.getFrequentItemset(), 0.5,
+				ap2.getStringBuilder());
 		arg.assocRules();
+		
+		
 
-		PCY2 pcy2 = new PCY2("retail.dat", 0.0091, 0, Classification.TRANSACTIONS);
-		pcy2.compute();
-		AssociationRuleGenerator arg2 = new AssociationRuleGenerator(pcy2.getFrequentItemset(), 0.5,
-				pcy2.getStringBuilder());
-		arg2.assocRules();
-
-		System.out.println(arg.getAssociationRules().equals(arg2.getAssociationRules()));
+		//System.out.println(arg.getAssociationRules().equals(arg.getAssociationRules()));
 
 	}
 

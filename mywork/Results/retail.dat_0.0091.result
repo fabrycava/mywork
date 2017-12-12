@@ -1,0 +1,21 @@
+Folder:Datasets\
+fileName:retail.dat
+
+Input configuration: 
+16470 items, 88162 transactions, Min Sup = 0%
+classification = TRANSACTIONS
+
+Folder:Datasets\
+fileName:retail.dat
+
+Input configuration: 
+16470 items, 88162 transactions, Min Sup = 0%
+classification = TRANSACTIONS
+Pruning occurrencies of size 1
+pruned 16386 itemsetsof size 1 and 16386 elements
+Found 84 frequent itemsets of size 1 (with support 80200%)
+Items currently frequent= 84
+
+Elapsed time(s)= 1.431
+
+

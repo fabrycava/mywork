@@ -1,0 +1,49 @@
+Folder:Datasets\
+fileName:retail.dat
+
+Input configuration: 
+16470 items, 88162 transactions, Min Sup = 5.0%(4408 occurrences)
+classification = TRANSACTIONS
+
+Folder:Datasets\
+fileName:retail.dat
+
+Input configuration: 
+16470 items, 88162 transactions, Min Sup = 5.0%(4408 occurrences)
+classification = TRANSACTIONS
+Pruning occurrencies of size 1
+pruned 16464 itemsetsof size 1 and 16464 elements
+Found 6 frequent itemsets of size 1 (with support 5.0%	(4408 occurrences)
+
+Items currently frequent= 6
+
+generating all the tuples of size 2
+0 avoided accorgimento in step #2
+pruned 8 itemsetsof size 2 and 1 elements
+7 of size 2 have been generated from 5 items
+Found 7 frequent itemsets of size 2 (with support 5.0%	(4408 occurrences)
+
+Items currently frequent= 5
+Elapsed time for step #2 = 0
+
+generating all the tuples of size 3
+2 avoided accorgimento in step #3
+pruned 8 itemsetsof size 3 and 0 elements
+3 of size 3 have been generated from 5 items
+Found 3 frequent itemsets of size 3 (with support 5.0%	(4408 occurrences)
+
+Items currently frequent= 5
+Elapsed time for step #3 = 0
+
+generating all the tuples of size 4
+0 avoided accorgimento in step #4
+pruned 8 itemsetsof size 4 and 5 elements
+0 of size 4 have been generated from 0 items
+Found 0 frequent itemsets of size 4 (with support 5.0%	(4408 occurrences)
+
+Items currently frequent= 0
+Elapsed time for step #4 = 0
+
+Elapsed time(s)= 1.537
+
+

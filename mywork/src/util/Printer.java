@@ -30,7 +30,7 @@ public class Printer {
 		sb.append("Folder:" + folderData + "\n" + "fileName:"+fileName+"\n\n");
 		sb.append("Input configuration: \n" + ap.getN() + " items, " + ap.getT() + " transactions, ");
 		sb.append("Min Sup = " + ap.getMinimumSupport());
-		sb.append(", Min Conf = " + ap.getMinimumConfidence() + "%\n");
+		//sb.append(", Min Conf = " + ap.getMinimumConfidence() + "%\n");
 		// sb.append("itemsCount" + ap.getItemsCountMap() + "\n");
 
 		pw.write(sb.toString() + "\n");

@@ -10,8 +10,6 @@ import enums.Classification;
 import itemset.ItemSet;
 import itemset.ItemSetIF;
 import transaction.Transaction;
-import util.Reader;
-import util.Subset;
 import util.SubsetIterator;
 
 public class PCY extends AbstractAPriori {
@@ -28,26 +26,18 @@ public class PCY extends AbstractAPriori {
 	int totalAccorgimento = 0;
 
 	public PCY(String fileName, double minimumSupport, int maxK, Classification classification) throws Exception {
-		super(fileName, minimumSupport, maxK, classification);
-		frequentItemsTable = new HashMap<>();
-		Reader.readTransations(this, classification, folderData);
-		printInputSettings();
+		super(fileName, minimumSupport, maxK, classification);	
 
 	}
 
 	@Override
 	public void compute() {
 		super.compute();
-
-		int previousSize = currentItems.size();
-
 		long elapsedTime = System.currentTimeMillis() - start;
-
 		s = "A total of " + tuplesAvoided + " tuples generation over " + (tuplesGenerated + tuplesAvoided)
 				+ " has been avoided thanks the PCY\n";
 
 		System.out.println(totalAccorgimento + " risparmiate grazie all' accorgimento ;)");
-
 		sb.append(s);
 		System.out.println(s + "\n");
 		s = "Elapsed time(s)= " + (double) elapsedTime / 1000 + "\n";
@@ -226,7 +216,31 @@ public class PCY extends AbstractAPriori {
 		// }
 		timeStep = System.currentTimeMillis();
 		pcyStep(k);
-		generateCk(k);
+		
+		
+				
+		try {
+			generateCk(k);
+
+		} catch (OutOfMemoryError e) {
+
+			System.out.println();
+			long elapsedTime = System.currentTimeMillis() - start;
+
+			s = "Found " + frequentItemsTable.size() + " frequent itemsets of size " + k + " (with support "
+					+ (minimumSupport * 100) + "%)";
+			sb.append(s + "\n\n");
+			System.out.println(s + "\n");
+			s = "APriori crashed due to the OutOfMemory!!!!!!!!\nThe result may be highly incorrect\n\n\n"
+					+ totalAccorgimento + " risparmiate grazie all' accorgimento ;)\nElapsed time(s)= "
+					+ (double) elapsedTime / 1000 + "\n";
+			sb.append(s + "\n\n");
+			System.out.println(s + "\n");
+
+			pw.print(sb.toString());
+			results();
+			pw.close();
+		}
 		countOccurrences();
 		prune(k);
 		if (previousSize > currentItems.size()) {// the number of items is decreasing

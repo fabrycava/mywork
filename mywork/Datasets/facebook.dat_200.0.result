@@ -1,0 +1,198 @@
+Folder:Datasets\
+fileName:..\Datasets\facebook.dat
+
+Input configuration: 
+4039 items, 4039 transactions, Min Sup = 4.951720722951226%(200 occurrences)
+classification = USOCIAL
+
+Folder:Datasets\
+fileName:..\Datasets\facebook.dat
+
+Input configuration: 
+4039 items, 4039 transactions, Min Sup = 4.951720722951226%(200 occurrences)
+classification = USOCIAL
+Pruning occurrencies of size 1
+pruned 3996 itemsetsof size 1 and 3996 elements
+Found 43 frequent itemsets of size 1 (with support 4.951720722951226%	(200 occurrences)
+
+Items currently frequent= 43
+
+generating all the tuples of size 2
+0 avoided accorgimento in step #2
+pruned 551 itemsetsof size 2 and 1 elements
+352 of size 2 have been generated from 42 items
+Found 352 frequent itemsets of size 2 (with support 4.951720722951226%	(200 occurrences)
+Items currently frequent= 42
+Elapsed time for step #2 = 0
+
+generating all the tuples of size 3
+2480 avoided accorgimento in step #3
+pruned 551 itemsetsof size 3 and 2 elements
+2094 of size 3 have been generated from 40 items
+Found 2094 frequent itemsets of size 3 (with support 4.951720722951226%	(200 occurrences)
+Items currently frequent= 40
+Elapsed time for step #3 = 0
+
+generating all the tuples of size 4
+8625 avoided accorgimento in step #4
+pruned 551 itemsetsof size 4 and 2 elements
+9400 of size 4 have been generated from 38 items
+Found 9400 frequent itemsets of size 4 (with support 4.951720722951226%	(200 occurrences)
+Items currently frequent= 38
+Elapsed time for step #4 = 0
+
+generating all the tuples of size 5
+22524 avoided accorgimento in step #5
+pruned 551 itemsetsof size 5 and 0 elements
+32966 of size 5 have been generated from 38 items
+Found 32966 frequent itemsets of size 5 (with support 4.951720722951226%	(200 occurrences)
+Items currently frequent= 38
+Elapsed time for step #5 = 0
+
+generating all the tuples of size 6
+42817 avoided accorgimento in step #6
+pruned 551 itemsetsof size 6 and 0 elements
+92626 of size 6 have been generated from 38 items
+Found 92626 frequent itemsets of size 6 (with support 4.951720722951226%	(200 occurrences)
+Items currently frequent= 38
+Elapsed time for step #6 = 1
+
+generating all the tuples of size 7
+60215 avoided accorgimento in step #7
+pruned 551 itemsetsof size 7 and 1 elements
+211944 of size 7 have been generated from 37 items
+Found 211944 frequent itemsets of size 7 (with support 4.951720722951226%	(200 occurrences)
+Items currently frequent= 37
+Elapsed time for step #7 = 9
+
+generating all the tuples of size 8
+60727 avoided accorgimento in step #8
+pruned 551 itemsetsof size 8 and 0 elements
+399369 of size 8 have been generated from 37 items
+Found 399369 frequent itemsets of size 8 (with support 4.951720722951226%	(200 occurrences)
+Items currently frequent= 37
+Elapsed time for step #8 = 49
+
+generating all the tuples of size 9
+47818 avoided accorgimento in step #9
+pruned 551 itemsetsof size 9 and 0 elements
+624600 of size 9 have been generated from 37 items
+Found 624600 frequent itemsets of size 9 (with support 4.951720722951226%	(200 occurrences)
+Items currently frequent= 37
+Elapsed time for step #9 = 199
+
+generating all the tuples of size 10
+27830 avoided accorgimento in step #10
+pruned 551 itemsetsof size 10 and 0 elements
+815112 of size 10 have been generated from 37 items
+Found 815112 frequent itemsets of size 10 (with support 4.951720722951226%	(200 occurrences)
+Items currently frequent= 37
+Elapsed time for step #10 = 640
+
+generating all the tuples of size 11
+11638 avoided accorgimento in step #11
+pruned 551 itemsetsof size 11 and 0 elements
+890332 of size 11 have been generated from 37 items
+Found 890332 frequent itemsets of size 11 (with support 4.951720722951226%	(200 occurrences)
+Items currently frequent= 37
+Elapsed time for step #11 = 636
+
+generating all the tuples of size 12
+3312 avoided accorgimento in step #12
+pruned 551 itemsetsof size 12 and 0 elements
+814631 of size 12 have been generated from 37 items
+Found 814631 frequent itemsets of size 12 (with support 4.951720722951226%	(200 occurrences)
+Items currently frequent= 37
+Elapsed time for step #12 = 1021
+
+generating all the tuples of size 13
+575 avoided accorgimento in step #13
+pruned 551 itemsetsof size 13 and 0 elements
+623392 of size 13 have been generated from 37 items
+Found 623392 frequent itemsets of size 13 (with support 4.951720722951226%	(200 occurrences)
+Items currently frequent= 37
+Elapsed time for step #13 = 901
+
+generating all the tuples of size 14
+46 avoided accorgimento in step #14
+pruned 551 itemsetsof size 14 and 14 elements
+397290 of size 14 have been generated from 23 items
+Found 397290 frequent itemsets of size 14 (with support 4.951720722951226%	(200 occurrences)
+Items currently frequent= 23
+Elapsed time for step #14 = 409
+
+generating all the tuples of size 15
+0 avoided accorgimento in step #15
+pruned 551 itemsetsof size 15 and 0 elements
+209304 of size 15 have been generated from 23 items
+Found 209304 frequent itemsets of size 15 (with support 4.951720722951226%	(200 occurrences)
+Items currently frequent= 23
+Elapsed time for step #15 = 139
+
+generating all the tuples of size 16
+0 avoided accorgimento in step #16
+pruned 551 itemsetsof size 16 and 0 elements
+90117 of size 16 have been generated from 23 items
+Found 90117 frequent itemsets of size 16 (with support 4.951720722951226%	(200 occurrences)
+Items currently frequent= 23
+Elapsed time for step #16 = 32
+
+generating all the tuples of size 17
+0 avoided accorgimento in step #17
+pruned 551 itemsetsof size 17 and 0 elements
+31179 of size 17 have been generated from 23 items
+Found 31179 frequent itemsets of size 17 (with support 4.951720722951226%	(200 occurrences)
+Items currently frequent= 23
+Elapsed time for step #17 = 6
+
+generating all the tuples of size 18
+0 avoided accorgimento in step #18
+pruned 551 itemsetsof size 18 and 0 elements
+8455 of size 18 have been generated from 23 items
+Found 8455 frequent itemsets of size 18 (with support 4.951720722951226%	(200 occurrences)
+Items currently frequent= 23
+Elapsed time for step #18 = 1
+
+generating all the tuples of size 19
+0 avoided accorgimento in step #19
+pruned 551 itemsetsof size 19 and 0 elements
+1730 of size 19 have been generated from 23 items
+Found 1730 frequent itemsets of size 19 (with support 4.951720722951226%	(200 occurrences)
+Items currently frequent= 23
+Elapsed time for step #19 = 0
+
+generating all the tuples of size 20
+0 avoided accorgimento in step #20
+pruned 551 itemsetsof size 20 and 0 elements
+251 of size 20 have been generated from 23 items
+Found 251 frequent itemsets of size 20 (with support 4.951720722951226%	(200 occurrences)
+Items currently frequent= 23
+Elapsed time for step #20 = 0
+
+generating all the tuples of size 21
+0 avoided accorgimento in step #21
+pruned 551 itemsetsof size 21 and 0 elements
+23 of size 21 have been generated from 23 items
+Found 23 frequent itemsets of size 21 (with support 4.951720722951226%	(200 occurrences)
+Items currently frequent= 23
+Elapsed time for step #21 = 0
+
+generating all the tuples of size 22
+0 avoided accorgimento in step #22
+pruned 551 itemsetsof size 22 and 1 elements
+1 of size 22 have been generated from 22 items
+Found 1 frequent itemsets of size 22 (with support 4.951720722951226%	(200 occurrences)
+Items currently frequent= 22
+Elapsed time for step #22 = 0
+
+generating all the tuples of size 23
+0 avoided accorgimento in step #23
+pruned 551 itemsetsof size 23 and 22 elements
+0 of size 23 have been generated from 0 items
+Found 0 frequent itemsets of size 23 (with support 4.951720722951226%	(200 occurrences)
+Items currently frequent= 0
+Elapsed time for step #23 = 0
+
+Elapsed time(s)= 4052.525
+
+

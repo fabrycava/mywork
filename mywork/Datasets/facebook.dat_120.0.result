@@ -1,0 +1,45 @@
+Folder:Datasets\
+fileName:..\Datasets\facebook.dat
+
+Input configuration: 
+4039 items, 4039 transactions, Min Sup = 0%
+classification = USOCIAL
+
+Folder:Datasets\
+fileName:..\Datasets\facebook.dat
+
+Input configuration: 
+4039 items, 4039 transactions, Min Sup = 0%
+classification = USOCIAL
+Pruning occurrencies of size 1
+pruned 3672 itemsetsof size 1 and 3672 elements
+Found 367 frequent itemsets of size 1 (with support 12000%)
+Items currently frequent= 367
+
+generating all the tuples of size 2
+0 avoided accorgimento in step #2
+pruned 43307 itemsetsof size 2 and 3 elements
+23854 of size 2 have been generated from 364 items
+Found 23854 frequent itemsets of size 2 (with support 2400%)
+Items currently frequent= 364
+Elapsed time for step #2 = 20
+
+generating all the tuples of size 3
+1993243 avoided accorgimento in step #3
+pruned 45100 itemsetsof size 3 and 0 elements
+1166146 of size 3 have been generated from 364 items
+Found 1166146 frequent itemsets of size 3 (with support 2400%)
+Items currently frequent= 364
+Elapsed time for step #3 = 536
+
+generating all the tuples of size 4
+Found 927130 frequent itemsets of size 4 (with support 2400%)
+
+APriori crashed due to the OutOfMemory!!!!!!!!
+The result may be highly incorrect
+
+
+1993243 risparmiate grazie all' accorgimento ;)
+Elapsed time(s)= 36018.709
+
+

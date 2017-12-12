@@ -7,21 +7,16 @@ import associationRule.AssociationRuleGenerator;
 import enums.Classification;
 import itemset.ItemSet;
 import itemset.ItemSetIF;
-import util.Reader;
-import util.Subset;
 import util.SubsetIterator;
 
 public class APriori2 extends AbstractAPriori {
 
 	int total = 0;
-	
+
 	private int tuplesGenerated;
 
 	public APriori2(String fileName, double minimumSupport, int maxK, Classification classification) throws Exception {
-		super(fileName, minimumSupport, maxK, classification);
-		frequentItemsTable = new HashMap<>();
-		Reader.readTransations(this, classification, folderData);
-		printInputSettings();
+		super(fileName, minimumSupport, maxK, classification);				
 	}
 
 	@Override
@@ -38,7 +33,6 @@ public class APriori2 extends AbstractAPriori {
 
 		pw.print(sb.toString());
 		pw.close();
-
 	}
 
 	// generate the candidate tuples
@@ -46,7 +40,7 @@ public class APriori2 extends AbstractAPriori {
 		s = "generating all the tuples of size " + k;
 		sb.append(s + "\n");
 		System.out.println(s);
-		int tempAcc = 0, t = 0;
+		int  t = 0;
 		HashMap<ItemSet, Integer> newMap = new HashMap<>();
 		Iterator<ItemSet> it = frequentItemsTable.keySet().iterator();
 		while (it.hasNext()) {
@@ -72,9 +66,8 @@ public class APriori2 extends AbstractAPriori {
 						// newMap.put(previous, 0);
 						if (prune(k, previous, newMap)) {
 							tuplesRemoved++;
-							//System.out.println(previous+" removed");
+							// System.out.println(previous+" removed");
 						}
-
 				}
 			}
 			it.remove();
@@ -86,7 +79,7 @@ public class APriori2 extends AbstractAPriori {
 
 		int itemsRemoved = removeUnfrequentCurrentItems();
 
-		if (CD && !frequentItemsTable.isEmpty())
+		if (!frequentItemsTable.isEmpty())
 			cleanFrequentItemset(k);
 		resetCurrentItems();
 
@@ -96,18 +89,18 @@ public class APriori2 extends AbstractAPriori {
 
 		s = t + " avoided accorgimento in step #" + k;
 		System.out.println(s);
-		sb.append(s);
-
-		s = frequentItemsTable.size() + " of size " + k + " have been generated from " + currentItems.size() + " items";
 		sb.append(s + "\n");
-		System.out.println(s);
 
 		s = "pruned " + tuplesRemoved + " itemsetsof size " + k + " and " + itemsRemoved + " elements";
 		sb.append(s + "\n");
 		System.out.println(s);
 
+		s = frequentItemsTable.size() + " of size " + k + " have been generated from " + currentItems.size() + " items";
+		sb.append(s + "\n");
+		System.out.println(s);
+
 		s = "Found " + frequentItemsTable.size() + " frequent itemsets of size " + k + " (with support "
-				+ (minimumSupport * 100) + "%)";
+				+ (minimumSupportDouble * 100) + "%\t(" + minimumSupport + " occurrences)";
 		sb.append(s + "\n");
 		System.out.println(s);
 		s = "Items currently frequent= " + currentItems.size();
@@ -134,8 +127,28 @@ public class APriori2 extends AbstractAPriori {
 	@Override
 	protected void step(int k) {
 		long timeStep = System.currentTimeMillis();
+		try {
+			generateCk(k);
+		} catch (OutOfMemoryError e) {
 
-		generateCk(k);		
+			System.out.println();
+			long elapsedTime = System.currentTimeMillis() - start;
+
+			s = "Found " + frequentItemsTable.size() + " frequent itemsets of size " + k + " (with support "
+					+ (minimumSupport * 100) + "%)";
+			sb.append(s + "\n\n");
+			System.out.println(s + "\n");
+			s = "APriori crashed due to the OutOfMemory!!!!!!!!\nThe result may be highly incorrect\n\n\n"
+					+ totalAccorgimento + " risparmiate grazie all' accorgimento ;)\nElapsed time(s)= "
+					+ (double) elapsedTime / 1000 + "\n";
+			sb.append(s + "\n\n");
+			System.out.println(s + "\n");
+
+			pw.print(sb.toString());
+			results();
+			pw.close();
+		}
+
 		s = "Elapsed time for step #" + k + " = " + (System.currentTimeMillis() - timeStep) / 1000 + "\n";
 		sb.append(s + "\n");
 		System.out.println(s);

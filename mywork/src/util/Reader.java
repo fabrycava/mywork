@@ -10,6 +10,7 @@ import java.util.StringTokenizer;
 
 import apriori.APriori;
 import apriori.AbstractAPriori;
+import apriori.AbstractAPrioriCommunities;
 import enums.Classification;
 import itemset.ItemSet;
 import transaction.Transaction;
@@ -128,7 +129,7 @@ public class Reader {
 			readFromBaskets(ap, folderData);
 			break;
 		case USOCIAL:
-			readUndirectedToBipartiteGraph(ap, folderData);
+			readUndirectedToBipartiteGraph( ap, folderData);
 		}
 
 		// else if (classification == Classification.BIPARTITEib)
@@ -137,13 +138,14 @@ public class Reader {
 		// readFromBaskets(ap, folderData);
 	}
 
-	private static void readUndirectedToBipartiteGraph(AbstractAPriori ap, String folderData) throws Exception {
-		ap.setCD();
+	private static void readUndirectedToBipartiteGraph(AbstractAPriori ap, String folderData)
+			throws Exception {
+		// ap.setCD();
 		boolean flagZero = false;
 		int N = 0;
 		int T = 0;
 		Transaction t;
-		int max=0;
+		int max = 0;
 
 		BufferedReader br = new BufferedReader(new FileReader(new File(folderData + ap.getFileName())));
 
@@ -152,75 +154,68 @@ public class Reader {
 			String s = br.readLine();
 
 			StringTokenizer st = new StringTokenizer(s, " \t,[]");
-			
-				int x = Integer.parseInt(st.nextToken());
-				int y = Integer.parseInt(st.nextToken());
-				max=Math.max(x, max);
-				max=Math.max(max, y);
-				if (x == 0 || y == 0)
-					flagZero = true;
-				ItemSet unaryX = new ItemSet();
-				ItemSet unaryY = new ItemSet();
-				unaryX.add(x);
-				unaryY.add(y);
 
-				// addItemX
-				ap.currentItemsPut(x, false);
-				if (!ap.fITContains(unaryX)) {
-					ap.fITPut(unaryX, 2);
-					N++;
-					T++;
-				} else {
-					int old = ap.fITGet(unaryX);
-					ap.fITPut(unaryX, ++old);
-				}
+			int x = Integer.parseInt(st.nextToken());
+			int y = Integer.parseInt(st.nextToken());
+			max = Math.max(x, max);
+			max = Math.max(max, y);
+			if (x == 0 || y == 0)
+				flagZero = true;
+			ItemSet unaryX = new ItemSet();
+			ItemSet unaryY = new ItemSet();
+			unaryX.add(x);
+			unaryY.add(y);
 
-				// add itemY
-				ap.currentItemsPut(y, false);
-				if (!ap.fITContains(unaryY)) {
-					ap.fITPut(unaryY, 2);
-					N++;
-					T++;
-				} else {
-					int old = ap.fITGet(unaryY);
-					ap.fITPut(unaryY, ++old);
-				}
-
-				// addTransactionX
-				int index = ap.getTransactions().indexOf(new TransactionSet(x));
-				if (index == -1) {
-					t = new TransactionSet(x);
-					t.add(x);
-					t.add(y);
-					ap.transactionsAdd(t);
-				} else
-					ap.getTransactions().get(index).add(y);
-
-				// addTransactionY
-				index = ap.getTransactions().indexOf(new TransactionSet(y));
-				if (index == -1) {
-					t = new TransactionSet(y);
-					t.add(x);
-					t.add(y);
-					ap.transactionsAdd(t);
-				} else
-					ap.getTransactions().get(index).add(x);
-
-				
+			// addItemX
+			ap.currentItemsPut(x, false);
+			if (!ap.fITContains(unaryX)) {
+				ap.fITPut(unaryX, 2);
+				N++;
+				T++;
+			} else {
+				int old = ap.fITGet(unaryX);
+				ap.fITPut(unaryX, ++old);
 			}
-			br.close();
 
-			ap.setMaxItem(max);
-			ap.setN(N);
-			ap.setT(T);
-			
+			// add itemY
+			ap.currentItemsPut(y, false);
+			if (!ap.fITContains(unaryY)) {
+				ap.fITPut(unaryY, 2);
+				N++;
+				T++;
+			} else {
+				int old = ap.fITGet(unaryY);
+				ap.fITPut(unaryY, ++old);
+			}
 
-			
+			// addTransactionX
+			int index = ap.getTransactions().indexOf(new TransactionSet(x));
+			if (index == -1) {
+				t = new TransactionSet(x);
+				t.add(x);
+				t.add(y);
+				ap.transactionsAdd(t);
+			} else
+				ap.getTransactions().get(index).add(y);
+
+			// addTransactionY
+			index = ap.getTransactions().indexOf(new TransactionSet(y));
+			if (index == -1) {
+				t = new TransactionSet(y);
+				t.add(x);
+				t.add(y);
+				ap.transactionsAdd(t);
+			} else
+				ap.getTransactions().get(index).add(x);
+
 		}
+		br.close();
 
-	
+		ap.setMaxItem(max);
+		ap.setN(N);
+		ap.setT(T);
 
-
+	}
 
 	private static void readFromBipartiteGraphIB(AbstractAPriori ap, String folderData) throws Exception {
 

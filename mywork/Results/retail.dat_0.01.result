@@ -1,0 +1,58 @@
+Folder:Datasets\
+fileName:retail.dat
+
+Input configuration: 
+16470 items, 88162 transactions, Min Sup = 1.0%	(881 occurrences)
+Min Sup = 881occurrencesclassification = TRANSACTIONS
+
+Folder:Datasets\
+fileName:retail.dat
+
+Input configuration: 
+16470 items, 88162 transactions, Min Sup = 1.0%	(881 occurrences)
+Min Sup = 881occurrencesclassification = TRANSACTIONS
+Pruning occurrencies of size 1
+pruned 16400 itemsetsof size 1 and 16400 elements
+Found 70 frequent itemsets of size 1 (with support 1.0%	(881 occurrences)
+
+Items currently frequent= 70
+
+generating all the tuples of size 2
+0 avoided accorgimento in step #2
+pruned 2357 itemsetsof size 2 and 40 elements
+58 of size 2 have been generated from 30 items
+Found 58 frequent itemsets of size 2 (with support 1.0%	(881 occurrences)
+
+Items currently frequent= 30
+Elapsed time for step #2 = 18
+
+generating all the tuples of size 3
+824 avoided accorgimento in step #3
+pruned 2369 itemsetsof size 3 and 15 elements
+25 of size 3 have been generated from 15 items
+Found 25 frequent itemsets of size 3 (with support 1.0%	(881 occurrences)
+
+Items currently frequent= 15
+Elapsed time for step #3 = 0
+
+generating all the tuples of size 4
+162 avoided accorgimento in step #4
+pruned 2369 itemsetsof size 4 and 7 elements
+6 of size 4 have been generated from 8 items
+Found 6 frequent itemsets of size 4 (with support 1.0%	(881 occurrences)
+
+Items currently frequent= 8
+Elapsed time for step #4 = 0
+
+generating all the tuples of size 5
+9 avoided accorgimento in step #5
+pruned 2369 itemsetsof size 5 and 8 elements
+0 of size 5 have been generated from 0 items
+Found 0 frequent itemsets of size 5 (with support 1.0%	(881 occurrences)
+
+Items currently frequent= 0
+Elapsed time for step #5 = 0
+
+Elapsed time(s)= 20.119
+
+

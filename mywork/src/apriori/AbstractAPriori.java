@@ -10,20 +10,21 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import enums.Classification;
 import itemset.ItemSet;
 import itemset.ItemSetIF;
 import transaction.Transaction;
+import util.Reader;
 
 public abstract class AbstractAPriori implements AprioriInterface {
 
 	protected String fileName, folderData = "Datasets\\", folderResults = "Results\\";;
-	protected int N, T,totalAccorgimento = 0;
+	protected int N, T, totalAccorgimento = 0;
 
 	String s;
-	protected double minimumSupport, fixedSupport;
+	protected int minimumSupport;// , fixedSupport;
+	protected double minimumSupportDouble;
 
 	// protected Printer printer;
 	long timeStep = System.currentTimeMillis();
@@ -34,15 +35,14 @@ public abstract class AbstractAPriori implements AprioriInterface {
 
 	protected HashMap<ItemSet, Integer> frequentItemsTable;
 
-	protected HashMap<ItemSet, Double> frequentItemset;
+	protected HashMap<ItemSet, Integer> frequentItemset;
 	protected StringBuilder sb;
 
 	protected PrintWriter pw;
 	protected long start;
 	protected int k, reductionStep, maxItem, tuplesRemoved, maxK;
-	protected boolean CD = false;
 
-	protected HashSet<ItemSet> incrementedTuples = new HashSet<>();
+	// protected HashSet<ItemSet> incrementedTuples = new HashSet<>();
 
 	protected Classification classification;
 
@@ -51,20 +51,16 @@ public abstract class AbstractAPriori implements AprioriInterface {
 		start = System.currentTimeMillis();
 		this.fileName = fileName;
 		this.classification = classification;
-		// frequentItemset = new HashMap<>();
 
-		if (classification == Classification.USOCIAL)
-			CD = true;
+		if (maxK < 0)
+			throw new IllegalArgumentException("MaxK must be an integer > 0");
+		else
+			this.maxK = maxK;
 
-		if (((minimumSupport > 1 && !CD) || minimumSupport < 0))
-			throw new IllegalArgumentException(
-					"support must be expressed with a double value between 0 and 1 (included)");
-		else {
-			this.minimumSupport = minimumSupport;
-			fixedSupport = minimumSupport;
-		}
+		// if (classification == Classification.USOCIAL)
+		// CD = true;
 
-		pw = new PrintWriter(new File(folderResults + fileName + ".result"));
+		pw = new PrintWriter(new File(folderResults + fileName + "_" + minimumSupport + ".result"));
 
 		sb = new StringBuilder();
 
@@ -73,14 +69,31 @@ public abstract class AbstractAPriori implements AprioriInterface {
 		currentItems = new HashMap();
 		frequentItemset = new HashMap<>();
 
-		this.maxK = CD ? maxK : Integer.MAX_VALUE;
+		Reader.readTransations(this, classification, folderData);
+
+		if (minimumSupport < 0)
+			throw new IllegalArgumentException(
+					"support must be expressed with a double value between 0 and 1 (included) or with an integer value indicating the occurrences");
+		else {
+			if (minimumSupport < 1) {
+				this.minimumSupport = (int) (T * minimumSupport);
+				this.minimumSupportDouble = minimumSupport;
+			} else {
+				this.minimumSupport = (int) minimumSupport;
+				this.minimumSupportDouble = ((double) minimumSupport) / T;
+			}
+			// fixedSupport = minimumSupport;
+		}
+
+		printInputSettings();
 
 	}
 
 	protected void printInputSettings() {
 		sb.append("Folder:" + folderData + "\n" + "fileName:" + fileName + "\n\n");
 		sb.append("Input configuration: \n" + N + " items, " + T + " transactions, ");
-		sb.append("Min Sup = " + (minimumSupport * 100) + "%\n");
+		sb.append("Min Sup = " + (minimumSupportDouble * 100) + "%(" + minimumSupport + " occurrences)\n");
+
 		sb.append("classification = " + classification.toString() + "\n");
 		// sb.append("Min Conf = " + (minimumConfidence * 100) + "%\n");
 		pw.write(sb.toString() + "\n");
@@ -164,7 +177,7 @@ public abstract class AbstractAPriori implements AprioriInterface {
 
 	}
 
-	public HashMap<ItemSet, Double> getFrequentItemset() {
+	public HashMap<ItemSet, Integer> getFrequentItemset() {
 		return frequentItemset;
 	}
 
@@ -213,28 +226,30 @@ public abstract class AbstractAPriori implements AprioriInterface {
 				step(k);
 			}
 		} catch (OutOfMemoryError e) {
-			
-			System.out.println();
-			long elapsedTime = System.currentTimeMillis() - start;
-
-			s = "Found " + frequentItemsTable.size() + " frequent itemsets of size " + k + " (with support "
-					+ (minimumSupport * 100) + "%)";
-			sb.append(s+"\n\n");
-			System.out.println(s + "\n");
-			s ="APriori crashed due to the OutOfMemory!!!!!!!!\nThe result may be highly incorrect\n\n\n" +totalAccorgimento + " risparmiate grazie all' accorgimento ;)\nElapsed time(s)= " + (double) elapsedTime / 1000 + "\n";
-			sb.append(s + "\n\n");
-			System.out.println(s + "\n");
-
-			pw.print(sb.toString());
-			results();
-			pw.close();
+			catchOutOfMemory();
 		}
-		
-		
 
 	}
-	
-	
+
+	protected void catchOutOfMemory() {
+
+		System.out.println();
+		long elapsedTime = System.currentTimeMillis() - start;
+
+		s = "Found " + frequentItemsTable.size() + " frequent itemsets of size " + k + " (with support "
+				+ (minimumSupport * 100) + "%)";
+		sb.append(s + "\n\n");
+		System.out.println(s + "\n");
+		s = "APriori crashed due to the OutOfMemory!!!!!!!!\nThe result may be highly incorrect\n\n\n"
+				+ totalAccorgimento + " risparmiate grazie all' accorgimento ;)\nElapsed time(s)= "
+				+ (double) elapsedTime / 1000 + "\n";
+		sb.append(s + "\n\n");
+		System.out.println(s + "\n");
+
+		pw.print(sb.toString());
+		results();
+		pw.close();
+	}
 
 	// after the counting of the candidate tuples Ck,
 	// it prunes all the unfrequent tuples
@@ -249,7 +264,7 @@ public abstract class AbstractAPriori implements AprioriInterface {
 		// compute the support for all the itemsets in Ck
 		while (it.hasNext()) {
 			Map.Entry<ItemSet, Integer> pair = (Map.Entry) it.next();
-			double sup = minimumSupport > 1 ? pair.getValue() : computeSup(pair.getValue());
+			int sup = pair.getValue();
 			if (sup < minimumSupport)
 				toDelete.add(pair.getKey());
 			else {// itemset is frequen
@@ -258,7 +273,7 @@ public abstract class AbstractAPriori implements AprioriInterface {
 				}
 				// add the frequent itemset to the frequent so i can count the confidence later.
 				if (pair.getKey().size() > 0)
-					frequentItemset.put(pair.getKey(), Double.valueOf(pair.getValue()));
+					frequentItemset.put(pair.getKey(), pair.getValue());
 			}
 		}
 		int numRemoved = toDelete.size();
@@ -276,18 +291,17 @@ public abstract class AbstractAPriori implements AprioriInterface {
 			}
 		}
 
-		if (CD && !frequentItemsTable.isEmpty())
-			cleanFrequentItemset(k);
+		
 		resetCurrentItems();
 		s = "pruned " + numRemoved + " itemsetsof size " + k + " and " + c + " elements";
 		sb.append(s + "\n");
 		System.out.println(s);
 
 		s = "Found " + frequentItemsTable.size() + " frequent itemsets of size " + k + " (with support "
-				+ (minimumSupport * 100) + "%)";
+				+ (minimumSupportDouble * 100) + "%\t(" + minimumSupport + " occurrences)\n";
 		sb.append(s + "\n");
 		System.out.println(s);
-		s = "Items currently frequent= " + currentItems.size();
+		s = "Items currently frequent= " + currentItems.size() + "\n";
 		System.out.println(s);
 		sb.append(s + "\n");
 
@@ -302,33 +316,21 @@ public abstract class AbstractAPriori implements AprioriInterface {
 	}
 
 	protected void cleanFrequentItemset(int k) {
-		int max = 0;
-		Iterator<ItemSet> it = frequentItemset.keySet().iterator();
-		while (it.hasNext()) {
-
-			ItemSet is = it.next();
-			int size = is.size();
-			max = Math.max(max, size);
-			if (!(size == k))
-				it.remove();
-		}
-		System.out.println("max = " + max + "\tk =" + k);
+		
 	}
 
-	public void setCD() {
-		CD = true;
-	}
+	
 
 	protected abstract void step(int k);
 
 	protected boolean prune(int k, ItemSet is, HashMap<ItemSet, Integer> newMap) {
 
-		int count = newcountOccurrences(is);
-		double sup = minimumSupport > 1 ? count : computeSup(count);
+		int sup = newcountOccurrences(is);
+
 		// System.out.println("occ of " + is+ " = " + sup);
-		if (sup >= minimumSupport) {
-			frequentItemset.put(is, Double.valueOf(count));
-			newMap.put(is, count);
+		if (sup > minimumSupport) {
+			frequentItemset.put(is, sup);
+			newMap.put(is, sup);
 			for (Integer i : is) {// if an itemset is frequent then all the items in it are frequent
 				currentItems.put(i, true);
 			}
@@ -338,21 +340,14 @@ public abstract class AbstractAPriori implements AprioriInterface {
 
 	}
 
-	private int newcountOccurrences(ItemSet is) {
+	protected int newcountOccurrences(ItemSet is) {
 
 		int value = 0;
 		for (Transaction t : transactions)
-			if (t.containsAll(is)) {
+			if (t.containsAll(is))
 				value++;
-				if (is.size() == maxK && value > maxK && minimumSupport > 1 && !is.contains(t.getId())) {
-					ItemSet triple = new ItemSet(is);
-					triple.add(t.getId());
-					incrementedTuples.add(triple);
-
-				}
-
-			}
 		return value;
+
 	}
 
 	protected int removeUnfrequentCurrentItems() {
@@ -369,15 +364,17 @@ public abstract class AbstractAPriori implements AprioriInterface {
 		return c;
 	}
 
-	public Set<ItemSet> getIngrementedTuple() {
-		return incrementedTuples;
-	}
-	
+	// public Set<ItemSet> getIngrementedTuple() {
+	// return incrementedTuples;
+	// }
+
 	@Override
 	public void results() {
-		
-		for(ItemSet is:frequentItemset.keySet())
-			pw.write(is.toString());		
+
+		for (ItemSet is : frequentItemset.keySet())
+			pw.write(is.toString());
 	}
+
+	protected abstract void generateCk(int k) throws OutOfMemoryError;
 
 }

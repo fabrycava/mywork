@@ -11,7 +11,7 @@ public class GraphGenerator {
 	public static void generateHub(int nodes, int communities, double density, double noise, String output)
 			throws Exception {
 
-		PrintWriter pw = new PrintWriter(new File("graphs\\" + output));
+		PrintWriter pw = new PrintWriter(new File("graphs\\" + output+".dat"));
 
 		String s = "Generating a Hub Graph with\n " + nodes + " nodes * " + communities
 				+ " communities\n Community density = " + density + " Graph noise = " + noise;
@@ -72,7 +72,7 @@ public class GraphGenerator {
 
 	public static void generateRandom(int nodes, double dense, String output) throws Exception {
 
-		PrintWriter pw = new PrintWriter(new File("graphs\\" + output));
+		PrintWriter pw = new PrintWriter(new File("graphs\\" + output+".dat"));
 
 		String s = "Generating a Random Graph with\nnodes = " + nodes + "\nDensity = " + dense + "\n";
 		//pw.write(s + "\n");
