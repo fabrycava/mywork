@@ -20,7 +20,7 @@ import util.Reader;
 public abstract class AbstractAPriori implements AprioriInterface {
 
 	protected String fileName, folderData = "Datasets\\", folderResults = "Results\\";;
-	protected int N, T, totalAccorgimento = 0;
+	protected int N, T, totalAccorgimento = 0, totalPruned=0;;
 
 	String s;
 	protected int minimumSupport;// , fixedSupport;
@@ -40,7 +40,7 @@ public abstract class AbstractAPriori implements AprioriInterface {
 
 	protected PrintWriter pw;
 	protected long start;
-	protected int k, reductionStep, maxItem, tuplesRemoved, maxK;
+	protected int k, reductionStep, maxItem,  maxK;
 
 	// protected HashSet<ItemSet> incrementedTuples = new HashSet<>();
 
@@ -220,10 +220,16 @@ public abstract class AbstractAPriori implements AprioriInterface {
 	@Override
 	public void compute() {
 		prune(1);
+		
 
 		try {
 			for (k = 2; frequentItemsTable.size() != 0 && k <= maxK; k++) {
-				step(k);
+				int worstCase = frequentItemset.size() * (currentItems.size() - k - 1);
+				s = "STEP " + k + "\nNo more than " + worstCase + " will be computed in this step";
+				sb.append(s + "\n");
+				System.out.println(s);
+				step(k);			
+
 			}
 		} catch (OutOfMemoryError e) {
 			catchOutOfMemory();
@@ -291,7 +297,6 @@ public abstract class AbstractAPriori implements AprioriInterface {
 			}
 		}
 
-		
 		resetCurrentItems();
 		s = "pruned " + numRemoved + " itemsetsof size " + k + " and " + c + " elements";
 		sb.append(s + "\n");
@@ -316,10 +321,8 @@ public abstract class AbstractAPriori implements AprioriInterface {
 	}
 
 	protected void cleanFrequentItemset(int k) {
-		
-	}
 
-	
+	}
 
 	protected abstract void step(int k);
 
@@ -372,7 +375,7 @@ public abstract class AbstractAPriori implements AprioriInterface {
 	public void results() {
 
 		for (ItemSet is : frequentItemset.keySet())
-			pw.write(is.toString());
+			pw.write(is.toString() + "\n");
 	}
 
 	protected abstract void generateCk(int k) throws OutOfMemoryError;

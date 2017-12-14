@@ -45,6 +45,8 @@ public class APrioriCommunities extends AbstractAPrioriCommunities {
 
 	// generate the candidate tuples
 	protected void generateCk(int k) {
+		int checked = 0, tuplesPruned = 0, unchecked = 0, checkedPruned = 0;
+
 		s = "generating all the tuples of size " + k;
 		sb.append(s + "\n");
 		System.out.println(s);
@@ -57,26 +59,31 @@ public class APrioriCommunities extends AbstractAPrioriCommunities {
 			while (it1.hasNext()) {
 				int x = it1.next();
 				if (x > temp.getMax()) {// ensure the monotonicity
+					checked++;
 					ItemSet previous = (ItemSet) temp.clone();
 					previous.add(x);
 
 					boolean flag = true;
 
-					SubsetIterator<Integer> sit = new SubsetIterator<>(previous, k - 1);
-					while (sit.hasNext()) {
-						if (!frequentItemset.containsKey(sit.next())) {
-							flag = false;
-							t++;
-							break;
+					if (!iterative) {
+						SubsetIterator<Integer> sit = new SubsetIterator<>(previous, k - 1);
+						while (sit.hasNext()) {
+							if (!frequentItemset.containsKey(sit.next())) {
+								flag = false;
+								t++;
+								break;
+							}
 						}
 					}
-					if (flag)
-						// newMap.put(previous, 0);
+					if (flag) {
+						checkedPruned++;
 						if (prune(k, previous, newMap)) {
-							tuplesRemoved++;
-							// System.out.println(previous+" removed");
+							tuplesPruned++;
+
 						}
-				}
+					}
+				} else
+					unchecked++;
 			}
 			it.remove();
 		}
@@ -94,21 +101,38 @@ public class APrioriCommunities extends AbstractAPrioriCommunities {
 		totalAccorgimento += t;
 		frequentItemsTable = newMap;
 		tuplesGenerated += frequentItemsTable.size();
+		totalPruned += tuplesPruned;
+
+		// System.out.println("c = " +c+ "\tc1 = "+c1);
+
+		s = "checked " + checked + " itemsetsof size " + k;
+		sb.append(s + "\n");
+		System.out.println(s);
+
+		s = "unchecked " + unchecked + " itemsetsof size " + k;
+		sb.append(s + "\n");
+		System.out.println(s);
 
 		s = t + " avoided accorgimento in step #" + k;
 		System.out.println(s);
 		sb.append(s + "\n");
 
-		s = "pruned " + tuplesRemoved + " itemsetsof size " + k + " and " + itemsRemoved + " elements";
+		s = "checkedPruned " + checkedPruned + " itemsetsof size " + k;
+		sb.append(s + "\n");
+		System.out.println(s);
+		
+		s = "pruned " + tuplesPruned + " itemsetsof size " + k + " and " + itemsRemoved + " elements";
 		sb.append(s + "\n");
 		System.out.println(s);
 
-		s = frequentItemsTable.size() + " of size " + k + " have been generated from " + currentItems.size() + " items";
-		sb.append(s + "\n");
-		System.out.println(s);
+		// s = frequentItemsTable.size() + " of size " + k + " have been generated from
+		// " + currentItems.size() + " items";
+		// sb.append(s + "\n");
+		// System.out.println(s);
 
-		s = "Found " + frequentItemsTable.size() + " frequent itemsets of size " + k + " (with support "
-				+ (minimumSupportDouble * 100) + "%\t(" + minimumSupport + " occurrences)";
+		s = "Found " + frequentItemsTable.size() + " cliques of size " + k;
+		if (!iterative)
+			s += " (with support " + (minimumSupportDouble * 100) + "%\t(" + minimumSupport + " occurrences)";
 		sb.append(s + "\n");
 		System.out.println(s);
 		s = "Items currently frequent= " + currentItems.size();
@@ -142,13 +166,14 @@ public class APrioriCommunities extends AbstractAPrioriCommunities {
 			System.out.println();
 			long elapsedTime = System.currentTimeMillis() - start;
 
-			s = "Found " + frequentItemsTable.size() + " frequent itemsets of size " + k + " (with support "
-					+ (minimumSupport * 100) + "%)";
-			sb.append(s + "\n\n");
-			System.out.println(s + "\n");
 			s = "APriori crashed due to the OutOfMemory!!!!!!!!\nThe result may be highly incorrect\n\n\n"
 					+ totalAccorgimento + " risparmiate grazie all' accorgimento ;)\nElapsed time(s)= "
 					+ (double) elapsedTime / 1000 + "\n";
+			sb.append(s + "\n\n");
+			System.out.println(s + "\n");
+
+			s = "Found " + frequentItemset.size() + " frequent itemsets of size " + k + " (with support "
+					+ (minimumSupport * 100) + "%)";
 			sb.append(s + "\n\n");
 			System.out.println(s + "\n");
 

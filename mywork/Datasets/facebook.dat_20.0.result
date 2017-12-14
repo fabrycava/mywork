@@ -1,0 +1,119 @@
+Folder:Datasets\
+fileName:..\Datasets\facebook.dat
+
+Input configuration: 
+4039 items, 4039 transactions, Min Sup = 0.49517207229512256%(20 occurrences)
+classification = USOCIAL
+
+Folder:Datasets\
+fileName:..\Datasets\facebook.dat
+
+Input configuration: 
+4039 items, 4039 transactions, Min Sup = 0.49517207229512256%(20 occurrences)
+classification = USOCIAL
+Max computable Items = 20
+Pruning occurrencies of size 1
+pruned 1626 itemsetsof size 1 and 1626 elements
+Found 2413 frequent itemsets of size 1 (with support 0.49517207229512256%	(20 occurrences)
+
+Items currently frequent= 2413
+
+STEP 2
+No more than 400 will be computed in this step
+generating all the tuples of size 2
+checked 190 itemsetsof size 2
+unchecked 210 itemsetsof size 2
+0 avoided accorgimento in step #2
+checkedPruned 190 itemsetsof size 2
+pruned 136 itemsetsof size 2 and 1 elements
+Found 54 cliques of size 2
+Items currently frequent= 19
+Elapsed time for step #2 = 0
+
+STEP 3
+No more than 1026 will be computed in this step
+generating all the tuples of size 3
+checked 339 itemsetsof size 3
+unchecked 687 itemsetsof size 3
+0 avoided accorgimento in step #3
+checkedPruned 339 itemsetsof size 3
+pruned 247 itemsetsof size 3 and 2 elements
+Found 92 cliques of size 3
+Items currently frequent= 17
+Elapsed time for step #3 = 0
+
+STEP 4
+No more than 1564 will be computed in this step
+generating all the tuples of size 4
+checked 399 itemsetsof size 4
+unchecked 1165 itemsetsof size 4
+0 avoided accorgimento in step #4
+checkedPruned 399 itemsetsof size 4
+pruned 294 itemsetsof size 4 and 2 elements
+Found 105 cliques of size 4
+Items currently frequent= 15
+Elapsed time for step #4 = 0
+
+STEP 5
+No more than 1575 will be computed in this step
+generating all the tuples of size 5
+checked 357 itemsetsof size 5
+unchecked 1218 itemsetsof size 5
+0 avoided accorgimento in step #5
+checkedPruned 357 itemsetsof size 5
+pruned 280 itemsetsof size 5 and 0 elements
+Found 77 cliques of size 5
+Items currently frequent= 15
+Elapsed time for step #5 = 0
+
+STEP 6
+No more than 1155 will be computed in this step
+generating all the tuples of size 6
+checked 203 itemsetsof size 6
+unchecked 952 itemsetsof size 6
+0 avoided accorgimento in step #6
+checkedPruned 203 itemsetsof size 6
+pruned 168 itemsetsof size 6 and 0 elements
+Found 35 cliques of size 6
+Items currently frequent= 15
+Elapsed time for step #6 = 0
+
+STEP 7
+No more than 525 will be computed in this step
+generating all the tuples of size 7
+checked 65 itemsetsof size 7
+unchecked 460 itemsetsof size 7
+0 avoided accorgimento in step #7
+checkedPruned 65 itemsetsof size 7
+pruned 56 itemsetsof size 7 and 0 elements
+Found 9 cliques of size 7
+Items currently frequent= 15
+Elapsed time for step #7 = 0
+
+STEP 8
+No more than 135 will be computed in this step
+generating all the tuples of size 8
+checked 9 itemsetsof size 8
+unchecked 126 itemsetsof size 8
+0 avoided accorgimento in step #8
+checkedPruned 9 itemsetsof size 8
+pruned 8 itemsetsof size 8 and 7 elements
+Found 1 cliques of size 8
+Items currently frequent= 8
+Elapsed time for step #8 = 0
+
+STEP 9
+No more than 8 will be computed in this step
+generating all the tuples of size 9
+checked 0 itemsetsof size 9
+unchecked 8 itemsetsof size 9
+0 avoided accorgimento in step #9
+checkedPruned 0 itemsetsof size 9
+pruned 0 itemsetsof size 9 and 8 elements
+Found 0 cliques of size 9
+Items currently frequent= 0
+Elapsed time for step #9 = 0
+
+Elapsed time(s)= 1.575
+
+

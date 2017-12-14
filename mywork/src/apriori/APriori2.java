@@ -37,6 +37,7 @@ public class APriori2 extends AbstractAPriori {
 
 	// generate the candidate tuples
 	protected void generateCk(int k) {
+		int checked =0,tuplesPruned=0;
 		s = "generating all the tuples of size " + k;
 		sb.append(s + "\n");
 		System.out.println(s);
@@ -65,7 +66,7 @@ public class APriori2 extends AbstractAPriori {
 					if (flag)
 						// newMap.put(previous, 0);
 						if (prune(k, previous, newMap)) {
-							tuplesRemoved++;
+							tuplesPruned++;
 							// System.out.println(previous+" removed");
 						}
 				}
@@ -86,12 +87,13 @@ public class APriori2 extends AbstractAPriori {
 		totalAccorgimento += t;
 		frequentItemsTable = newMap;
 		tuplesGenerated += frequentItemsTable.size();
+		totalPruned+=tuplesPruned;
 
 		s = t + " avoided accorgimento in step #" + k;
 		System.out.println(s);
 		sb.append(s + "\n");
 
-		s = "pruned " + tuplesRemoved + " itemsetsof size " + k + " and " + itemsRemoved + " elements";
+		s = "pruned " + tuplesPruned + " itemsetsof size " + k + " and " + itemsRemoved + " elements";
 		sb.append(s + "\n");
 		System.out.println(s);
 
