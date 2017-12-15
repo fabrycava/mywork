@@ -83,26 +83,36 @@ public class Cliques {
 		// Thread.sleep(240*min);
 		System.out.println("JUST WOKE UP. LET'S START ;)");
 
-		Set<ItemSet> cliques = Cliques.listCliquesMin("..\\Datasets\\" + "facebook.dat", 40, 20, 50);
-		//Set<ItemSet> cliques3 = Cliques.listCliquesMin("..\\Datasets\\" + "facebook.dat", 40, 50, 20);
-		
-		
-//		
+		for (int i = 10; i <= 100; i += 10) {
+			Cliques.listCliquesMin("..\\Datasets\\" + "facebook.dat", 40, 100, i);
+			System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n");
+		}
+
+		// Set<ItemSet> cliques3 = Cliques.listCliquesMin("..\\Datasets\\" +
+		// "facebook.dat", 40, 100, 10);
+		//
+		// Set<ItemSet> cliques = Cliques.listCliquesMin("..\\Datasets\\" +
+		// "facebook.dat", 40, 100, 50);
+
+		//
 		System.out.println("\n\n\n");
-		//Set<ItemSet> cliques3 = Cliques.listCliquesMin("..\\Datasets\\" + "facebook.dat", 20, 50, 20);
-//		System.out.println("\n\n\n");
-//		String name = "N" + nodes + "C" + communities + "D" + density + "N" + noise;
-//		GraphGenerator.generateHub(nodes, communities, density, noise, name);
-//		Set<ItemSet> cliques1 = Cliques.listCliques("..\\graphs\\" + name + ".dat", 10, 50);
-//		System.out.println("\n\n\n");
-//
-//		nodes = 30;
-//		density = 1;
-//		communities = 50;
-//
-//		String name2 = "N" + nodes + "C" + communities + "D" + density + "N" + noise;
-//		GraphGenerator.generateHub(nodes, communities, density, noise, name2);
-//		Set<ItemSet> cliques2 = Cliques.listCliques("..\\graphs\\" + name2 + ".dat", 20, 50);
+		// Set<ItemSet> cliques3 = Cliques.listCliquesMin("..\\Datasets\\" +
+		// "facebook.dat", 20, 50, 20);
+		// System.out.println("\n\n\n");
+		// String name = "N" + nodes + "C" + communities + "D" + density + "N" + noise;
+		// GraphGenerator.generateHub(nodes, communities, density, noise, name);
+		// Set<ItemSet> cliques1 = Cliques.listCliques("..\\graphs\\" + name + ".dat",
+		// 10, 50);
+		// System.out.println("\n\n\n");
+		//
+		// nodes = 30;
+		// density = 1;
+		// communities = 50;
+		//
+		// String name2 = "N" + nodes + "C" + communities + "D" + density + "N" + noise;
+		// GraphGenerator.generateHub(nodes, communities, density, noise, name2);
+		// Set<ItemSet> cliques2 = Cliques.listCliques("..\\graphs\\" + name2 + ".dat",
+		// 20, 50);
 
 	}
 
