@@ -44,11 +44,13 @@ public class Prova {
 				if (count == 0 && total >= MAXMEMORY * 0.7) {
 					c /= 20;
 					count++;
-				} else if (count == 1 && total >= MAXMEMORY * 0.8)
+				} else if (count == 1 && total >= MAXMEMORY * 0.8) {
 					c /= 10;
-
-				else if (count == 2 && total >= MAXMEMORY * 0.9)
+					count++;
+				} else if (count == 2 && total >= MAXMEMORY * 0.9) {
 					c /= 5;
+					count++;
+				}
 				if (total >= (MAXMEMORY * 0.95)) {
 					System.out.println("ciaao");
 					System.exit(1);
