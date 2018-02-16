@@ -32,12 +32,13 @@ public class APrioriCommunities extends AbstractAPrioriCommunities {
 		super.compute();
 		// System.out.println(frequentItemsTable.size());
 
-		System.out.println(totalAccorgimento + " risparmiate grazie all' accorgimento ;)");
+		//System.out.println(totalAccorgimento + " risparmiate grazie all' accorgimento ;)");
 		long elapsedTime = System.currentTimeMillis() - start;
 
-		s = "Elapsed time(s)= " + (double) elapsedTime / 1000 + "\n";
+		s = "Elapsed time(s)= " + (double) elapsedTime / 1000 + ("\n\nFound " + frequentItemset.size() + " of size " + (k-2)) ;
 		sb.append(s + "\n\n");
 		System.out.println(s + "\n");
+		
 
 		pw.print(sb.toString());
 		pw.close();
@@ -105,21 +106,21 @@ public class APrioriCommunities extends AbstractAPrioriCommunities {
 
 		// System.out.println("c = " +c+ "\tc1 = "+c1);
 
-		s = "checked " + checked + " itemsetsof size " + k;
-		sb.append(s + "\n");
-		System.out.println(s);
-
-		s = "unchecked " + unchecked + " itemsetsof size " + k;
-		sb.append(s + "\n");
-		System.out.println(s);
-
-		s = t + " avoided accorgimento in step #" + k;
-		System.out.println(s);
-		sb.append(s + "\n");
-
-		s = "checkedPruned " + checkedPruned + " itemsetsof size " + k;
-		sb.append(s + "\n");
-		System.out.println(s);
+//		s = "checked " + checked + " itemsetsof size " + k;
+//		sb.append(s + "\n");
+//		System.out.println(s);
+//
+//		s = "unchecked " + unchecked + " itemsetsof size " + k;
+//		sb.append(s + "\n");
+//		System.out.println(s);
+//
+//		s = t + " avoided accorgimento in step #" + k;
+//		System.out.println(s);
+//		sb.append(s + "\n");
+//
+//		s = "checkedPruned " + checkedPruned + " itemsetsof size " + k;
+//		sb.append(s + "\n");
+//		System.out.println(s);
 		
 		s = "pruned " + tuplesPruned + " itemsetsof size " + k + " and " + itemsRemoved + " elements";
 		sb.append(s + "\n");

@@ -69,8 +69,8 @@ public abstract class AbstractAPrioriCommunities extends AbstractAPriori {
 				int worstCase = frequentItemset.size() * (currentItems.size()-(k-1) );
 				//long worstCase=CombinatoricsUtils.binomialCoefficient(currentItems.size(), k);
 				s = "STEP " + k + "\nNo more than " + worstCase + " will be computed in this step";
-				sb.append(s + "\n");
-				System.out.println(s);
+				//sb.append(s + "\n");
+				//System.out.println(s);
 				step(k);
 			}
 		} catch (OutOfMemoryError e) {

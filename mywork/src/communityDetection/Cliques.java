@@ -32,8 +32,8 @@ public class Cliques {
 		apc.compute();
 		Set<ItemSet> cliques = apc.getFrequentItemset().keySet();
 
-		System.out.println("Found " + cliques.size() + " of size " + maxK + " with at least " + minimumNeighbours
-				+ " neighbours in common");
+//		System.out.println("Found " + cliques.size() + " of size " + maxK + " with at least " + minimumNeighbours
+//				+ " neighbours in common");
 		return cliques;
 	}
 
@@ -57,16 +57,16 @@ public class Cliques {
 		// Set<ItemSet> triangles = ListTriangles.listTriangles("facebook.dat");
 		// System.out.println(triangles);
 
-		int nodes = 20;
-		double density = 1;
-		int communities = 50;
+		int nodes = 20000;
+		double density = 0;
+		int communities = 1;
 		double noise = 0.01;
-		int minNeighbours = 150;
-		// String name = "N" + nodes + "C" + communities + "D" + density +"N"+noise;
+		int minNeighbours = 2;
+		String name = "N" + nodes + "C" + communities + "D" + density +"N"+noise;
 
 		// GraphGenerator.generateRandom(nodes, density, "prova");
 
-		// GraphGenerator.generateHub(nodes, communities,density,noise,name);
+		 GraphGenerator.generateHub(nodes, communities,density,noise,name);
 
 		// Set<ItemSet> triangles = Cliques.listTriangles("..\\graphs\\" + "prova");
 
@@ -78,16 +78,20 @@ public class Cliques {
 		int ms = 1000;
 		int sec = 60;
 		int min = ms * sec;
-		int sleep = 240 * min;
+		int sleep = 700 * min;
 		System.out.println("sleeping for " + sleep + " min");
-		// Thread.sleep(240*min);
+		 Thread.sleep(sleep);
 		System.out.println("JUST WOKE UP. LET'S START ;)");
+		
+		
 
-		for (int i = 10; i <= 100; i += 10) {
-			Cliques.listCliquesMin("..\\Datasets\\" + "facebook.dat", 40, 100, i);
-			System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n");
-		}
+//		for (int i = 10; i <= 100; i += 10) {
+//			Cliques.listCliquesMin("..\\Datasets\\" + "facebook.dat", 40, 100, i);
+//			System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n");
+//		}
 
+		Cliques.listCliquesMin("..\\graphs\\"+name+".dat", minNeighbours, Integer.MAX_VALUE, nodes*communities);
+		
 		// Set<ItemSet> cliques3 = Cliques.listCliquesMin("..\\Datasets\\" +
 		// "facebook.dat", 40, 100, 10);
 		//
