@@ -2,6 +2,7 @@ package apriori;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Set;
 
 import associationRule.AssociationRuleGenerator;
 import enums.Classification;
@@ -118,11 +119,14 @@ public class APriori2 extends AbstractAPriori {
 
 	public static void main(String[] args) throws Exception {
 
-		APriori ap = new APriori("kosarak.dat", (double) 0.02, 0, Classification.TRANSACTIONS);
+		APriori2 ap = new APriori2("kosarak.dat", (double) 0.02, 0, Classification.TRANSACTIONS);
 		ap.compute();
-		AssociationRuleGenerator arg = new AssociationRuleGenerator(ap.getFrequentItemset(), 0.9,
-				ap.getStringBuilder());
-		arg.assocRules();
+		Set<ItemSet> cliques = ap.getFIT().keySet();
+
+		System.out.println("Found " + cliques.size() + " of size " +ap.getK());
+//		AssociationRuleGenerator arg = new AssociationRuleGenerator(ap.getFrequentItemset(), 0.9,
+//				ap.getStringBuilder());
+//		arg.assocRules();
 
 	}
 

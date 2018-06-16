@@ -8,18 +8,14 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.commons.math3.util.CombinatoricsUtils;
-
 import enums.Classification;
 import itemset.ItemSet;
 import transaction.Transaction;
-import transaction.TransactionSet;
 
 public abstract class AbstractAPrioriCommunities extends AbstractAPriori {
 
 	protected HashMap<Integer, Transaction> transactions;
 	protected int maxComputableItems = 0;
-	protected boolean iterative = false;
 
 	public AbstractAPrioriCommunities(String fileName, double minimumSupport, int maxK, Classification classification,
 			int maxComputableItems) throws Exception {
@@ -28,7 +24,7 @@ public abstract class AbstractAPrioriCommunities extends AbstractAPriori {
 		for (Transaction t : super.transactions)
 			transactions.put(t.getId(), t);
 		this.maxComputableItems = maxComputableItems;
-		iterative = true;
+
 		String s = "Max computable Items = " + maxComputableItems;
 		sb.append(s + "\n");
 		System.out.println(s);
@@ -51,7 +47,7 @@ public abstract class AbstractAPrioriCommunities extends AbstractAPriori {
 	public void compute() {
 		prune(1);
 
-		if (iterative && frequentItemsTable.size() > maxComputableItems) {
+		if (frequentItemsTable.size() > maxComputableItems) {
 			LinkedList<Entry<ItemSet, Integer>> l = new LinkedList<>(frequentItemsTable.entrySet());
 			Collections.sort(l, new OccurrencesComparator());
 			while (l.size() > maxComputableItems) {
@@ -64,13 +60,15 @@ public abstract class AbstractAPrioriCommunities extends AbstractAPriori {
 		}
 		try {
 			for (k = 2; frequentItemsTable.size() != 0 && k <= maxK; k++) {
-//				System.out.println("current = " + currentItems.size() + " FIT = " + frequentItemsTable.size() + " FI = "
-//						+ frequentItemset.size() + "\n");
-				int worstCase = frequentItemset.size() * (currentItems.size()-(k-1) );
-				//long worstCase=CombinatoricsUtils.binomialCoefficient(currentItems.size(), k);
+				// System.out.println("current = " + currentItems.size() + " FIT = " +
+				// frequentItemsTable.size() + " FI = "
+				// + frequentItemset.size() + "\n");
+				int worstCase = frequentItemset.size() * (currentItems.size() - (k - 1));
+				// long worstCase=CombinatoricsUtils.binomialCoefficient(currentItems.size(),
+				// k);
 				s = "STEP " + k + "\nNo more than " + worstCase + " will be computed in this step";
-				//sb.append(s + "\n");
-				//System.out.println(s);
+				// sb.append(s + "\n");
+				// System.out.println(s);
 				step(k);
 			}
 		} catch (OutOfMemoryError e) {
@@ -81,18 +79,17 @@ public abstract class AbstractAPrioriCommunities extends AbstractAPriori {
 
 	@Override
 	protected int newcountOccurrences(ItemSet is) {
-		if (iterative) {
-			int value = 0;
-			for (Integer i : is)
-				if (transactions.get(i).containsAll(is)) {
-									value++;
-					// if (value > minimumSupport) {
-					// return value;
-					// }
-				}
-			return value;
-		}
-		return super.newcountOccurrences(is);
+
+		int value = 0;
+		for (Integer i : is)
+			if (transactions.get(i).containsAll(is)) {
+				value++;
+				// if (value > minimumSupport) {
+				// return value;
+				// }
+			}
+		return value;
+
 	}
 
 	private class OccurrencesComparator implements Comparator<Map.Entry<ItemSet, Integer>> {
@@ -111,10 +108,35 @@ public abstract class AbstractAPrioriCommunities extends AbstractAPriori {
 
 		int sup = newcountOccurrences(is);
 		// System.out.println("occ of " + is+ " = " + sup);
-		if ((iterative && sup >= is.size()) || (!iterative && sup > minimumSupport)) {
+		if ((sup >= is.size())) {
+			if (classification == Classification.USOCIALZ) {
+				frequentItemset.put(is, sup);
+				newMap.put(is, sup);
+
+				for (Integer i : is) {// if an itemset is frequent then all the items in it are frequent
+					currentItems.put(i, true);
+				}
+			}
+			return false;
+		}
+		return true;
+	}
+
+	protected boolean pruneR(int k, ItemSet is, HashMap<ItemSet, Integer> newMap) {
+
+		int sup = 0;
+		for (Transaction t : transactions.values())
+			if (t.containsAll(is))
+				sup++;
+
+		//System.out.println("occ of " + is + " = " + sup);
+		if (sup >= minimumSupport) {
+			//System.out.println("nopasa");
 			frequentItemset.put(is, sup);
 			newMap.put(is, sup);
 			for (Integer i : is) {// if an itemset is frequent then all the items in it are frequent
+
+				//System.out.println("i");
 				currentItems.put(i, true);
 			}
 			return false;

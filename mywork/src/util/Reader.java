@@ -130,6 +130,13 @@ public class Reader {
 			break;
 		case USOCIAL:
 			readUndirectedToBipartiteGraph( ap, folderData);
+			break;
+		case USOCIALZ:
+			readUndirectedToBipartiteGraph( ap, folderData);
+			break;
+		case USOCIALR:
+			readUndirectedToBipartiteGraph( ap, folderData);
+			break;
 		}
 
 		// else if (classification == Classification.BIPARTITEib)
@@ -214,6 +221,7 @@ public class Reader {
 		ap.setMaxItem(max);
 		ap.setN(N);
 		ap.setT(T);
+		System.out.println("TTTTTTTTTT=" +T);
 
 	}
 

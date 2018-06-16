@@ -20,7 +20,7 @@ import util.Reader;
 public abstract class AbstractAPriori implements AprioriInterface {
 
 	protected String fileName, folderData = "Datasets\\", folderResults = "Results\\";;
-	protected int N, T, totalAccorgimento = 0, totalPruned=0;;
+	protected int N, T, totalAccorgimento = 0, totalPruned = 0;;
 
 	String s;
 	protected int minimumSupport;// , fixedSupport;
@@ -40,7 +40,7 @@ public abstract class AbstractAPriori implements AprioriInterface {
 
 	protected PrintWriter pw;
 	protected long start;
-	protected int k, reductionStep, maxItem,  maxK;
+	protected int k, reductionStep, maxItem, maxK;
 
 	// protected HashSet<ItemSet> incrementedTuples = new HashSet<>();
 
@@ -81,6 +81,7 @@ public abstract class AbstractAPriori implements AprioriInterface {
 			} else {
 				this.minimumSupport = (int) minimumSupport;
 				this.minimumSupportDouble = ((double) minimumSupport) / T;
+				System.out.println(minimumSupport + " " + T + "aaaaaaaaaaaaaaaaa");
 			}
 			// fixedSupport = minimumSupport;
 		}
@@ -220,7 +221,6 @@ public abstract class AbstractAPriori implements AprioriInterface {
 	@Override
 	public void compute() {
 		prune(1);
-		
 
 		try {
 			for (k = 2; frequentItemsTable.size() != 0 && k <= maxK; k++) {
@@ -228,7 +228,7 @@ public abstract class AbstractAPriori implements AprioriInterface {
 				s = "STEP " + k + "\nNo more than " + worstCase + " will be computed in this step";
 				sb.append(s + "\n");
 				System.out.println(s);
-				step(k);			
+				step(k);
 
 			}
 		} catch (OutOfMemoryError e) {
@@ -331,7 +331,8 @@ public abstract class AbstractAPriori implements AprioriInterface {
 		int sup = newcountOccurrences(is);
 
 		// System.out.println("occ of " + is+ " = " + sup);
-		if (sup > minimumSupport) {
+		if ((classification == Classification.USOCIALZ && sup >= k)
+				|| (classification == Classification.USOCIALR && sup >= minimumSupport)) {// tuple is frequent
 			frequentItemset.put(is, sup);
 			newMap.put(is, sup);
 			for (Integer i : is) {// if an itemset is frequent then all the items in it are frequent
